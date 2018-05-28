@@ -1,0 +1,311 @@
+/* Copyright (c) 2018 Acrolinx GmbH */
+
+// AcrolinxSidebarSDK.idl : type library source for ActiveX Control project.
+
+// This file will be processed by the MIDL compiler tool to
+// produce the type library (AcrolinxSidebarSDK.tlb) that will become a resource in
+// Acrolinx.Sidebar.SDK.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+import "ocidl.idl";
+import "oaidl.idl";
+/*!   Enumaration for the input format
+*/
+[
+    uuid(3DD1F26A-2956-496D-964A-A5EF3302C23E),
+]
+typedef enum Input_Format
+{
+    IF_XML = 0,
+    IF_TEXT,
+    IF_HTML,
+    IF_WORD_XML,
+    IF_MARKDOWN,
+    // Use server-side detection of input format based on file name. 5.2 or later server is required.
+    IF_AUTO
+} Input_Format;
+[
+    uuid(3F096B10-B9C3-48CD-9140-D73F0C5E3FB8),
+]
+typedef enum Component_Category
+{
+    // Version information about such components are displayed in the about dialog.
+    CC_DEFAULT = 0,
+
+    // There should be exactly one MAIN component.
+    // This information is used to identify your client on the server.
+    // Version information about this components might be displayed more prominently.
+    CC_MAIN,
+
+    // Version information about such components are displayed in the detail section of the about dialog or not at all.
+    CC_DETAIL
+} Software_Component_Category;
+[
+    object,
+    uuid(C992586F-8B64-495B-99BF-F1B39203880E),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IAcrolinxStorage : IUnknown {
+    [id(1)] HRESULT GetItem([in] BSTR key, [out,retval] BSTR* data);
+    [id(2)] HRESULT RemoveItem([in] BSTR key);
+    [id(3)] HRESULT SetItem([in] BSTR key, [in] BSTR data);
+};
+[
+    object,
+    uuid(09CEBD52-2561-4F7C-94E2-42D560DC06CB),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IScriptHandler : IDispatch{
+    [id(401)] HRESULT OnError([in] BSTR msg, [in] BSTR url, [in] BSTR line, [in] BSTR col, [in] BSTR error);
+    [id(402)] HRESULT Log([in] BSTR logMessage);
+    [id(403)] HRESULT getItem([in] BSTR key, [out,retval] BSTR* data);
+    [id(404)] HRESULT removeItem([in] BSTR key);
+    [id(405)] HRESULT setItem([in] BSTR key, [in] BSTR data);
+    [id(406)] HRESULT requestInit(void);
+    [id(407)] HRESULT onInitFinished([in] BSTR initResult);
+    [id(408)] HRESULT configure([in] BSTR configuration);
+    [id(409)] HRESULT requestGlobalCheck(BSTR options);
+    [id(410)] HRESULT onCheckResult([in] BSTR checkResult, [out,retval] BSTR* retValue);
+    [id(411)] HRESULT selectRanges([in] BSTR checkId, [in] BSTR jsonMatches);
+    [id(412)] HRESULT replaceRanges([in] BSTR checkId, [in] BSTR jsonMatchesWithReplacements);
+    [id(413)] HRESULT download([in] BSTR downloadInfo);
+    [id(414)] HRESULT openWindow([in] BSTR url);
+    [id(415)] HRESULT openLogFile(void);
+    [id(416)] HRESULT getContent([out,retval] BSTR* content);
+};
+[
+    object,
+    uuid(8947DCBC-ABA2-47C7-9235-BE40C3867F0E),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface ICheckOptions : IDispatch{
+    [id(1), helpstring("Returns true if check selection is click")] HRESULT GetSelection([out,retval] VARIANT_BOOL* selection);
+    [id(2), helpstring("Initialize checkoptions JSON string you get from Sidebar")] HRESULT InitInstance([in] BSTR checkOptions);
+};
+[
+    object,
+    uuid(5246C8E4-62B5-497B-BC2D-776CA2FC1E40),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IRange : IDispatch {
+    [id(1), helpstring("Get end index of the range")] HRESULT GetEnd([out,retval] LONG* endOffset);
+    [id(2), helpstring("Get start index of the range")] HRESULT GetStart([out,retval] LONG* startOffset);
+    [id(3), helpstring("Get length of the range")] HRESULT GetLength([out,retval] LONG* length);
+    [id(4), helpstring("Intialize the range")] HRESULT InitInstance([in] LONG start, [in] LONG end);
+};
+[
+	object,
+	uuid(6E11FCDB-E699-45C9-9D79-02DF47555592),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IRanges : IDispatch{
+    [id(1), helpstring("Get range by index")] HRESULT GetRangeAt([in] LONG index, [out,retval] IRange** range);
+    [id(2), helpstring("Get count of ranges in list")] HRESULT GetRangeCount([out,retval] LONG* count);
+    [id(3), helpstring("Add range to list")] HRESULT AddRange([in] LONG start, [in] LONG end);
+};
+[
+    object,
+    uuid(8E847950-C710-41C7-8E3A-618F011E6B80),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IMatch : IDispatch {
+    [id(2), helpstring("Get range for the match")] HRESULT GetRange([out,retval] IRange** range);
+    [id(3), helpstring("Initialize match")] HRESULT InitInstance([in] BSTR content, [in] BSTR replacement, [in] IRange* range, [in] IRange* extractedRange);
+    [id(6), helpstring("Get the content of match for highlight or replacement")] HRESULT GetMatchContent([out,retval] BSTR* content);
+    [id(7), helpstring("Get suggested replacement for match content")] HRESULT GetMatchReplacement([out,retval] BSTR* replacement);
+    [id(8), helpstring("Get range in context of Acrolinx extracted text")] HRESULT GetExtractedRange([out,retval] IRange** extractedRange);
+};
+[
+    object,
+    uuid(BB0349D4-7381-48AD-AFFE-8A5267BB1CE5),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IDokument : IDispatch{
+    [id(1), helpstring("Get document content")] HRESULT GetContent([out,retval] BSTR* content);
+    [id(2), helpstring("Get name and path of the document")] HRESULT GetReference([out,retval] BSTR* reference);
+    [id(3), helpstring("Get input format - {XML, Text, HTML, Word_XML,Markdown, Auto}")] HRESULT GetFormat([out,retval] Input_Format* format);
+    [id(4), helpstring("Initialize document")] HRESULT InitInstance([in] BSTR content, BSTR reference, Input_Format inputFormat);
+    [id(5), helpstring("Initialize document alongwith ranges for Check Selection")] HRESULT InitInstanceWithSelectionRanges([in] BSTR content, [in] BSTR reference, [in] Input_Format inputFormat, [in] IRanges* selectionRanges);
+};
+[
+    object,
+    uuid(78D9432F-591C-481F-88E6-B2E33C47C3BB),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface ICheckResult : IDispatch{
+    [id(1), helpstring("Get id for the current check")] HRESULT GetCheckId([out,retval] BSTR* checkId);
+    [id(2), helpstring("Get information for recent check to embed in your current document")] HRESULT GetEmbedCheckInformation([out,retval] BSTR* embedCheckInformation);
+    [id(3), helpstring("Get range of the checked document")] HRESULT GetRange([out,retval] IRange** range);
+};
+[
+    object,
+    uuid(F4B61CCA-C745-4C69-99F9-E6FB3883791D),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+]
+interface IMatches : IDispatch{
+    [id(1), helpstring("Get id for the current check")] HRESULT GetCheckId([out,retval] BSTR* checkId);
+    [id(2)] HRESULT SetCheckId([in] BSTR checkId);
+    [id(3), helpstring("Get the count of matches in selection or replacement")] HRESULT GetMatchCount([out,retval] LONG* count);
+    [id(4), helpstring("Get match by index")] HRESULT GetMatchAt([in] LONG index, IMatch** match);
+};
+[
+	object,
+	uuid(EB4510D3-0C4F-46EE-84F1-F8BF18CD3BE3),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IDocumentModel : IDispatch{
+    [id(1), helpstring("Set the initially extracted content to document model")] HRESULT InitInstance(BSTR originalContent);
+    [id(2), helpstring("Get the initially extracted content from document model")] HRESULT GetOrginalContent([out,retval] BSTR* originalContent);
+    [id(3), helpstring("Get current content from document model")] HRESULT GetCurrentContent([out,retval] BSTR* currentContent);
+    [id(4), helpstring("Set current content if document manually modified by user")] HRESULT SetCurrentContent([in] BSTR currentContent);
+    [id(5), helpstring("Update document model for every replacement")] HRESULT Update([in] IRange* originalRange, BSTR replacement);
+    [id(6), helpstring("Get updated range for current content")] HRESULT GetOriginalToCurrentRange([in] IRange* originalRange, [out,retval] IRange** currentRange);
+};
+[ uuid(C09DADB1-142C-440A-BF4A-8399AAE802B3), version(1.0),
+    control ]
+library AcrolinxSidebarSDKLib
+{
+    importlib(STDOLE_TLB);
+
+    //  Primary dispatch interface for CAcrolinxSidebar
+    [ 
+        uuid(3474A21B-4818-4CA2-AF38-3FC9F5A9BE13)	
+    ]
+    dispinterface _DAcrolinxSidebarSDK
+    {
+    properties:
+        [id(201), nonbrowsable] BSTR ServerAddress;
+        [id(202), nonbrowsable] VARIANT_BOOL ShowServerSelector;
+        [id(203), nonbrowsable] BSTR ClientSignature;
+        [id(204), nonbrowsable] BSTR MinimumSidebarVersion;
+        [id(301), nonbrowsable] BSTR StartPageSourceLocation;
+        [id(205), nonbrowsable] VARIANT_BOOL ReadOnlySuggestions;
+        [id(206), nonbrowsable] VARIANT_BOOL SupportCheckSelection;
+        [id(207), nonbrowsable] BSTR ClientLocale;
+    methods:
+        [id(101), helpstring("Loads the Acrolinx Sidebar")] void Start(void);
+        [id(102), helpstring("Loads the Acrolinx Sidebar")] void StartWithServerAddress(BSTR serverUrl);
+        [id(103), helpstring("Logs Info messages"), helpcontext(103)] void LogInfo(BSTR msg);
+        [id(104), helpstring("Logs Debug messages"), helpcontext(104)] void LogTrace(BSTR msg);
+        [id(105), helpstring("Logs Error messages"), helpcontext(105)] void LogError(BSTR msg);
+        [id(106), helpstring("Logs Warning messages"), helpcontext(106)] void LogWarn(BSTR msg);
+        [id(108), helpstring("Create document instance for a check")] IDispatch* CreateDocument(void);
+        [id(109), helpstring("Check the document")] BSTR Check(IDispatch* document);
+        [id(110), helpstring("Invalidate Sidebar card")] void InvalidateRanges(IDispatch* matches);
+        [id(111), helpstring("Register your application components")] void RegisterClientComponent(BSTR id, BSTR name, BSTR version, Software_Component_Category category);
+        [id(112), helpstring("Create a list of IRange")] IDispatch* CreateRangeList(void);
+    };
+
+    //  Event dispatch interface for CAcrolinxSidebar
+
+    [ 
+        uuid(7A68FB9C-778D-4DC1-B3D7-263BA767CCB2)	
+    ]
+    dispinterface _DAcrolinxSidebarSDKEvents
+    {
+    properties:
+    //  Event interface has no properties
+    methods:
+        [id(1), helpstring("Indicates Sidebar has finished loading")] void SidebarLoaded(BSTR url);
+        [id(2), helpstring("Indicates Sidebar has been intialized")] void InitFinished(void);
+        [id(3), helpstring("Check button in clicked on Sidebar")] void RequestCheck(IDispatch* checkOptions);
+        [id(4), helpstring("Indicates check is complete")] void Checked(IDispatch* checkResult);
+        [id(5), helpstring("Indicates user clicked on a card")] void SelectRanges(IDispatch* matches);
+        [id(6), helpstring("Indicates user clicked replacement text on a card")] void ReplaceRanges(IDispatch* matches);
+    };
+
+    //  Class information for CAcrolinxSidebar
+    [
+        uuid(32245F63-9E1D-412B-A361-AD40856C4BD9)
+    ]
+    coclass AcrolinxSidebarSDK
+    {
+        [default] dispinterface _DAcrolinxSidebarSDK;
+        [default, source] dispinterface _DAcrolinxSidebarSDKEvents;
+    };
+    [
+        uuid(23DDEE2F-30E4-4396-BE20-036DC2F2FA84)
+    ]
+    coclass ScriptHandler
+    {
+        [default] dispinterface IScriptHandler;
+    };
+    [
+        uuid(2B744C95-891B-458D-970F-F9AA43C8DD4A)
+    ]
+    coclass CheckOptions
+    {
+        [default] interface ICheckOptions;
+    };
+    [
+        uuid(AEF18D6E-9B70-4EDF-8F58-AAF5EB5EECB1)
+    ]
+    coclass Range
+    {
+        [default] dispinterface IRange;
+    };
+    [
+        uuid(E931E3C2-A0D2-48A1-8D0F-F1C90A012A69)
+    ]
+    coclass Match
+    {
+        [default] dispinterface IMatch;
+    };
+    [
+        uuid(9D9817E2-2C4B-4268-917B-CD5D284E086C)
+    ]
+    coclass Dokument
+    {
+        [default] interface IDokument;
+    };
+    [
+        uuid(256CC053-2AEF-4A49-B44F-489E47FA983A)
+    ]
+    coclass CheckResult
+    {
+        [default] interface ICheckResult;
+    };
+    [
+        uuid(9A4110B9-AF19-4D93-9801-43DE2C210C70)
+    ]
+    coclass Matches
+    {
+        [default] interface IMatches;
+    };
+	[
+		uuid(1F247866-18D2-4D59-9326-E63164BDBC7D)
+	]
+	coclass DocumentModel
+	{
+		[default] interface IDocumentModel;
+	};
+	[
+		uuid(F858A149-373C-4A5F-B495-0947F406E5B2)
+	]
+	coclass Ranges
+	{
+		[default] interface IRanges;
+	};
+};

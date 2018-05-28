@@ -1,0 +1,14 @@
+Debug/
+Release/
+Acrolinx.Sidebar.SDK/Debug
+Acrolinx.Sidebar.SDK/Release
+Acrolinx.Sidebar.SDK/Acrolinx.Sidebar.SDK.vcxproj.user
+Acrolinx.Sidebar.SDK/Acrolinx.Sidebar.SDK.aps
+Acrolinx.Sidebar.SDK/Acrolinx.Sidebar.SDK_i.c
+Acrolinx.Sidebar.SDK/Acrolinx.Sidebar.SDK_i.h
+Acrolinx.Sidebar.SDK/AcrolinxSidebarSDK_p.c
+Acrolinx.Sidebar.SDK/dlldata.c
+Acrolinx.Sidebar.SDK.sdf
+Acrolinx.Sidebar.SDK.suo
+Acrolinx.Sidebar.SDK.opensdf
+ipch/

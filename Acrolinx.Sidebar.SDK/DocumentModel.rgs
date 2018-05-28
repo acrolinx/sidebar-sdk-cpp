@@ -1,0 +1,26 @@
+HKCR
+{
+	ACROSIDEBAR.DocumentModel.1 = s 'DocumentModel Class'
+	{
+		CLSID = s '{1F247866-18D2-4D59-9326-E63164BDBC7D}'
+	}
+	ACROSIDEBAR.DocumentModel = s 'DocumentModel Class'
+	{		
+		CurVer = s 'ACROSIDEBAR.DocumentModel.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {1F247866-18D2-4D59-9326-E63164BDBC7D} = s 'DocumentModel Class'
+		{
+			ProgID = s 'ACROSIDEBAR.DocumentModel.1'
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			val AppID = s '%APPID%'
+			TypeLib = s '{C09DADB1-142C-440A-BF4A-8399AAE802B3}'
+			Version = s '1.0'
+		}
+	}
+}

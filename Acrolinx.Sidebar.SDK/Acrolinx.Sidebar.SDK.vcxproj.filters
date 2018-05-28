@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Documents">
+      <UniqueIdentifier>{882f15bb-3278-4fe3-bdf4-7fac6889bade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Storage">
+      <UniqueIdentifier>{ed572610-8bc7-4d0e-927c-4f10fb982cdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Storage">
+      <UniqueIdentifier>{5bf1122f-2c8a-4646-bb99-6a92435bac31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Documents">
+      <UniqueIdentifier>{85e2d631-65fa-4cd4-9c2f-3802666b3e2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{a8a4d177-c432-453b-9e42-54f86483e558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{71309008-b1fd-4d5f-b624-9ad39586be03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\ChangeTracking">
+      <UniqueIdentifier>{473d8e5c-503a-424d-92ef-549665b46936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\Logger">
+      <UniqueIdentifier>{4f122723-e070-4af0-8cdf-4bed877659a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\Json">
+      <UniqueIdentifier>{9bd3054a-8b3a-43ff-9f58-673bf9ec8cee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\Assembly">
+      <UniqueIdentifier>{ee04552f-331c-4e2a-a46e-41a0d9ed74f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util\ChangeTracking">
+      <UniqueIdentifier>{6c96a6fa-93a6-4b51-aa4d-f97d6888f455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util\Json">
+      <UniqueIdentifier>{d86d808c-a3e9-462d-8b6c-3276bd82b4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util\Assembly">
+      <UniqueIdentifier>{c0da1b8a-bf82-4e33-bb89-0897cbbd1dcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util\Adapter">
+      <UniqueIdentifier>{cd1cdd53-75a6-41cc-a0d3-e5c948baf96d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util\Logger">
+      <UniqueIdentifier>{b5d1f7d4-37bc-40d3-8ac7-74926fdcd46d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AcrolinxSidebarCtrl.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="acrolinx.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Acrolinx.Sidebar.SDK.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Dokument.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="loading.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="DocumentModel.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Acrolinx.Sidebar.SDK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AcrolinxSidebar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AcrolinxSidebarPpg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WebBrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Storage\RegistryAcrolinxStorage.cpp">
+      <Filter>Source Files\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="SidebarControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckOptions.cpp">
+      <Filter>Source Files\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="Match.cpp">
+      <Filter>Source Files\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="Range.cpp">
+      <Filter>Source Files\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matches.cpp">
+      <Filter>Source Files\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="Dokument.cpp">
+      <Filter>Source Files\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="DocumentModel.cpp">
+      <Filter>Source Files\Util\ChangeTracking</Filter>
+    </ClCompile>
+    <ClCompile Include="DiffMatchPatchWorker.cpp">
+      <Filter>Source Files\Util\ChangeTracking</Filter>
+    </ClCompile>
+    <ClCompile Include="UniversalAdapter.cpp">
+      <Filter>Source Files\Util\Adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="Ranges.cpp">
+      <Filter>Source Files\Documents</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiAdapter.cpp">
+      <Filter>Source Files\Util\Adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerHelper.cpp">
+      <Filter>Source Files\Util\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\DllUtil\DllUtil.cpp">
+      <Filter>Source Files\Util\Assembly</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\JSONUtil\JsonUtil.cpp">
+      <Filter>Source Files\Util\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="COMInstanceMngr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Acrolinx.Sidebar.SDK.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AcrolinxSidebar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AcrolinxSidebarPpg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SidebarControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WebBrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage\RegistryAcrolinxStorage.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckOptions.h">
+      <Filter>Header Files\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="Match.h">
+      <Filter>Header Files\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="Range.h">
+      <Filter>Header Files\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matches.h">
+      <Filter>Header Files\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="Dokument.h">
+      <Filter>Header Files\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="DocumentModel.h">
+      <Filter>Header Files\Utils\ChangeTracking</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\diff-match-patch\diff_match_patch.h">
+      <Filter>Header Files\Utils\ChangeTracking</Filter>
+    </ClInclude>
+    <ClInclude Include="DiffMatchPatchWorker.h">
+      <Filter>Header Files\Utils\ChangeTracking</Filter>
+    </ClInclude>
+    <ClInclude Include="AcrolinxInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ranges.h">
+      <Filter>Header Files\Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\easylogging++\easylogging++.h">
+      <Filter>Header Files\Utils\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerHelper.h">
+      <Filter>Header Files\Utils\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\DllUtil\DllUtil.h">
+      <Filter>Header Files\Utils\Assembly</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\JSONUtil\JsonUtil.h">
+      <Filter>Header Files\Utils\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="COMInstanceMngr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Acrolinx.Sidebar.SDK.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="AcrolinxSidebarSDK.idl">
+      <Filter>Source Files</Filter>
+    </Midl>
+  </ItemGroup>
+</Project>
