@@ -40,3 +40,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 For more information visit: http://www.acrolinx.com
+
+## Dependencies
+
+This project depends on -
+
+RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt) and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson). The RapidJSON website is at http://rapidjson.org/.
+
+Easylogging++ v8.91 for logging utility. Easylogging++ is licensed under the [EasyLogging++ Licence](https://github.com/muflihun/easyloggingpp/blob/v8.91/LICENCE.txt) and Copyright (c) 2012-2013 Majid Khan. You can get the source [here]( https://github.com/muflihun/easyloggingpp/tree/v8.91).
