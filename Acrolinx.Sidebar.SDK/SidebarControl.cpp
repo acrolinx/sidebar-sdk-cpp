@@ -211,7 +211,7 @@ void CSidebarControl::ShowHideServerSelectorIfServerAddressParameterSet(CString 
         SetServerAddress(serverAddress);
         SetShowServerSelector(FALSE);
     }
-    else
+    else if(GetServerAddress().IsEmpty())
     {
         SetShowServerSelector(TRUE);
     }
