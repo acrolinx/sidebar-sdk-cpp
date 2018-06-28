@@ -78,6 +78,9 @@
     <None Include="DocumentModel.rgs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Range.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -1,6 +1,7 @@
 /* Copyright (c) 2018 Acrolinx GmbH */
 
 #pragma once
+#include "resource.h"       // main symbols
 #include "JsonUtil.h"
 #include "Acrolinx.Sidebar.SDK_i.h"
 #include "COMInstanceMngr.h"
@@ -25,6 +26,7 @@ public:
     {
     }
 
+    DECLARE_REGISTRY_RESOURCEID(IDR_RANGE)
 private:
     LONG m_end;
     LONG m_start;
@@ -37,3 +39,4 @@ public:
     STDMETHOD(InitInstance)(LONG start, LONG end);
 };
 
+OBJECT_ENTRY_AUTO(__uuidof(Range), CRange)

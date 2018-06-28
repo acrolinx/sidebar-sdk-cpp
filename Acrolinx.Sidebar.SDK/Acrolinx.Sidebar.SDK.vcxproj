@@ -259,6 +259,7 @@ xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
     <None Include="DocumentModel.rgs" />
     <None Include="Dokument.rgs" />
     <None Include="loading.bmp" />
+    <None Include="Range.rgs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Acrolinx.Sidebar.SDK.cpp" />
