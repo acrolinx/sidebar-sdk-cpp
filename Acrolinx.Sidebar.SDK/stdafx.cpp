@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 Acrolinx GmbH */
+/* Copyright Acrolinx GmbH */
 
 // stdafx.cpp : source file that includes just the standard includes
 //  Acrolinx.Sidebar.SDK.pch will be the pre-compiled header

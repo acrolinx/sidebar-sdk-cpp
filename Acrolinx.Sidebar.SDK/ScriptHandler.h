@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 Acrolinx GmbH */
+/* Copyright Acrolinx GmbH */
 
 // ScriptHandler.h : Declaration of the CScriptHandler
 

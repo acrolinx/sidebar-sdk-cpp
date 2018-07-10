@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 Acrolinx GmbH */
+/* Copyright Acrolinx GmbH */
 
 // Acrolinx.Sidebar.SDK.cpp : Implementation of CAcrolinxSidebarSDKApp and DLL registration.
 

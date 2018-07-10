@@ -12,9 +12,9 @@ using namespace System::Runtime::InteropServices;
 [assembly:AssemblyTitleAttribute("AcrolinxSidebarSDKTest")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
-[assembly:AssemblyCompanyAttribute("")];
+[assembly:AssemblyCompanyAttribute("Acrolinx GmbH")];
 [assembly:AssemblyProductAttribute("AcrolinxSidebarSDKTest")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c)  2018")];
+[assembly:AssemblyCopyrightAttribute("Copyright")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

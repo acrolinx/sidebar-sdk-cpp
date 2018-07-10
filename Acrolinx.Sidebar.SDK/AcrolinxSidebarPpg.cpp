@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 Acrolinx GmbH */
+/* Copyright Acrolinx GmbH */
 
 // AcrolinxSidebarPpg.cpp : Implementation of the CAcrolinxSidebarPropPage property page class.
 
