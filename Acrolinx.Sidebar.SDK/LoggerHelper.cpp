@@ -67,7 +67,7 @@ bool Acrolinx_Sdk_Sidebar_Util::LoggerHelper::Init()
     {
         tempPath = wcharPath;
     }
-    tempPath = tempPath + _T("Acrolinx\\Logs\\");
+    tempPath = tempPath + _T("Acrolinx\\Logs\\") + DllUtil::GetAppName() + _T("\\");
 
     m_logFileName = tempPath + curDate +_T("-") + DllUtil::GetAppName() +  _T(".log");
     std::string defaultLogFileName ((CStringA)m_logFileName);
