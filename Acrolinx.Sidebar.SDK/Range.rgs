@@ -1,5 +1,13 @@
 HKCR
 {
+	ACROSIDEBAR.Range.1 = s 'Range Class'
+	{
+		CLSID = s '{AEF18D6E-9B70-4EDF-8F58-AAF5EB5EECB1}'
+	}
+	ACROSIDEBAR.Range = s 'Range Class'
+	{
+		CurVer = s 'ACROSIDEBAR.Range.1'
+	}
 	NoRemove CLSID
 	{
 		ForceRemove {AEF18D6E-9B70-4EDF-8F58-AAF5EB5EECB1} = s 'Range Class'
