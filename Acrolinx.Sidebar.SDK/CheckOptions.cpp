@@ -15,7 +15,8 @@ STDMETHODIMP CCheckOptions::GetSelection(VARIANT_BOOL* selection)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     ACROASSERT(m_isInstanceCreated == TRUE, "Initialize Checkoptions object by calling InitInstance() before using it");
 
-    BOOL retVal = m_checkOptions.HasMember(_T("selection"))?TRUE:FALSE;
+    BOOL retVal = m_checkOptions.HasMember(_T("selection")) ? m_checkOptions[_T("selection")].GetBool() : FALSE;
+
     if(selection == nullptr)
     {
         LERROR <<  "Create out bool var before calling GetSelection()";
