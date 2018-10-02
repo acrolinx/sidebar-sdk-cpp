@@ -43,17 +43,21 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 1. Provides [lookup](https://github.com/acrolinx/acrolinx-coding-guidance/blob/master/topics/lookup/diff.md) functionality.
 2. **Start page**: Provides interactive way to sign in to Acrolinx with built-in error handling.
 3. Provides logging using [EasyLogging++ v8.91](https://github.com/muflihun/easyloggingpp).
-4. **Acrolinx Storage**: Applications using the IE web browser control may be denied to access LocalStorage. The SDK uses its own storage mechanism using the Windows registry.
-   * **Registry path**: `HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
-   * **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
+4. **Acrolinx Storage**: Applications using the IE web browser control may be denied to access LocalStorage.
+   The SDK uses its own storage mechanism using the Windows registry.
+   + **Registry path**: `HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
+   + **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
 5. **Acrolinx Adapter**: Provides reusable functionality for all integrations.
   
 ## References
 
 * The [Sidebar DEMO C++](https://github.com/acrolinx/sidebar-demo-cpp) is built based on this SDK.
 * The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-sdk-js/).
-* RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt) and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson). The RapidJSON website is at [rapidjson.org](http://rapidjson.org/).
-* EasyLogging++ v8.91 for logging utility. EasyLogging++ is licensed under the [EasyLogging++ License](https://github.com/muflihun/easyloggingpp/blob/v8.91/LICENCE.txt) and Copyright (c) 2012-2013 Majid Khan. You can get the source [here]( https://github.com/muflihun/easyloggingpp/tree/v8.91).
+* RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt)
+  and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson).
+  The RapidJSON website is at [rapidjson.org](http://rapidjson.org/).
+* EasyLogging++ v8.91 for logging utility. EasyLogging++ is licensed under the [EasyLogging++ License](https://github.com/muflihun/easyloggingpp/blob/v8.91/LICENCE.txt)
+  and Copyright (c) 2012-2013 Majid Khan. You can get the source [here]( https://github.com/muflihun/easyloggingpp/tree/v8.91).
 
 ## License
 
