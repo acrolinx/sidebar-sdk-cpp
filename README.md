@@ -44,8 +44,8 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 2. **Start page**: Provides interactive way to sign in to Acrolinx with built-in error handling.
 3. Provides logging using [EasyLogging++ v8.91](https://github.com/muflihun/easyloggingpp).
 4. **Acrolinx Storage**: Applications using the IE web browser control may be denied to access LocalStorage. The SDK uses its own storage mechanism using the Windows registry.
-   * **Registry path**: HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]
-   * **Fallback path**: HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]
+   * **Registry path**: `HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
+   * **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
 5. **Acrolinx Adapter**: Provides reusable functionality for all integrations.
   
 ## References
