@@ -1,6 +1,6 @@
 # Acrolinx Sidebar Windows C++ SDK
 
-This is a library for integrating the [Acrolinx](http://www.acrolinx.com/) Sidebar into a Windows C++ application.
+This is a library for integrating the [Acrolinx](https://www.acrolinx.com/) Sidebar into a Windows C++ application.
 
 See: [Getting Started with Custom Integrations](https://support.acrolinx.com/hc/en-us/articles/205687652-Getting-Started-with-Custom-Integrations)
 
@@ -75,4 +75,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-For more information visit: [http://www.acrolinx.com](http://www.acrolinx.com)
+For more information visit: [https://www.acrolinx.com](https://www.acrolinx.com)
