@@ -321,6 +321,7 @@ CString CScriptHandler::Check(CString content, CString reference, CString format
         return result.bstrVal;
     }
 
+    m_documentContent = _T("");
     return CString();
 }
 

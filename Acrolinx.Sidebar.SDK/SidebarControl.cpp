@@ -496,11 +496,11 @@ void CSidebarControl::FireRequestCheck(CString checkOptions)
 
 CString CSidebarControl::Check(CDokument* document)
 {
-    BSTR content, reference;
+    _bstr_t content, reference;
     CString format;
     WDocument selectRangesJson;
-    document->GetContent(&content);
-    document->GetReference(&reference);
+    document->GetContent(content.GetAddress());
+    document->GetReference(reference.GetAddress());
     format = document->GetFormatAsString();
 
     CString selectionRanges = _T("[]");
@@ -528,7 +528,7 @@ CString CSidebarControl::Check(CDokument* document)
         ranges->Release();
         selectionRanges = CJsonUtil::Stringify(selectRangesJson);
     }
-    return m_scriptHandler->Check(content, reference, format, selectionRanges);
+    return m_scriptHandler->Check(content.GetBSTR(), reference.GetBSTR(), format, selectionRanges);
 }
 
 
@@ -657,11 +657,11 @@ void CSidebarControl::InvalidateRanges(CMatches* matches)
 
     for(size_t i=0; i<matches->GetCount(); i++)
     {
-        BSTR checkId;
-        matches->GetCheckId(&checkId);
+        _bstr_t checkId;
+        matches->GetCheckId(checkId.GetAddress());
         CString domKey;
         domKey.Format(_T("/%d/checkId"),i);
-        CJsonUtil::SetString(matchRanges, domKey, CString(checkId));
+        CJsonUtil::SetString(matchRanges, domKey, CString(checkId.GetBSTR()));
         IMatch* match = nullptr;
         matches->GetMatchAt(i, &match);
         IRange* range = nullptr;

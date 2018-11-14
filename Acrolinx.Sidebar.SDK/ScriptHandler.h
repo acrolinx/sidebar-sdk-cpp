@@ -60,6 +60,8 @@ public:
             m_defaultDocHostUIHandler = nullptr;
         }
 
+        m_documentContent = _T("");
+
         m_webBrowser = nullptr;
         m_sidebarCtrl = nullptr;
     }

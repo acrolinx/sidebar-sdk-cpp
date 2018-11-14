@@ -177,7 +177,7 @@ interface IMatches : IDispatch{
 ]
 interface IDocumentModel : IDispatch{
     [id(1), helpstring("Set the initially extracted content to document model")] HRESULT InitInstance(BSTR originalContent);
-    [id(2), helpstring("Get the initially extracted content from document model")] HRESULT GetOrginalContent([out,retval] BSTR* originalContent);
+    [id(2), helpstring("Get the initially extracted content from document model")] HRESULT GetOriginalContent([out,retval] BSTR* originalContent);
     [id(3), helpstring("Get current content from document model")] HRESULT GetCurrentContent([out,retval] BSTR* currentContent);
     [id(4), helpstring("Set current content if document manually modified by user")] HRESULT SetCurrentContent([in] BSTR currentContent);
     [id(5), helpstring("Update document model for every replacement")] HRESULT Update([in] IRange* originalRange, BSTR replacement);

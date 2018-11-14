@@ -202,9 +202,9 @@ void CUniversalAdapter::ReplaceRanges(IMatches* matches, Input_Format format)
             IRange* rawRange;
             ToRawRange(currentRange, &rawRange, format);
 
-            BSTR replacmentContent;
-            matchToUpdate->GetMatchReplacement(&replacmentContent);
-            ReplaceRawRange(rawRange, replacmentContent, format);
+            _bstr_t replacmentContent;
+            matchToUpdate->GetMatchReplacement(replacmentContent.GetAddress());
+            ReplaceRawRange(rawRange, replacmentContent.GetBSTR(), format);
 
             m_documentModel->Update(adapterRange, replacmentContent);
 
@@ -231,9 +231,9 @@ void CUniversalAdapter::ToRawRange(IRange* currentRange, IRange** rawRange, Inpu
         currentRange->GetStart(&startOffset);
         currentRange->GetEnd(&endOffset);
 
-        BSTR currentContent;
-        m_documentModel->GetCurrentContent(&currentContent);
-        CString currentStr(currentContent);
+        _bstr_t currentContent;
+        m_documentModel->GetCurrentContent(currentContent.GetAddress());
+        CString currentStr(currentContent.GetBSTR());
         LONG tagOffsetAdjustment = m_tagName.GetLength() + 2;
         LONG startDiff =  DecodeLength(currentStr.Left(startOffset));
         LONG lengthDiff = DecodeLength(currentStr.Mid(startOffset, endOffset - startOffset));

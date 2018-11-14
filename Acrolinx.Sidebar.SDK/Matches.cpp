@@ -15,7 +15,7 @@ STDMETHODIMP CMatches::GetCheckId(BSTR* checkId)
 
     if(checkId == nullptr)
     {
-        LERROR << "Create out string before calling GetCheckId()";
+        LERROR << "Create string before calling GetCheckId()";
     }
     else
     {

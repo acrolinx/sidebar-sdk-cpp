@@ -20,8 +20,11 @@ CString Acrolinx_Sdk_Sidebar_Util::CJsonUtil::Stringify(const WDocument& json)
     WWriter writer(sb);
     if (json.Accept(writer))
     {
-        return CString(sb.GetString());
+        CString jsonStr(sb.GetString());
+        sb.Clear();
+        return jsonStr;
     }
+
     TRACE(_T("Strigify failed"));
     return CString();
 }

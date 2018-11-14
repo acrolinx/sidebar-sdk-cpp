@@ -51,7 +51,7 @@ namespace AcrolinxSidebarSDKTest
             Range^ modifiedRange = documentModel->GetOriginalToCurrentRange(originalRange);
 
             Assert::AreEqual(documentModel->GetCurrentContent()->Substring(modifiedRange->GetStart(), modifiedRange->GetLength()),
-                documentModel->GetOrginalContent()->Substring(originalRange->GetStart(), originalRange->GetLength()));
+                documentModel->GetOriginalContent()->Substring(originalRange->GetStart(), originalRange->GetLength()));
         };
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace AcrolinxSidebarSDKTest
             Range^ modifiedRange = documentModel->GetOriginalToCurrentRange(originalRange);
 
             Assert::AreEqual(documentModel->GetCurrentContent()->Substring(modifiedRange->GetStart(), modifiedRange->GetLength()),
-                documentModel->GetOrginalContent()->Substring(originalRange->GetStart(), originalRange->GetLength()));
+                documentModel->GetOriginalContent()->Substring(originalRange->GetStart(), originalRange->GetLength()));
         };
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace AcrolinxSidebarSDKTest
             Range^ modifiedRange = documentModel->GetOriginalToCurrentRange(range);
 
             Assert::AreEqual(documentModel->GetCurrentContent()->Substring(modifiedRange->GetStart(), modifiedRange->GetLength()),
-                documentModel->GetOrginalContent()->Substring(range->GetStart(), range->GetLength()));
+                documentModel->GetOriginalContent()->Substring(range->GetStart(), range->GetLength()));
 
         };
 
@@ -121,7 +121,7 @@ namespace AcrolinxSidebarSDKTest
             Range^ modifiedRange = documentModel->GetOriginalToCurrentRange(range);
 
             Assert::AreEqual(documentModel->GetCurrentContent()->Substring(modifiedRange->GetStart(), modifiedRange->GetLength()),
-                documentModel->GetOrginalContent()->Substring(range->GetStart(), range->GetLength()));
+                documentModel->GetOriginalContent()->Substring(range->GetStart(), range->GetLength()));
         };
     };
 }

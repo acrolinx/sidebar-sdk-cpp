@@ -36,6 +36,8 @@ public:
 
     void FinalRelease()
     {
+        m_originalContent = "";
+        m_currentContent = "";
     }
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DOCUMENTMODEL)
@@ -53,7 +55,7 @@ private:
 // IDocumentModel
 public:
     STDMETHOD(InitInstance)(BSTR originalContent);
-    STDMETHOD(GetOrginalContent)(BSTR* originalContent);
+    STDMETHOD(GetOriginalContent)(BSTR* originalContent);
     STDMETHOD(GetCurrentContent)(BSTR* currentContent);
     STDMETHOD(SetCurrentContent)(BSTR currentContent);
     STDMETHOD(Update)(IRange* originalRange, BSTR replacement);

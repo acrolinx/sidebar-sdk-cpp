@@ -29,7 +29,7 @@ STDMETHODIMP CDocumentModel::InitInstance(BSTR originalContent)
 }
 
 
-STDMETHODIMP CDocumentModel::GetOrginalContent(BSTR* originalContent)
+STDMETHODIMP CDocumentModel::GetOriginalContent(BSTR* originalContent)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     ACROASSERT(m_isInstanceCreated == TRUE, "Initialize DocumentModel object by calling InitInstance() before using it");

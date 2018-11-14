@@ -19,7 +19,7 @@ STDMETHODIMP CCheckResult::GetCheckId(BSTR* checkId)
     CString retval = m_checkResult[_T("checkedPart")][_T("checkId")].GetString();
     if(checkId == nullptr)
     {
-        LERROR << "Create out parameter string before calling GetCheckId()";
+        LERROR << "Create string before calling GetCheckId()";
     }
     else
     {
