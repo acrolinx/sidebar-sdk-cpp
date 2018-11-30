@@ -102,7 +102,7 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetItem(BSTR key, BSTR* data)
             }
             else
             {
-                LERROR << "Fail to retrieve the storage values " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+                LDEBUG << "Fail to retrieve the storage values " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
             }
             ::RegCloseKey( hKey );
         }
