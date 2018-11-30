@@ -47,6 +47,7 @@ public:
     void FinalRelease()
     {
         m_content = "";
+        m_reference = "";
     }
 
 public:
