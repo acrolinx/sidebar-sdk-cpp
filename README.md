@@ -40,7 +40,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 
 ## SDK Features
 
-1. Provides [lookup](https://github.com/acrolinx/acrolinx-coding-guidance/blob/master/topics/lookup/diff.md) functionality.
+1. Provides lookup functionality.
 2. **Start page**: Provides interactive way to sign in to Acrolinx with built-in error handling.
 3. Provides logging using [EasyLogging++ v8.91](https://github.com/muflihun/easyloggingpp).
 4. **Acrolinx Storage**: Applications using the IE web browser control may be denied to access LocalStorage.
