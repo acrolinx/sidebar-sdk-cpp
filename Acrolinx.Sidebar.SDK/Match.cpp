@@ -2,7 +2,6 @@
 
 #include "StdAfx.h"
 #include "Match.h"
-#include "easylogging++.h"
 
 CMatch::CMatch(void)
     : m_content(CString())

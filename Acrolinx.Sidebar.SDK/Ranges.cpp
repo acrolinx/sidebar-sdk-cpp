@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "Ranges.h"
-#include "easylogging++.h"
 
 
 // CRanges
@@ -13,7 +12,7 @@ STDMETHODIMP CRanges::GetRangeAt(LONG index, IRange** range)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    LTRACE << "Populating range";
+    LOGD << "Populating range";
     this->GetAt(index)->AddRef();
     *range = this->GetAt(index);
 
@@ -42,6 +41,6 @@ STDMETHODIMP CRanges::AddRange(LONG start, LONG end)
 
     range->InitInstance(start, end);
     this->Add(range);
-    LTRACE << "Added range [" << start << "," << end << "]";
+    LOGD << "Added range [" << start << "," << end << "]";
     return S_OK;
 }

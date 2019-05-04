@@ -1,5 +1,4 @@
 #include "StdAfx.h"
-#include "easylogging++.h"
 #include "COMInstanceMngr.h"
 
 

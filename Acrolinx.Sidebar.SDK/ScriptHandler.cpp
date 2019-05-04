@@ -6,7 +6,6 @@
 #include "ScriptHandler.h"
 #include "SidebarControl.h"
 #include "LoggerHelper.h"
-#include "easylogging++.h"
 #include "DllUtil.h"
 
 // CScriptHandler
@@ -50,7 +49,7 @@ ATL::CComVariant CScriptHandler::injectScript(CString script)
     HRESULT hRes = GetScriptDispatch(pScriptDisp);
     if (!SUCCEEDED(hRes) || (nullptr == pScriptDisp)) 
     {
-        LERROR << "script dispatch failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+        LOGE << "script dispatch failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
         return S_FALSE;
     }
 
@@ -60,7 +59,7 @@ ATL::CComVariant CScriptHandler::injectScript(CString script)
         hRes = pScriptDisp->GetIDsOfNames(IID_NULL, &fktName, 1, LOCALE_USER_DEFAULT, &dispIdEval);
         if (!SUCCEEDED(hRes))
         {
-            LERROR << "script dispatch failed to get ids of name: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+            LOGE << "script dispatch failed to get ids of name: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
             pScriptDisp.Release();
             return S_FALSE;
         }
@@ -77,7 +76,7 @@ ATL::CComVariant CScriptHandler::injectScript(CString script)
 
     if (!SUCCEEDED(hRes))
     {
-        LERROR << "script execution failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+        LOGE << "script execution failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
         return S_FALSE;
     }
 
@@ -93,7 +92,7 @@ HRESULT CScriptHandler::GetScriptDispatch(IDispatchPtr& scriptDisp)
     pDocDisp = m_webBrowser->get_Document();
     if ((nullptr == pDocDisp))
     {
-        LERROR << "Browser has no document";
+        LOGE << "Browser has no document";
         return S_FALSE;
     }
 
@@ -101,7 +100,7 @@ HRESULT CScriptHandler::GetScriptDispatch(IDispatchPtr& scriptDisp)
     HRESULT hRes = pDocDisp->QueryInterface(IID_IHTMLDocument2, (void**)&pDocHtm);
     if (!SUCCEEDED(hRes) || (nullptr == pDocHtm))
     {
-        LERROR << "Document has no html/script";
+        LOGE << "Document has no html/script";
         return S_FALSE;
     }
     else
@@ -128,7 +127,7 @@ void CScriptHandler::SetSidebarControl(CSidebarControl* sidebar)
 STDMETHODIMP CScriptHandler::Log(BSTR logMessage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LINFO << "JavaScript Log: "<< CString(logMessage).GetString();
+    LOGI << "JavaScript Log: "<< CString(logMessage).GetString();
     return S_OK;
 }
 
@@ -148,7 +147,7 @@ STDMETHODIMP CScriptHandler::OnError(BSTR msg, BSTR url, BSTR line, BSTR col, BS
     scriptError.Append(L", Error:");
     scriptError.Append(error);
 
-    LERROR << "CScriptHandler::OnError: " << scriptError.GetString();
+    LOGE << "CScriptHandler::OnError: " << scriptError.GetString();
 
     return S_OK;
 }
@@ -199,7 +198,7 @@ STDMETHODIMP CScriptHandler::requestInit(void)
 STDMETHODIMP CScriptHandler::onInitFinished(BSTR initResult)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LTRACE << "Init Result: " << CString(initResult).GetString();
+    LOGD << "Init Result: " << CString(initResult).GetString();
     m_sidebarCtrl->FireInitFinished();
 
     return S_OK;
@@ -211,7 +210,7 @@ STDMETHODIMP CScriptHandler::configure(BSTR configuration)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     ASSERT(&configuration != nullptr);
-    LINFO <<"configure: " << CString(configuration).GetString();
+    LOGI <<"configure: " << CString(configuration).GetString();
     return S_OK;
 }
 
@@ -242,7 +241,7 @@ STDMETHODIMP CScriptHandler::selectRanges(BSTR checkId, BSTR jsonMatches)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     m_sidebarCtrl->FireSelectRanges(checkId, jsonMatches);
-    LTRACE <<"Selection Matches: " << CString(jsonMatches).GetString();
+    LOGD <<"Selection Matches: " << CString(jsonMatches).GetString();
 
     return S_OK;
 }
@@ -253,7 +252,7 @@ STDMETHODIMP CScriptHandler::replaceRanges(BSTR checkId, BSTR jsonMatchesWithRep
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     m_sidebarCtrl->FireReplaceRanges(checkId, jsonMatchesWithReplacements);
-    LTRACE <<"Replacement Matches: " << CString(jsonMatchesWithReplacements).GetString();
+    LOGD <<"Replacement Matches: " << CString(jsonMatchesWithReplacements).GetString();
 
     return S_OK;
 }
@@ -265,7 +264,7 @@ STDMETHODIMP CScriptHandler::download(BSTR downloadInfo)
 
     ASSERT(&downloadInfo != nullptr);
 
-    LINFO << "downloadInfo: " << CString(downloadInfo).GetString();
+    LOGI << "downloadInfo: " << CString(downloadInfo).GetString();
 
     return S_OK;
 }
@@ -296,7 +295,7 @@ STDMETHODIMP CScriptHandler::openLogFile(void)
     }
     else
     {
-        LERROR << "Log file path is empty";
+        LOGE << "Log file path is empty";
     }
 
     return S_OK;

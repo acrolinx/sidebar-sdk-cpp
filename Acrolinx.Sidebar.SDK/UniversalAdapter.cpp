@@ -4,7 +4,6 @@
 #include <regex>
 #include "AcrolinxInterface.h"
 #include "Range.h"
-#include "easylogging++.h"
 #include "DocumentModel.h"
 #include "Dokument.h"
 
@@ -85,7 +84,7 @@ CString CUniversalAdapter::Extract(Input_Format format, CString documentReferenc
         HRESULT hr = xmlDoc.CreateInstance(__uuidof(DOMDocument));
         if(!SUCCEEDED(hr))
         {
-            LERROR << "Could not create XML document.";
+            LOGE << "Could not create XML document.";
             return CString();
         }
 

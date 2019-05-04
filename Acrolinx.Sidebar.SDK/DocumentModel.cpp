@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 #include "DocumentModel.h"
-#include "easylogging++.h"
 #include "Range.h"
 #include "DiffMatchPatchWorker.h"
 
@@ -23,7 +22,7 @@ STDMETHODIMP CDocumentModel::InitInstance(BSTR originalContent)
     m_originalContent = originalContent;
     m_currentContent = originalContent;
 
-    LTRACE << "Original Content: "<< m_originalContent.GetString();
+    LOGD << "Original Content: "<< m_originalContent.GetString();
 
     return S_OK;
 }
@@ -75,7 +74,7 @@ STDMETHODIMP CDocumentModel::Update(IRange* originalRange, BSTR replacement)
 
         m_currentContent.Delete(start, length);
         m_currentContent.Insert(start, replacement);
-        LTRACE << "New Content: "<< m_currentContent.GetString();
+        LOGD << "New Content: "<< m_currentContent.GetString();
         relativeRange->Release();
     }
     return hRes;
@@ -130,7 +129,7 @@ HRESULT CDocumentModel::MatchSurface(IRange* originalRange, IRange* currentRange
 
     CString newSurface = m_currentContent.Mid(start, length);
 
-    LTRACE << "Org surface: " << orgSurface.GetString()  << " New surface: " <<newSurface.GetString();
+    LOGD << "Org surface: " << orgSurface.GetString()  << " New surface: " <<newSurface.GetString();
 
     return (newSurface == orgSurface) ? S_OK : S_FALSE;
 }
@@ -140,7 +139,7 @@ STDMETHODIMP CDocumentModel::SetCurrentContent(BSTR currentContent)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     m_currentContent = currentContent;
-    LTRACE << "New Content: "<< m_currentContent.GetString();
+    LOGD << "New Content: "<< m_currentContent.GetString();
 
     return S_OK;
 }

@@ -4,7 +4,6 @@
 #include <Winnt.h>
 #include "DllUtil.h"
 #include <Wbemcli.h>
-#include "easylogging++.h"
 #include <Strsafe.h>
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
@@ -23,7 +22,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSInfo(CString& id, CString& name, C
 {
     if(!GetOSNameString(name, version))
     {
-        LERROR << "Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSInfo: GetOSNameString failed";
+        LOGE << "Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSInfo: GetOSNameString failed";
         return FALSE;
     }
     id = GetFormatedID(name);
@@ -38,7 +37,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppInfo(CString& id, CString& name, 
         WCHAR   szPath[MAX_PATH] = {0};
         if(!GetModuleFileName(nullptr, szPath, _countof(szPath)))
         {
-            LERROR << "Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppInfo: Failed to get executable path";
+            LOGE << "Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppInfo: Failed to get executable path";
             return FALSE;
         }
         version = GetFileVersion(CString(szPath));
@@ -48,7 +47,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppInfo(CString& id, CString& name, 
     }
     catch(...)
     {
-        LERROR << "Failed to get application info";
+        LOGE << "Failed to get application info";
     }
     return FALSE;
 }
@@ -62,7 +61,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetDllInfo(CString& id, CString& name, 
         WCHAR   szPath[MAX_PATH] = {0};
         if(!GetModuleFileName((HINSTANCE)&__ImageBase, szPath, _countof(szPath)))
         {
-            LERROR << "Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppInfo: Failed to get executable path";
+            LOGE << "Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppInfo: Failed to get executable path";
             return FALSE;
         }
         name = szPath;
@@ -72,7 +71,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetDllInfo(CString& id, CString& name, 
     }
     catch(...)
     {
-        LERROR << "Failed to get dll info";
+        LOGE << "Failed to get dll info";
     }
     return FALSE;
 }
@@ -114,7 +113,7 @@ CString Acrolinx_Sdk_Sidebar_Util::DllUtil::GetFileVersion(CString fileName)
     }
     catch(...)
     {
-        LERROR << "Failed to get file version";
+        LOGE << "Failed to get file version";
     }
     delete[] verData;
     return dllVersion;
@@ -146,7 +145,7 @@ CString Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppName(CString fileName)
     }
     catch(...)
     {
-        LERROR << "Failed to get app name";
+        LOGE << "Failed to get app name";
     }
     delete[] verData;
     return appName;
@@ -164,7 +163,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
     {
         PCWSTR pszMachineName = L".";
 
-        LTRACE << "Initialize COM process security by calling CoInitializeSecurity.";
+        LOGD << "Initialize COM process security by calling CoInitializeSecurity.";
         hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT,
             RPC_C_IMP_LEVEL_IDENTIFY, nullptr, EOAC_NONE, nullptr);
         if (FAILED(hr) && hr != RPC_E_TOO_LATE)
@@ -172,14 +171,14 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
             goto Cleanup;
         }
 
-        LTRACE << "Obtain the initial locator to WMI by calling CoCreateInstance.";
+        LOGD << "Obtain the initial locator to WMI by calling CoCreateInstance.";
         hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast<LPVOID *>(&pLoc));
         if (FAILED(hr))
         {
             goto Cleanup;
         }
 
-        LTRACE << "Connect to WMI through the IWbemLocator::ConnectServer method.";
+        LOGD << "Connect to WMI through the IWbemLocator::ConnectServer method.";
         wchar_t szPath[200];
         hr = StringCchPrintf(szPath, ARRAYSIZE(szPath), L"\\\\%s\\root\\cimv2", pszMachineName);
         if (FAILED(hr))
@@ -192,7 +191,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
             goto Cleanup;
         }
 
-        LTRACE << "Set security levels on a WMI connection";
+        LOGD << "Set security levels on a WMI connection";
         hr = CoSetProxyBlanket(pSvc, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL,
             RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE);
         if (FAILED(hr))
@@ -200,7 +199,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
             goto Cleanup;
         }
 
-        LTRACE << "Use the IWbemServices pointer to make requests of WMI";
+        LOGD << "Use the IWbemServices pointer to make requests of WMI";
         hr = pSvc->ExecQuery(bstr_t(L"WQL"), bstr_t(L"SELECT Caption, Version FROM Win32_OperatingSystem"),
             WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator);
         if (FAILED(hr))
@@ -208,7 +207,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
             goto Cleanup;
         }
 
-        LTRACE << "Secure the enumerator proxy.";
+        LOGD << "Secure the enumerator proxy.";
         hr = CoSetProxyBlanket(pEnumerator, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT,
             COLE_DEFAULT_PRINCIPAL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE);
         if (FAILED(hr))
@@ -216,12 +215,12 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
             goto Cleanup;
         }
 
-        LTRACE << "Get the data from the above query.";
+        LOGD << "Get the data from the above query.";
         IWbemClassObject *pclsObj = nullptr;
         ULONG uReturn = 0;
         while (pEnumerator)
         {
-            LTRACE << "Get one object.";
+            LOGD << "Get one object.";
             HRESULT hrTmp = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
             if (0 == uReturn)
             {
@@ -229,7 +228,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
             }
             VARIANT vtProp;
 
-            LTRACE << "Get the value of the Win32_OperatingSystem.Caption property.";
+            LOGD << "Get the value of the Win32_OperatingSystem.Caption property.";
             hrTmp = pclsObj->Get(L"Caption", 0, &vtProp, 0, 0);
             if (SUCCEEDED(hrTmp))
             {
@@ -239,7 +238,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
                 osName = pszName;
             }
 
-            LTRACE << "Get the value of the Win32_OperatingSystem.version property.";
+            LOGD << "Get the value of the Win32_OperatingSystem.version property.";
             hrTmp = pclsObj->Get(L"Version", 0, &vtProp, 0, 0);
             if (SUCCEEDED(hrTmp))
             {
@@ -255,7 +254,7 @@ BOOL Acrolinx_Sdk_Sidebar_Util::DllUtil::GetOSNameString(CString& osName, CStrin
     }
     catch(...)
     {
-        LERROR << "Failed to get OS name";
+        LOGE << "Failed to get OS name";
     }
 Cleanup:
     // Centralized cleanup for all allocated resources
@@ -285,7 +284,7 @@ CString Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppName(void)
         WCHAR   szPath[MAX_PATH] = {0};
         if(!GetModuleFileName(nullptr, szPath, _countof(szPath)))
         {
-            LERROR << "Failed to get executable path: " << GetLastErrorAsString().GetString();
+            LOGE << "Failed to get executable path: " << GetLastErrorAsString().GetString();
             return CString();
         }
         CString name = GetAppName(szPath);
@@ -298,7 +297,7 @@ CString Acrolinx_Sdk_Sidebar_Util::DllUtil::GetAppName(void)
     }
     catch(...)
     {
-        LERROR << "Failed to get application name";
+        LOGE << "Failed to get application name";
     }
     return CString();
 }

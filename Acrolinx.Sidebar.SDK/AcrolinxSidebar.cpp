@@ -7,7 +7,6 @@
 #include "AcrolinxSidebar.h"
 #include "AcrolinxSidebarPpg.h"
 #include "afxdialogex.h"
-#include "easylogging++.h"
 #include "Dokument.h"
 #include "Ranges.h"
 
@@ -402,28 +401,28 @@ void CAcrolinxSidebar::SetClientLocale(LPCTSTR newVal)
 void CAcrolinxSidebar::LogInfo(LPCTSTR msg)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LINFO << msg;
+    LOGI << msg;
 }
 
 
 void CAcrolinxSidebar::LogTrace(LPCTSTR msg)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LTRACE << msg;
+    LOGD << msg;
 }
 
 
 void CAcrolinxSidebar::LogError(LPCTSTR msg)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LERROR << msg;
+    LOGE << msg;
 }
 
 
 void CAcrolinxSidebar::LogWarn(LPCTSTR msg)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LWARNING << msg;
+    LOGW << msg;
 }
 
 

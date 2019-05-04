@@ -217,9 +217,6 @@
     <ClInclude Include="Ranges.h">
       <Filter>Header Files\Documents</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\easylogging++\easylogging++.h">
-      <Filter>Header Files\Utils\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="LoggerHelper.h">
       <Filter>Header Files\Utils\Logger</Filter>
     </ClInclude>

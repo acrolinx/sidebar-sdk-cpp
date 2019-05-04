@@ -36,9 +36,10 @@
 #import "MSXML6.dll"  no_auto_exclude rename_namespace(_T("MSXML"))
 #include <msxml2.h>
 
+#include <plog/Log.h>
 
 #ifdef _DEBUG
-#define ACROASSERT(f, m) ASSERT(f) ; LERROR_IF(!(f)) << m
+#define ACROASSERT(f, m) ASSERT(f) ; LOGE_IF(!(f)) << m
 #else
-#define ACROASSERT(f, m)  LERROR_IF(!(f)) << m
+#define ACROASSERT(f, m)  LOGE_IF(!(f)) << m
 #endif

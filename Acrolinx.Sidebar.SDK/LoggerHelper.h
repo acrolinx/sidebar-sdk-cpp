@@ -10,9 +10,12 @@ namespace Acrolinx_Sdk_Sidebar_Util
         LoggerHelper(void);
         ~LoggerHelper(void);
     public:
-        static bool Init();
+        static void Init();
         static CString GetLogFileName(void);
     private:
         static CString m_logFileName;
+    private:
+        static bool IsLogLevelDebug();
+        static CString CreateLogFileName();
     };
 }

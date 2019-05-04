@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 #include "Dokument.h"
-#include "easylogging++.h"
 
 // CDokument
 
@@ -109,11 +108,11 @@ void CDokument::SetDocument(BSTR content, BSTR reference, Input_Format inputForm
     }
 
     m_content = content;
-    LTRACE << "Content: " << m_content.GetString();
+    LOGD << "Content: " << m_content.GetString();
     m_reference = reference;
-    LTRACE << "Reference: " << m_reference.GetString();
+    LOGD << "Reference: " << m_reference.GetString();
     m_format = inputFormat;
-    LTRACE << "Format: " << GetFormatAsString().GetString();
+    LOGD << "Format: " << GetFormatAsString().GetString();
     m_selectionRanges = selectionRanges;
 }
 

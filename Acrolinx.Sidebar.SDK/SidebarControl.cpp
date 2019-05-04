@@ -14,7 +14,6 @@
 #include "CheckResult.h"
 #include "Range.h"
 #include "LoggerHelper.h"
-#include "easylogging++.h"
 
 using namespace Acrolinx_Sdk_Sidebar_Util;
 
@@ -50,7 +49,6 @@ CSidebarControl::~CSidebarControl()
         m_acrolinxStorage = NULL;
     }
     m_sidebar = NULL;
-    //Logger::LogShutdown();
 }
 
 void CSidebarControl::DoDataExchange(CDataExchange* pDX)
@@ -105,13 +103,13 @@ CString CSidebarControl::GetStartPageURL(void)
         WCHAR szPath[MAX_PATH] = {0};
         if(!GetModuleFileName(GetModuleHandle(_T("Acrolinx.Sidebar.SDK.dll")), szPath, sizeof(szPath)/sizeof(szPath[0])))
         {
-            LERROR << "Cannot find path, error: " <<  Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+            LOGE << "Cannot find path, error: " <<  Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
             return CString();
         }
         startPageURL = szPath;
         if(startPageURL.Replace(_T("Acrolinx.Sidebar.SDK.dll"), _T("Acrolinx.Startpage.dll"))==0)
         {
-            LERROR << "Path may be wrong, replacement failed: " << startPageURL.GetString();
+            LOGE << "Path may be wrong, replacement failed: " << startPageURL.GetString();
             return CString();
         }
     }
@@ -123,7 +121,7 @@ CString CSidebarControl::GetStartPageURL(void)
     }
     else
     {
-        LERROR << "Startpage url is not correctly build: "<< startPageURL.GetString() << ". May be Acrolinx.Startpage.dll is missing from the path";
+        LOGE << "Startpage url is not correctly build: "<< startPageURL.GetString() << ". May be Acrolinx.Startpage.dll is missing from the path";
         return CString();
     }
 
@@ -178,7 +176,7 @@ void CSidebarControl::SetDefaults(CString serverAddress)
         WCHAR strNameBuffer[LOCALE_NAME_MAX_LENGTH] = {0};
         if (LCIDToLocaleName(defaultLang, strNameBuffer, LOCALE_NAME_MAX_LENGTH, 0) == 0)
         {
-            LERROR << DllUtil::GetLastErrorAsString().GetString();
+            LOGE << DllUtil::GetLastErrorAsString().GetString();
         }
         else
         {
@@ -186,7 +184,7 @@ void CSidebarControl::SetDefaults(CString serverAddress)
             int position = 0;
             locale = locale.Tokenize(_T("-"), position);
             SetClientLocale(locale);
-            LINFO << "Default locale is set " << locale.GetString();
+            LOGI << "Default locale is set " << locale.GetString();
         }
     }
 
@@ -231,14 +229,14 @@ void CSidebarControl::DocumentCompleteWebBrowser(LPDISPATCH pDisp, VARIANT* URL)
         HRESULT hRes = document->QueryInterface(IID_IOleObject, (void**)&oleObject);
         if (!SUCCEEDED(hRes))
         {
-            LERROR << "Could not find OleObject";
+            LOGE << "Could not find OleObject";
             return;
         }
         // Get the new scriptHandler
         hRes = CComObject<CScriptHandler>::CreateInstance(&m_scriptHandler);
         if (!SUCCEEDED(hRes))
         {
-            LERROR << "CreateInstance script handle instance failed";
+            LOGE << "CreateInstance script handle instance failed";
             return;
         }
 
@@ -246,7 +244,7 @@ void CSidebarControl::DocumentCompleteWebBrowser(LPDISPATCH pDisp, VARIANT* URL)
         hRes = oleObject->GetClientSite(&clientSite);
         if (!SUCCEEDED(hRes) || nullptr == clientSite)
         {
-            LERROR << "Could not find client site";
+            LOGE << "Could not find client site";
             return;            
         }
 
@@ -257,7 +255,7 @@ void CSidebarControl::DocumentCompleteWebBrowser(LPDISPATCH pDisp, VARIANT* URL)
         hRes = oleObject->SetClientSite(m_scriptHandler);
         if (!SUCCEEDED(hRes))
         {
-            LERROR << "Client site setup failed";
+            LOGE << "Client site setup failed";
             return;
         }
         oleObject.Release();
@@ -285,7 +283,7 @@ BOOL CSidebarControl::DestroyWindow()
             hRes = document->QueryInterface(IID_IOleObject, (void**)&oleObject);
             if (!SUCCEEDED(hRes))
             {
-                LERROR << "Could not find OleObject";
+                LOGE << "Could not find OleObject";
                 return hRes;
             }
             IOleClientSite* clientsite;
@@ -295,7 +293,7 @@ BOOL CSidebarControl::DestroyWindow()
             hRes = oleObject->SetClientSite(m_scriptHandler->GetDeafultClientSite());
             if (!SUCCEEDED(hRes))
             {
-                LERROR << "Client site setup failed even after retries";
+                LOGE << "Client site setup failed even after retries";
                 return hRes;
             }
             oleObject.Release();
@@ -421,7 +419,7 @@ void CSidebarControl::AdjustZoomFactor()
     }
     catch (...)
     {
-        LERROR << "Unable to set zoom to sidebar";
+        LOGE << "Unable to set zoom to sidebar";
     }
 }
 
@@ -460,7 +458,7 @@ void CSidebarControl::RegisterClientComponent(CString id, CString name, CString 
 {
     if(category == CC_MAIN && m_isMainCategorySet)
     {
-        LWARNING << "MAIN component is already set. If you want to set MAIN compoment do it before sidebar start";
+        LOGW << "MAIN component is already set. If you want to set MAIN compoment do it before sidebar start";
         return;
     }
     if(category == CC_MAIN)
@@ -553,7 +551,7 @@ void CSidebarControl::OpenWindow(CString urlJson)
     CString urlStr(urlDom[_T("url")].GetString());
     if(urlStr.IsEmpty())
     {
-        LERROR << "URL is empty";
+        LOGE << "URL is empty";
         return;
     }
     CString urlTemp(urlStr);
@@ -565,7 +563,7 @@ void CSidebarControl::OpenWindow(CString urlJson)
     }
     else
     {
-        LERROR << "URL is not valid: " << urlStr.GetString();
+        LOGE << "URL is not valid: " << urlStr.GetString();
     }
 }
 
@@ -580,7 +578,7 @@ void CSidebarControl::FireSelectRanges(CString checkId, CString matches)
     }
     else
     {
-        LERROR << "Fail to prepare matches" << matches.GetString();
+        LOGE << "Fail to prepare matches" << matches.GetString();
     }
 }
 
@@ -595,7 +593,7 @@ void CSidebarControl::FireReplaceRanges(CString checkId, CString matchesWithRepl
     }
     else
     {
-        LERROR << "Fail to prepare matches" << matchesWithReplacement.GetString();
+        LOGE << "Fail to prepare matches" << matchesWithReplacement.GetString();
     }
 }
 
@@ -612,7 +610,7 @@ IMatches* CSidebarControl::ConvertToMatches(CString checkId, CString matches, BO
 
             WDocument matchesDom;
             CJsonUtil::Parse(matches, matchesDom);
-            LTRACE << "matches dom is ready";
+            LOGD << "matches dom is ready";
             for(size_t i = 0; i < matchesDom.Size(); i++)
             {
                 CComObject<CMatch>* match = nullptr;
@@ -633,13 +631,13 @@ IMatches* CSidebarControl::ConvertToMatches(CString checkId, CString matches, BO
                     replacement = matchesDom[i][_T("replacement")].GetString();
                 }
                 match->InitInstance(content.AllocSysString(), replacement.AllocSysString(), range, extractedRange);
-                LTRACE << "match added to matches list";
+                LOGD << "match added to matches list";
                 matchesObj->Add(match);
             }
         }
     }catch(...)
     {
-        LERROR << "Fail to prepare matches";
+        LOGE << "Fail to prepare matches";
         if(matchesObj != nullptr)
         {
             matchesObj->Release();

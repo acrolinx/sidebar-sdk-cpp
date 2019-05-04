@@ -3,9 +3,7 @@
 #include "StdAfx.h"
 #include "LoggerHelper.h"
 #include <string>
-#include "easylogging++.h"
 #include "DllUtil.h"
-
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 CString Acrolinx_Sdk_Sidebar_Util::LoggerHelper::m_logFileName = _T("");
@@ -19,42 +17,48 @@ Acrolinx_Sdk_Sidebar_Util::LoggerHelper::~LoggerHelper(void)
 }
 
 
-bool Acrolinx_Sdk_Sidebar_Util::LoggerHelper::Init()
+void Acrolinx_Sdk_Sidebar_Util::LoggerHelper::Init()
 {
-    try{
-        // Do default settings
-        WCHAR   dllName[MAX_PATH] = {0};
-        if(!GetModuleFileNameW((HINSTANCE)&__ImageBase, dllName, _countof(dllName)))
-        {
-            OutputDebugString(_T("Unable to get path for the loaded dll file"));
-            return false;
-        }
-        CString dllPathWithFileName(dllName);
-        int lastIndexOfBackSlash = dllPathWithFileName.ReverseFind('\\');
-        CString dllPath = dllPathWithFileName.Left(lastIndexOfBackSlash + 1);
-        std::string initFileName = std::string((CStringA)dllPath);
-        FILE *file = nullptr;
-        initFileName.append("AcrolinxLog.properties");
-        if (!(fopen_s(&file, initFileName.c_str(), "r")))
-        {
-            fclose(file);
-            easyloggingpp::Configurations confFromFile(initFileName);  // Load configuration from file
-            easyloggingpp::Loggers::reconfigureAllLoggers(confFromFile); // Re-configures all the loggers to current configuration file
-            confFromFile.clear();
-        }
-        else
-        {
-            easyloggingpp::Configurations defaultConf;
-            defaultConf.setToDefault();
-            defaultConf.set(easyloggingpp::Level::All, easyloggingpp::ConfigurationType::Format, "%datetime | [%level] %loc: %log");
-            easyloggingpp::Loggers::reconfigureAllLoggers(defaultConf);
-            defaultConf.clear();
-        }
-    }catch (...){
-        OutputDebugString(_T("Unable to read AcrolinxLog.property file hence setting default logging settings"));
-    }
+    CString logFileName = CreateLogFileName();
+    static plog::RollingFileAppender<plog::TxtFormatter> fileAppender(logFileName.GetString(), 10485760, 3);
+    plog::init(IsLogLevelDebug()?plog::debug:plog::info, &fileAppender);
+}
 
-    // Do default settings
+CString Acrolinx_Sdk_Sidebar_Util::LoggerHelper::GetLogFileName(void)
+{
+    return m_logFileName;
+}
+
+
+bool Acrolinx_Sdk_Sidebar_Util::LoggerHelper::IsLogLevelDebug()
+{
+    bool retVal = false;
+    try
+    {
+        HKEY hKey;
+        DWORD szData;
+        DWORD dwKeyDataType = REG_SZ;
+        DWORD dwDataBufSize = 1024;
+        LONG regAccess;
+
+        regAccess = ::RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\Acrolinx\\Plugins\\SdkCpp"), 0, KEY_READ, &hKey);
+        if (regAccess == ERROR_SUCCESS)
+        {
+            if (::RegQueryValueEx(hKey, _T("enable.debug.log"), nullptr, &dwKeyDataType, (LPBYTE) &szData, &dwDataBufSize) == ERROR_SUCCESS)
+            {
+                retVal = (szData == 1)?true:false;
+            }
+            RegCloseKey(hKey);
+        }
+    }
+    catch (...){
+        OutputDebugString(_T("Exception thrown by registry access"));
+    }
+    return retVal;
+}
+
+CString Acrolinx_Sdk_Sidebar_Util::LoggerHelper::CreateLogFileName()
+{
     time_t now = time(0);
     tm ltm;
     localtime_s(&ltm, &now);
@@ -70,40 +74,7 @@ bool Acrolinx_Sdk_Sidebar_Util::LoggerHelper::Init()
     tempPath = tempPath + _T("Acrolinx\\Logs\\") + DllUtil::GetAppName() + _T("\\");
 
     m_logFileName = tempPath + curDate +_T("-") + DllUtil::GetAppName() +  _T(".log");
-    std::string defaultLogFileName ((CStringA)m_logFileName);
 
-    easyloggingpp::Loggers::reconfigureAllLoggers(easyloggingpp::ConfigurationType::Filename, defaultLogFileName);
-
-    //Delete empty log file & folder: easylogging++ creates an empty file(shortcoming of v8.91)
-    WCHAR currentPath[MAX_PATH];
-    DWORD dwRet;
-    dwRet = GetCurrentDirectory(MAX_PATH, currentPath);
-    if( dwRet == 0 || dwRet > MAX_PATH)
-    {
-        LERROR << "Failed to get temp log file path: " << DllUtil::GetLastErrorAsString().GetString();
-    }
-    else
-    {
-        CString filePath(currentPath);
-        filePath.Append(_T("\\logs\\myeasylog.log"));
-        BOOL retVal = DeleteFile(filePath);
-        if(retVal)
-        {
-            CString logPath(currentPath);
-            logPath.Append(_T("\\logs"));
-            retVal = RemoveDirectory(logPath);
-        }
-
-        if (!retVal)
-        {
-            LERROR << "Failed to delete temp log file or path: " << DllUtil::GetLastErrorAsString().GetString();
-        }
-    }
-
-    return true;
-}
-
-CString Acrolinx_Sdk_Sidebar_Util::LoggerHelper::GetLogFileName(void)
-{
     return m_logFileName;
+
 }

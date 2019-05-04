@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 #include "Matches.h"
-#include "easylogging++.h"
 
 // CMatches
 
@@ -15,7 +14,7 @@ STDMETHODIMP CMatches::GetCheckId(BSTR* checkId)
 
     if(checkId == nullptr)
     {
-        LERROR << "Create string before calling GetCheckId()";
+        LOGE << "Create string before calling GetCheckId()";
     }
     else
     {
@@ -50,7 +49,7 @@ STDMETHODIMP CMatches::GetMatchAt(LONG index, IMatch** match)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    LTRACE << "Populating match";
+    LOGD << "Populating match";
     this->GetAt(index)->AddRef();
     *match = this->GetAt(index);
 

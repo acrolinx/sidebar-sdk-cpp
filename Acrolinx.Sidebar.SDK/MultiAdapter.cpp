@@ -2,7 +2,6 @@
 
 #include "StdAfx.h"
 #include "AcrolinxInterface.h"
-#include "easylogging++.h"
 #include "Dokument.h"
 #include "Match.h"
 #include "Matches.h"
@@ -42,7 +41,7 @@ void CMultiAdapter::RegisterAdapter(CUniversalAdapter* adapter)
     }
     else
     {
-        LERROR << "Adapter is not valid";
+        LOGE << "Adapter is not valid";
     }
 }
 

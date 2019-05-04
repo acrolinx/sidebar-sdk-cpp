@@ -2,7 +2,6 @@
 
 #include "StdAfx.h"
 #include "Range.h"
-#include "easylogging++.h"
 
 CRange::CRange(void)
     : m_start(0)
@@ -33,7 +32,7 @@ STDMETHODIMP CRange::GetLength(LONG* length)
 
     if(m_end < m_start)
     {
-        LERROR<< "Someting is wrong - range is not set properly";
+        LOGE<< "Someting is wrong - range is not set properly";
         return S_FALSE;
     }
 
@@ -53,6 +52,6 @@ STDMETHODIMP CRange::InitInstance(LONG start, LONG end)
 
     m_start = start;
     m_end = end;
-    LTRACE << "range [" << start << "," << end << "]";
+    LOGD << "range [" << start << "," << end << "]";
     return S_OK;
 }

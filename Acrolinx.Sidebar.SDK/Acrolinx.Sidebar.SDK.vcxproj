@@ -92,7 +92,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;_DEBUG;_USRDLL;ACROLINX_SDK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Utilities\DllUtil;Storage;Utilities\JSONUtil;Utilities;Utilities\easylogging++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Utilities\DllUtil;Storage;Utilities\JSONUtil;Utilities;Utilities\plog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -103,7 +103,7 @@
       <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>version.lib;Wbemuuid.lib;comsvcs.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Utilities\log4cpp\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -118,8 +118,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(ProjectDir)Resource\Acrolinx.Startpage.dll" "$(OutDir)"
-xcopy /yi "$(ProjectDir)AcrolinxLog.properties" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -129,7 +128,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;_DEBUG;_USRDLL;ACROLINX_SDK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Utilities\DllUtil;Storage;Utilities\JSONUtil;Utilities;Utilities\easylogging++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Utilities\DllUtil;Storage;Utilities\JSONUtil;Utilities;Utilities\plog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -140,7 +139,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>version.lib;Wbemuuid.lib;comsvcs.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Utilities\log4cpp\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -154,8 +153,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(ProjectDir)Resource\Acrolinx.Startpage.dll" "$(OutDir)"
-xcopy /yi "$(ProjectDir)AcrolinxLog.properties" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -180,7 +178,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>version.lib;Wbemuuid.lib;comsvcs.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Utilities\log4cpp\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -195,15 +193,10 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(ProjectDir)Resource\Acrolinx.Startpage.dll" "$(OutDir)"
-xcopy /yi "$(ProjectDir)AcrolinxLog.properties" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"
-
-xcopy /yi "$(OutDir)Acrolinx.Startpage.dll" "$(SolutionDir)\distrib"
-xcopy /yi "$(OutDir)Acrolinx.Sidebar.SDK.dll" "$(SolutionDir)\distrib\x86"
-xcopy /yi "$(OutDir)Acrolinx.Sidebar.SDK.lib" "$(SolutionDir)\distrib\x86"
-xcopy /yi "$(OutDir)AcrolinxLog.properties" "$(SolutionDir)\distrib"
-xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
+xcopy /yi "$(ProjectDir)Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -214,7 +207,7 @@ xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Storage;Utilities;Utilities\JSONUtil;Utilities\easylogging++;Utilities\DllUtil</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Storage;Utilities;Utilities\JSONUtil;Utilities\plog;Utilities\DllUtil</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -227,7 +220,7 @@ xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
       <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>version.lib;Wbemuuid.lib;comsvcs.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Utilities\log4cpp\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -241,15 +234,9 @@ xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(ProjectDir)Resource\Acrolinx.Startpage.dll" "$(OutDir)"
-xcopy /yi "$(ProjectDir)AcrolinxLog.properties" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"
-
-xcopy /yi "$(OutDir)Acrolinx.Startpage.dll" "$(SolutionDir)\distrib"
-xcopy /yi "$(OutDir)Acrolinx.Sidebar.SDK.dll" "$(SolutionDir)\distrib\x64"
-xcopy /yi "$(OutDir)Acrolinx.Sidebar.SDK.lib" "$(SolutionDir)\distrib\x64"
-xcopy /yi "$(OutDir)AcrolinxLog.properties" "$(SolutionDir)\distrib"
-xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
+xcopy /yi "$(ProjectDir)x64\Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -315,7 +302,6 @@ xcopy /yi "$(OutDir)AcrolinxInterface.h" "$(SolutionDir)\distrib"</Command>
     <ClInclude Include="AcrolinxInterface.h" />
     <ClInclude Include="Utilities\diff-match-patch\diff_match_patch.h" />
     <ClInclude Include="Utilities\DllUtil\DllUtil.h" />
-    <ClInclude Include="Utilities\easylogging++\easylogging++.h" />
     <ClInclude Include="Utilities\JSONUtil\JsonUtil.h" />
     <ClInclude Include="WebBrowser.h" />
   </ItemGroup>

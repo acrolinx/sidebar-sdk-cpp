@@ -6,12 +6,7 @@
 #include "Acrolinx.Sidebar.SDK.h"
 #include <initguid.h>
 #include "Acrolinx.Sidebar.SDK_i.c"
-#include "easylogging++.h"
 #include "LoggerHelper.h"
-
-
-//This is important for logger initialization
-_INITIALIZE_EASYLOGGINGPP
 
 class CAcrolinxSidebarSDKModule :
 public ATL::CAtlMfcModule

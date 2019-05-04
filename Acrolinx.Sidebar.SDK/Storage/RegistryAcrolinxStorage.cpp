@@ -3,7 +3,6 @@
 #include "StdAfx.h"
 #include "RegistryAcrolinxStorage.h"
 #include <Windows.h>
-#include "easylogging++.h"
 #include "DllUtil.h"
 
 
@@ -31,14 +30,14 @@ STDMETHODIMP CRegistryAcrolinxStorage::RemoveItem(BSTR key)
         {
             if(::RegDeleteValue(hKey,CString(key)) != ERROR_SUCCESS)
             {
-                LERROR << "Fail to remove values";
+                LOGE << "Fail to remove values";
             }
             ::RegCloseKey(hKey);
         }
     }
     catch(...)
     {
-        LERROR << "Exception thrown by registry";
+        LOGE << "Exception thrown by registry";
     }
 
     return S_OK;
@@ -59,7 +58,7 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
             CString value(data);
             if(::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), (value.GetLength()*(sizeof(WCHAR))) + 1) != ERROR_SUCCESS)
             {
-                LERROR << "Fail to store values";
+                LOGE << "Fail to store values";
             }
 
             ::RegCloseKey(hKey);
@@ -67,7 +66,7 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
     }
     catch(...)
     {
-        LERROR << "Exception thrown by registry";
+        LOGE << "Exception thrown by registry";
     }
 
     return S_OK;
@@ -102,18 +101,18 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetItem(BSTR key, BSTR* data)
             }
             else
             {
-                LDEBUG << "Fail to retrieve the storage values " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+                LOGD << "Fail to retrieve the storage values " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
             }
             ::RegCloseKey( hKey );
         }
         else
         {
-            LERROR << "Fail to open registry";
+            LOGE << "Fail to open registry";
         }
     }
     catch(...)
     {
-        LERROR << "Exception thrown by registry" << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+        LOGE << "Exception thrown by registry" << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
     }
 
     return S_OK;

@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 #include "CheckOptions.h"
-#include "easylogging++.h"
 
 // CCheckOptions
 
@@ -19,7 +18,7 @@ STDMETHODIMP CCheckOptions::GetSelection(VARIANT_BOOL* selection)
 
     if(selection == nullptr)
     {
-        LERROR <<  "Create out bool var before calling GetSelection()";
+        LOGE <<  "Create out bool var before calling GetSelection()";
     }
     else
     {

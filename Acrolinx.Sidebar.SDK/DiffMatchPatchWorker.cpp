@@ -2,7 +2,6 @@
 
 #include "StdAfx.h"
 #include "DiffMatchPatchWorker.h"
-#include "easylogging++.h"
 
 CDiffMatchPatchWorker::CDiffMatchPatchWorker(void)
 {
@@ -68,13 +67,13 @@ LONG CDiffMatchPatchWorker::FindDisplacement(OffsetMappingSet offsetMappingSet, 
 
     LONG index = std::distance(offsetMappingSet.begin(), findResult);
 
-    LTRACE << "Position of original range "<< index << " in diffs";
+    LOGD << "Position of original range "<< index << " in diffs";
 
     if(index > 0)
     {
         findResult = offsetMappingSet.begin();
         std::advance(findResult, index - 1);
-        LTRACE << "Diff distance " << findResult->second;
+        LOGD << "Diff distance " << findResult->second;
         return (LONG)findResult->second;
     }
 

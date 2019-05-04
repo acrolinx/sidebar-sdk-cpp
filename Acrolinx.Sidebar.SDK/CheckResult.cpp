@@ -5,7 +5,6 @@
 #include "stdafx.h"
 #include "CheckResult.h"
 #include "Range.h"
-#include "easylogging++.h"
 
 // CCheckResult
 
@@ -19,7 +18,7 @@ STDMETHODIMP CCheckResult::GetCheckId(BSTR* checkId)
     CString retval = m_checkResult[_T("checkedPart")][_T("checkId")].GetString();
     if(checkId == nullptr)
     {
-        LERROR << "Create string before calling GetCheckId()";
+        LOGE << "Create string before calling GetCheckId()";
     }
     else
     {
@@ -48,7 +47,7 @@ STDMETHODIMP CCheckResult::GetEmbedCheckInformation(BSTR* embedCheckInformation)
     }
     else
     {
-        LERROR << "embedCheckInformation isn't present";
+        LOGE << "embedCheckInformation isn't present";
     }
 
     return S_OK;
@@ -71,16 +70,16 @@ STDMETHODIMP CCheckResult::GetRange(IRange** range)
             rangeObj->AddRef();
             rangeObj->InitInstance(start, end);
             *range = rangeObj;
-            LTRACE << "Creating range [" << start << "," << end << "]";
+            LOGD << "Creating range [" << start << "," << end << "]";
         }
         else
         {
-            LERROR << "Creating range failed";
+            LOGE << "Creating range failed";
         }
     }
     else
     {
-        LTRACE << "Populating range [" << start << "," << end << "]";
+        LOGD << "Populating range [" << start << "," << end << "]";
         (*range)->InitInstance(start, end);
     }
 
@@ -99,7 +98,7 @@ BOOL CCheckResult::InitInstance(CString checkResult)
 
     if( checkResult.IsEmpty())
     {
-        LTRACE << "checkResult is empty";
+        LOGD << "checkResult is empty";
         checkResult = _T("{}");
     }
     CJsonUtil::Parse(checkResult, m_checkResult);
