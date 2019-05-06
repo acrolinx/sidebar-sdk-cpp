@@ -47,7 +47,7 @@ STDMETHODIMP CCheckResult::GetEmbedCheckInformation(BSTR* embedCheckInformation)
     }
     else
     {
-        LOGE << "embedCheckInformation isn't present";
+        LOGI << "embedCheckInformation isn't present";
     }
 
     return S_OK;
