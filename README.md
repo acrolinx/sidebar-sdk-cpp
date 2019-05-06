@@ -56,7 +56,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 * RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt)
   and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson).
   The RapidJSON website is at [rapidjson.org](http://rapidjson.org/).
-* plog v1.1.4 for logging utility. plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
+* Plog v1.1.4 for logging utility. Plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
   and Copyright (c) 2016 Sergey Podobry (sergey.podobry@gmail.com). You can get the source [here]( https://github.com/SergiusTheBest/plog).
 
 ## License
