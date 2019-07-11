@@ -196,7 +196,9 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"
 xcopy /yi "$(ProjectDir)Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"
-</Command>
+
+xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x86\"
+xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -236,7 +238,10 @@ xcopy /yi "$(ProjectDir)Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"
     <PostBuildEvent>
       <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"
-xcopy /yi "$(ProjectDir)x64\Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"</Command>
+xcopy /yi "$(ProjectDir)x64\Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"
+
+xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x64\"
+xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x64\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
