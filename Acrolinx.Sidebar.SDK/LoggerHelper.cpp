@@ -71,7 +71,13 @@ CString Acrolinx_Sdk_Sidebar_Util::LoggerHelper::CreateLogFileName()
     {
         tempPath = wcharPath;
     }
-    tempPath = tempPath + _T("Acrolinx\\Logs\\") + DllUtil::GetAppName() + _T("\\");
+
+    tempPath = tempPath + _T("Acrolinx\\");
+    CreateDirectory(tempPath, NULL);
+    tempPath = tempPath + _T("Logs\\");
+    CreateDirectory(tempPath, NULL);
+    tempPath = tempPath + DllUtil::GetAppName() + _T("\\");
+    CreateDirectory(tempPath, NULL);
 
     m_logFileName = tempPath + curDate +_T("-") + DllUtil::GetAppName() +  _T(".log");
 

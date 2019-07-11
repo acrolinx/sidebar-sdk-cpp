@@ -229,7 +229,7 @@ library AcrolinxSidebarSDKLib
     //  Event interface has no properties
     methods:
         [id(1), helpstring("Indicates Sidebar has finished loading")] void SidebarLoaded(BSTR url);
-        [id(2), helpstring("Indicates Sidebar has been intialized")] void InitFinished(void);
+        [id(2), helpstring("Indicates Sidebar has been initialized")] void InitFinished(void);
         [id(3), helpstring("Check button in clicked on Sidebar")] void RequestCheck(IDispatch* checkOptions);
         [id(4), helpstring("Indicates check is complete")] void Checked(IDispatch* checkResult);
         [id(5), helpstring("Indicates user clicked on a card")] void SelectRanges(IDispatch* matches);
