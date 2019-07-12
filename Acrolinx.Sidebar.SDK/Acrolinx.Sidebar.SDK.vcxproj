@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;_DEBUG;_USRDLL;ACROLINX_SDK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Utilities\DllUtil;Storage;Utilities\JSONUtil;Utilities;Utilities\plog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4003;4005;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,7 +118,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\x86\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -129,7 +129,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;_DEBUG;_USRDLL;ACROLINX_SDK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Utilities\DllUtil;Storage;Utilities\JSONUtil;Utilities;Utilities\plog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4003;4005;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,7 +153,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\x64\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -166,7 +166,7 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Storage;Utilities;Utilities\JSONUtil;Utilities\easylogging++;Utilities\DllUtil</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4003;4005;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -193,12 +193,16 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\x86\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"
 xcopy /yi "$(ProjectDir)Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"
 
+
+xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(SolutionDir)distrib\x86\"
+xcopy /yi "$(ProjectDir)Release\Acrolinx.Sidebar.SDK.tlb" "$(SolutionDir)distrib\x86\"
 xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x86\"
-xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"</Command>
+xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"
+xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x86\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -210,7 +214,7 @@ xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;ACROLINX_SDK_EXPORTS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Storage;Utilities;Utilities\JSONUtil;Utilities\plog;Utilities\DllUtil</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4100;4003</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4003;4005;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -236,12 +240,16 @@ xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"</Command>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>xcopy /yi "$(SolutionDir)distrib\Acrolinx.Startpage.dll" "$(OutDir)"
+      <Command>xcopy /yi "$(SolutionDir)distrib\x64\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"
 xcopy /yi "$(ProjectDir)x64\Release\Acrolinx.Sidebar.SDK.tlb" "$(OutDir)"
 
+
+xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(SolutionDir)distrib\x64\"
+xcopy /yi "$(ProjectDir)x64\Release\Acrolinx.Sidebar.SDK.tlb" "$(SolutionDir)distrib\x64\"
 xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x64\"
-xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x64\"</Command>
+xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x64\"
+xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
