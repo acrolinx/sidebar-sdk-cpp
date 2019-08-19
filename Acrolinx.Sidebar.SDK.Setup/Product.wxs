@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?if $(sys.BUILDARCH) = x64 ?>
+<?define upgradeCode = "0EF4CBE4-142F-4386-8FDE-A1E305FA41AB" ?>
+<?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+<?define productName = "Acrolinx C++ Sidebar SDK (64 bit)" ?>
+<?else ?>
+<?define upgradeCode = "6F33DAB3-7045-4D51-8FA4-3A5C7231004F" ?>
+<?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+<?define productName = "Acrolinx C++ Sidebar SDK (32 bit)" ?>
+<?endif ?>
+
+<?define productVersion="1.1.0.1" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*"
+           Name="$(var.productName)"
+           Manufacturer="Acrolinx"
+           Language="0"
+           Version="$(var.productVersion)"
+           UpgradeCode="$(var.upgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"
+             Comments="$(var.productName) $(var.productVersion)"/>
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+    <Icon Id="logo_acrolinx.ico" SourceFile=".\resources\acrolinx.ico"/>
+
+    <Upgrade Id="$(var.upgradeCode)">
+      <UpgradeVersion Minimum="$(var.productVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
+      <UpgradeVersion Minimum="1.0.0.0" Maximum="$(var.productVersion)" IncludeMinimum="yes" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED"/>
+    </Upgrade>
+
+    <Condition Message="A newer version of $(var.productName) is already installed.">NOT NEWERVERSIONDETECTED</Condition>
+
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallInitialize"/>
+    </InstallExecuteSequence>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.PlatformProgramFilesFolder)">
+        <Directory Id="ACROLINXDIR" Name="Acrolinx">
+          <Directory Id="CPPSDK" Name="C++SDK"></Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="Feature.CPP.SDK" Title="Acrolinx C++ Sidebar SDK" Level="1">
+      <ComponentRef Id="Component.Acrolinx.Startpage.dll"/>
+      <?if $(sys.BUILDARCH) = x64 ?>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.64bit.dll"/>
+      <?else?>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.32bit.dll"/>
+      <?endif?>
+    </Feature>
+
+    <Property Id="ARPPRODUCTICON" Value="logo_acrolinx.ico" Secure="yes"/>
+    <Property Id="ARPCOMMENTS" Value="$(var.productName) (var.productVersion)" Secure="yes"/>
+  </Product>
+
+  <Fragment>
+    <DirectoryRef Id="CPPSDK">
+      <Component Id="Component.Acrolinx.Startpage.dll" Guid="421223B6-FE51-40A9-A46A-6697688BC2CE" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Startpage.dll" Name="Acrolinx.Startpage.dll" Source="..\distrib\x86\Acrolinx.Startpage.dll" DiskId="1"/>
+      </Component>
+    </DirectoryRef>
+    <?if $(sys.BUILDARCH) = x64 ?>
+    <DirectoryRef Id="CPPSDK">
+      <Component Id="Component.Acrolinx.Sidebar.SDK.64bit.dll" Guid="87C78C31-8C13-487A-BEAD-2A5299A7905F" Location="local" KeyPath="yes">
+        <AppId Description="AcrolinxSidebarSDK" Id="{949B9D2D-B59A-487C-A958-AC6492821378}" />
+        <File Id="Acrolinx.Sidebar.SDK64bit.dll" Name="Acrolinx.Sidebar.SDK.dll" Source="..\distrib\x64\Acrolinx.Sidebar.SDK.dll" DiskId="1">
+          <Class Id="{69EBA0D6-63D7-4A58-AEB3-B53EC2C565F9}" Context="InprocServer32" Description="Acrolinx Sidebar Property Page" />
+          <TypeLib Id="{C09DADB1-142C-440A-BF4A-8399AAE802B3}" Control="yes" Description="AcrolinxSidebarSDKLib" Language="0" MajorVersion="1" MinorVersion="0">
+            <Class Id="{1F247866-18D2-4D59-9326-E63164BDBC7D}" Context="InprocServer32" Description="DocumentModel Class" ThreadingModel="both" Version="1.0" Programmable="yes">
+              <ProgId Id="ACROSIDEBAR.DocumentModel.1" Description="DocumentModel Class">
+                <ProgId Id="ACROSIDEBAR.DocumentModel" Description="DocumentModel Class" />
+              </ProgId>
+            </Class>
+            <Class Id="{32245F63-9E1D-412B-A361-AD40856C4BD9}" Context="InprocServer32" Description="Acrolinx Sidebar Control" ThreadingModel="apartment" Version="1.0" Insertable="yes" Control="yes">
+              <ProgId Id="ACROSIDEBAR.AcrolinxSidebar.1" Description="Acrolinx Sidebar Control" />
+            </Class>
+            <Class Id="{9D9817E2-2C4B-4268-917B-CD5D284E086C}" Context="InprocServer32" Description="Dokument Class" ThreadingModel="apartment" Version="1.0" Programmable="yes" />
+            <Class Id="{AEF18D6E-9B70-4EDF-8F58-AAF5EB5EECB1}" Context="InprocServer32" Description="Range Class" ThreadingModel="apartment" Version="1.0" Programmable="yes">
+              <ProgId Id="ACROSIDEBAR.Range.1" Description="Range Class">
+                <ProgId Id="ACROSIDEBAR.Range" Description="Range Class" />
+              </ProgId>
+            </Class>
+            <Interface Id="{09CEBD52-2561-4F7C-94E2-42D560DC06CB}" Name="IScriptHandler" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{3474A21B-4818-4CA2-AF38-3FC9F5A9BE13}" Name="_DAcrolinxSidebarSDK" ProxyStubClassId32="{00020420-0000-0000-C000-000000000046}" />
+            <Interface Id="{5246C8E4-62B5-497B-BC2D-776CA2FC1E40}" Name="IRange" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{6E11FCDB-E699-45C9-9D79-02DF47555592}" Name="IRanges" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{78D9432F-591C-481F-88E6-B2E33C47C3BB}" Name="ICheckResult" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{7A68FB9C-778D-4DC1-B3D7-263BA767CCB2}" Name="_DAcrolinxSidebarSDKEvents" ProxyStubClassId32="{00020420-0000-0000-C000-000000000046}" />
+            <Interface Id="{8947DCBC-ABA2-47C7-9235-BE40C3867F0E}" Name="ICheckOptions" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{8E847950-C710-41C7-8E3A-618F011E6B80}" Name="IMatch" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{BB0349D4-7381-48AD-AFFE-8A5267BB1CE5}" Name="IDokument" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{EB4510D3-0C4F-46EE-84F1-F8BF18CD3BE3}" Name="IDocumentModel" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{F4B61CCA-C745-4C69-99F9-E6FB3883791D}" Name="IMatches" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+          </TypeLib>
+        </File>
+        <RegistryValue Root="HKCR" Key="ACROSIDEBAR.AcrolinxSidebar.1\Insertable" Value="" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="AppID\Acrolinx.Sidebar.SDK.DLL" Name="AppID" Value="{949B9D2D-B59A-487C-A958-AC6492821378}" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus\1" Value="131473" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus" Value="0" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\ToolboxBitmap32" Value="[#Acrolinx.Sidebar.SDK64bit.dll], 1" Type="string" Action="write" />
+      </Component>
+    </DirectoryRef>
+    <?else?>
+    <DirectoryRef Id="CPPSDK">
+      <Component Id="Component.Acrolinx.Sidebar.SDK.32bit.dll" Guid="00D8D04B-F9FD-45E3-A314-47B732FD79A6" Location="local" KeyPath="yes" Win64="no">
+        <AppId Description="AcrolinxSidebarSDK" Id="{949B9D2D-B59A-487C-A958-AC6492821378}" />
+        <File Id="Acrolinx.Sidebar.SDK32bit.dll" Name="Acrolinx.Sidebar.SDK.dll" Source="..\distrib\x86\Acrolinx.Sidebar.SDK.dll" DiskId="1">
+          <Class Id="{69EBA0D6-63D7-4A58-AEB3-B53EC2C565F9}" Context="InprocServer32" Description="Acrolinx Sidebar Property Page" />
+          <TypeLib Id="{C09DADB1-142C-440A-BF4A-8399AAE802B3}" Control="yes" Description="AcrolinxSidebarSDKLib" Language="0" MajorVersion="1" MinorVersion="0">
+            <Class Id="{1F247866-18D2-4D59-9326-E63164BDBC7D}" Context="InprocServer32" Description="DocumentModel Class" ThreadingModel="both" Version="1.0" Programmable="yes">
+              <ProgId Id="ACROSIDEBAR.DocumentModel.1" Description="DocumentModel Class">
+                <ProgId Id="ACROSIDEBAR.DocumentModel" Description="DocumentModel Class" />
+              </ProgId>
+            </Class>
+            <Class Id="{32245F63-9E1D-412B-A361-AD40856C4BD9}" Context="InprocServer32" Description="Acrolinx Sidebar Control" ThreadingModel="apartment" Version="1.0" Insertable="yes" Control="yes">
+              <ProgId Id="ACROSIDEBAR.AcrolinxSidebar.1" Description="Acrolinx Sidebar Control" />
+            </Class>
+            <Class Id="{9D9817E2-2C4B-4268-917B-CD5D284E086C}" Context="InprocServer32" Description="Dokument Class" ThreadingModel="apartment" Version="1.0" Programmable="yes" />
+            <Class Id="{AEF18D6E-9B70-4EDF-8F58-AAF5EB5EECB1}" Context="InprocServer32" Description="Range Class" ThreadingModel="apartment" Version="1.0" Programmable="yes">
+              <ProgId Id="ACROSIDEBAR.Range.1" Description="Range Class">
+                <ProgId Id="ACROSIDEBAR.Range" Description="Range Class" />
+              </ProgId>
+            </Class>
+            <Interface Id="{09CEBD52-2561-4F7C-94E2-42D560DC06CB}" Name="IScriptHandler" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{3474A21B-4818-4CA2-AF38-3FC9F5A9BE13}" Name="_DAcrolinxSidebarSDK" ProxyStubClassId32="{00020420-0000-0000-C000-000000000046}" />
+            <Interface Id="{5246C8E4-62B5-497B-BC2D-776CA2FC1E40}" Name="IRange" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{6E11FCDB-E699-45C9-9D79-02DF47555592}" Name="IRanges" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{78D9432F-591C-481F-88E6-B2E33C47C3BB}" Name="ICheckResult" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{7A68FB9C-778D-4DC1-B3D7-263BA767CCB2}" Name="_DAcrolinxSidebarSDKEvents" ProxyStubClassId32="{00020420-0000-0000-C000-000000000046}" />
+            <Interface Id="{8947DCBC-ABA2-47C7-9235-BE40C3867F0E}" Name="ICheckOptions" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{8E847950-C710-41C7-8E3A-618F011E6B80}" Name="IMatch" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{BB0349D4-7381-48AD-AFFE-8A5267BB1CE5}" Name="IDokument" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{EB4510D3-0C4F-46EE-84F1-F8BF18CD3BE3}" Name="IDocumentModel" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+            <Interface Id="{F4B61CCA-C745-4C69-99F9-E6FB3883791D}" Name="IMatches" ProxyStubClassId32="{00020424-0000-0000-C000-000000000046}" />
+          </TypeLib>
+        </File>
+        <RegistryValue Root="HKCR" Key="ACROSIDEBAR.AcrolinxSidebar.1\Insertable" Value="" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="AppID\Acrolinx.Sidebar.SDK.DLL" Name="AppID" Value="{949B9D2D-B59A-487C-A958-AC6492821378}" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus\1" Value="131473" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus" Value="0" Type="string" Action="write" />
+        <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\ToolboxBitmap32" Value="[#Acrolinx.Sidebar.SDK32bit.dll], 1" Type="string" Action="write" />
+      </Component>
+    </DirectoryRef>
+    <?endif?>
+  </Fragment>
+</Wix>
+
