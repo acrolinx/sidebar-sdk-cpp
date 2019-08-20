@@ -34,8 +34,6 @@ Before you start developing your own integration, you might benefit from looking
 
 ## Getting Started
 
-## Using the SDK
-
 See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/README.md).
 
 ## SDK Features
