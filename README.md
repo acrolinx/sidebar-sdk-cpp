@@ -58,7 +58,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
   The RapidJSON website is at [rapidjson.org](http://rapidjson.org/).
 * Plog v1.1.4 for logging utility. Plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
   and Copyright (c) 2016 Sergey Podobry (sergey.podobry@gmail.com). You can get the source [here]( https://github.com/SergiusTheBest/plog).
-* WiX Toolset v3.10.4 for preparing simple installer. Wix Toolset is licensed under the [MS-RL] https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT
+* WiX Toolset v3.10.4 for simple installer. Wix Toolset is licensed under the [MS-RL] https://github.com/wixtoolset/wix3/blob/develop/LICENSE.TXT
 
 ## License
 
