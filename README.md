@@ -32,6 +32,8 @@ Before you start developing your own integration, you might benefit from looking
 * the [Acrolinx SDKs](https://github.com/acrolinx?q=sdk), and
 * the [Acrolinx Demo Projects](https://github.com/acrolinx?q=demo).
 
+Also note that "Visual C++ 2010 redistributable x86" is a run time requirement.
+
 ## Getting Started
 
 See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/README.md).
