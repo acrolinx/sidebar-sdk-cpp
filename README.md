@@ -55,7 +55,6 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 * The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-sdk-js/).
 * RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt)
   and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson).
-  The RapidJSON website is at [rapidjson.org](http://rapidjson.org/).
 * Plog v1.1.4 for logging utility. Plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
   and Copyright (c) 2016 Sergey Podobry (sergey.podobry@gmail.com). You can get the source [here]( https://github.com/SergiusTheBest/plog).
 * WiX Toolset v3.10.4 for simple installer. Wix Toolset is licensed under the [MS-RL](https://wixtoolset.org/about/license/). The WiX Toolset website is at [wixtoolset.org](https://wixtoolset.org/).
