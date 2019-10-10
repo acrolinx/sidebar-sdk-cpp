@@ -52,7 +52,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 ## References
 
 * The [Sidebar DEMO C++](https://github.com/acrolinx/sidebar-demo-cpp) is built based on this SDK.
-* The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-sdk-js/).
+* The Sidebar SDKs are based on the [Acrolinx Sidebar Interface](https://acrolinx.github.io/sidebar-interface/).
 * RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt)
   and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson).
 * Plog v1.1.4 for logging utility. Plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
