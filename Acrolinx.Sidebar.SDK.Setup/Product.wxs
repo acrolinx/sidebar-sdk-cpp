@@ -45,10 +45,17 @@
 
     <Feature Id="Feature.CPP.SDK" Title="Acrolinx C++ Sidebar SDK" Level="1">
       <ComponentRef Id="Component.Acrolinx.Startpage.dll"/>
+      <ComponentRef Id="Component.Acrolinx.Interface.h"/>
       <?if $(sys.BUILDARCH) = x64 ?>
       <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.64bit.dll"/>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.64bit.lib"/>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.64bit.tlb"/>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.64bit.pdb"/>
       <?else?>
       <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.32bit.dll"/>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.32bit.lib"/>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.32bit.tlb"/>
+      <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.32bit.pdb"/>
       <?endif?>
     </Feature>
 
@@ -60,6 +67,9 @@
     <DirectoryRef Id="CPPSDK">
       <Component Id="Component.Acrolinx.Startpage.dll" Guid="421223B6-FE51-40A9-A46A-6697688BC2CE" Location="local" KeyPath="yes">
         <File Id="Acrolinx.Startpage.dll" Name="Acrolinx.Startpage.dll" Source="..\distrib\x86\Acrolinx.Startpage.dll" DiskId="1"/>
+      </Component>
+      <Component Id="Component.Acrolinx.Interface.h" Guid="E922B579-B52B-4476-ADDE-FFA8B6F4B3CA" Location="local" KeyPath="yes">
+        <File Id="AcrolinxInterface.h" Name="AcrolinxInterface.h" Source="..\distrib\x86\AcrolinxInterface.h" DiskId="1"/>
       </Component>
     </DirectoryRef>
     <?if $(sys.BUILDARCH) = x64 ?>
@@ -102,6 +112,15 @@
         <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus" Value="0" Type="string" Action="write" />
         <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\ToolboxBitmap32" Value="[#Acrolinx.Sidebar.SDK64bit.dll], 1" Type="string" Action="write" />
       </Component>
+      <Component Id="Component.Acrolinx.Sidebar.SDK.64bit.lib" Guid="7AE2BCD6-FB1F-46AE-A64E-0F52688F5802" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Sidebar.SDK64bit.lib" Name="Acrolinx.Sidebar.SDK.lib" Source="..\distrib\x64\Acrolinx.Sidebar.SDK.lib" DiskId="1"/>
+      </Component>
+      <Component Id="Component.Acrolinx.Sidebar.SDK.64bit.tlb" Guid="AF662172-A4E6-49D5-8881-370ED86ED55A" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Sidebar.SDK64bit.tlb" Name="Acrolinx.Sidebar.SDK.tlb" Source="..\distrib\x64\Acrolinx.Sidebar.SDK.tlb" DiskId="1"/>
+      </Component>
+      <Component Id="Component.Acrolinx.Sidebar.SDK.64bit.pdb" Guid="44AB7873-1226-4F14-9B74-D39A0EDD77B2" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Sidebar.SDK64bit.pdb" Name="Acrolinx.Sidebar.SDK.pdb" Source="..\distrib\x64\Acrolinx.Sidebar.SDK.pdb" DiskId="1"/>
+      </Component>
     </DirectoryRef>
     <?else?>
     <DirectoryRef Id="CPPSDK">
@@ -142,6 +161,15 @@
         <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus\1" Value="131473" Type="string" Action="write" />
         <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\MiscStatus" Value="0" Type="string" Action="write" />
         <RegistryValue Root="HKCR" Key="CLSID\{32245F63-9E1D-412B-A361-AD40856C4BD9}\ToolboxBitmap32" Value="[#Acrolinx.Sidebar.SDK32bit.dll], 1" Type="string" Action="write" />
+      </Component>
+      <Component Id="Component.Acrolinx.Sidebar.SDK.32bit.lib" Guid="1AC47850-DF28-4E06-B373-27B03BBAEBBE" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Sidebar.SDK32bit.lib" Name="Acrolinx.Sidebar.SDK.lib" Source="..\distrib\x86\Acrolinx.Sidebar.SDK.lib" DiskId="1"/>
+      </Component>
+      <Component Id="Component.Acrolinx.Sidebar.SDK.32bit.tlb" Guid="CAF51F15-276F-4F11-9BFB-7DA603DAB294" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Sidebar.SDK32bit.tlb" Name="Acrolinx.Sidebar.SDK.tlb" Source="..\distrib\x86\Acrolinx.Sidebar.SDK.tlb" DiskId="1"/>
+      </Component>
+      <Component Id="Component.Acrolinx.Sidebar.SDK.32bit.pdb" Guid="C5B679C6-D323-4D4A-A153-20D5AD6BCAAF" Location="local" KeyPath="yes">
+        <File Id="Acrolinx.Sidebar.SDK32bit.pdb" Name="Acrolinx.Sidebar.SDK.pdb" Source="..\distrib\x86\Acrolinx.Sidebar.SDK.pdb" DiskId="1"/>
       </Component>
     </DirectoryRef>
     <?endif?>
