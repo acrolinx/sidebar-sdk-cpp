@@ -1,5 +1,15 @@
 name: C++ SDK Build
 
+# ## TODOs #############################
+# Sonar
+# JDK setup for Sonar
+# Nuget restore
+# Code Signing
+# Nuget Package
+# Push Nuget to GitHub/Nuget org
+# Create GitHub release
+# #######################################
+
 on:
   push:
     branches: [ "main" ]
