@@ -17,3 +17,8 @@ Acrolinx.Sidebar.SDK.VC.db
 Acrolinx.Sidebar.SDK.Test/Interop
 Acrolinx.Sidebar.SDK.Test/Acrolinx.Sidebar.SDK.Test.vcxproj.user
 UpgradeLog.htm
+distrib/x86/Acrolinx.Sidebar.SDK.dll
+distrib/x86/Acrolinx.Sidebar.SDK.lib
+distrib/x86/Acrolinx.Sidebar.SDK.pdb
+distrib/x86/Acrolinx.Sidebar.SDK.tlb
+distrib/x86/AcrolinxInterface.h
