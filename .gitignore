@@ -13,4 +13,13 @@ Acrolinx.Sidebar.SDK.suo
 Acrolinx.Sidebar.SDK.opensdf
 ipch/
 Acrolinx.Sidebar.SDK.VC.db
-.vs/Acrolinx.Sidebar.SDK/v14/.suo
+.vs
+Acrolinx.Sidebar.SDK.Test/Interop
+Acrolinx.Sidebar.SDK.Test/Acrolinx.Sidebar.SDK.Test.vcxproj.user
+UpgradeLog.htm
+distrib/x86/Acrolinx.Sidebar.SDK.dll
+distrib/x86/Acrolinx.Sidebar.SDK.lib
+distrib/x86/Acrolinx.Sidebar.SDK.pdb
+distrib/x86/Acrolinx.Sidebar.SDK.tlb
+distrib/x86/AcrolinxInterface.h
+packages
