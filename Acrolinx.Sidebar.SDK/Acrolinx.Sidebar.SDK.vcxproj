@@ -295,6 +295,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClCompile Include="UniversalAdapter.cpp" />
     <ClCompile Include="Utilities\DllUtil\DllUtil.cpp" />
     <ClCompile Include="Utilities\JSONUtil\JsonUtil.cpp" />
+    <ClCompile Include="ViewComponent.cpp" />
     <ClCompile Include="WebBrowser.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +305,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="CheckOptions.h" />
     <ClInclude Include="CheckResult.h" />
     <ClInclude Include="COMInstanceMngr.h" />
+    <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="DiffMatchPatchWorker.h" />
     <ClInclude Include="DocumentModel.h" />
     <ClInclude Include="Dokument.h" />
@@ -322,6 +324,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="Utilities\diff-match-patch\diff_match_patch.h" />
     <ClInclude Include="Utilities\DllUtil\DllUtil.h" />
     <ClInclude Include="Utilities\JSONUtil\JsonUtil.h" />
+    <ClInclude Include="ViewComponent.h" />
     <ClInclude Include="WebBrowser.h" />
   </ItemGroup>
   <ItemGroup>

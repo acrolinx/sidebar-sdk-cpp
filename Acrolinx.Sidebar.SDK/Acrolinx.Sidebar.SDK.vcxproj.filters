@@ -153,6 +153,9 @@
     <ClCompile Include="COMInstanceMngr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ViewComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -230,6 +233,12 @@
     <ClInclude Include="COMInstanceMngr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ViewComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Acrolinx.Sidebar.SDK.rc">
@@ -240,5 +249,8 @@
     <Midl Include="AcrolinxSidebarSDK.idl">
       <Filter>Source Files</Filter>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>
