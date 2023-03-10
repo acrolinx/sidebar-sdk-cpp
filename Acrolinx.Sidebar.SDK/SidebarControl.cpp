@@ -791,16 +791,46 @@ HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebVi
 	return S_OK;
 }
 
+HRESULT CSidebarControl::OnCoreWebView2NavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args)
+{
+	return S_OK;
+}
+
+HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args)
+{
+	// Get the new scriptHandler
+	HRESULT hRes = CComObject<CScriptHandler>::CreateInstance(&m_scriptHandler);
+
+	VARIANT remoteObjectAsVariant = {};
+	
+	//m_scriptHandler.query_to<IDispatch>(&remoteObjectAsVariant.pdispVal);
+	remoteObjectAsVariant.vt = VT_DISPATCH;
+	remoteObjectAsVariant.pdispVal = m_scriptHandler;
+
+	m_webView->AddHostObjectToScript(L"bridge", &remoteObjectAsVariant);
+
+
+	return S_OK;
+}
+
 HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller)
 {
 	if (result == S_OK)
 	{
 		m_controller = controller;
 		//m_webBrowser.DestroyWindow();
+
 		Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
 		m_controller->get_CoreWebView2(&coreWebView2);
 		//coreWebView2.query_to(&m_webView);
 		m_webView = coreWebView2.Get();;
+
+		// Add Handlers for WebView2 events
+		m_webView->add_NavigationCompleted(Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>
+			(this, &CSidebarControl::OnCoreWebView2NavigationCompleted).Get(), nullptr);
+
+		m_webView->add_NavigationStarting(Microsoft::WRL::Callback<ICoreWebView2NavigationStartingEventHandler>
+			(this, &CSidebarControl::OnCoreWebView2NavigationStarting).Get(), nullptr);
 
 		NewComponent<ViewComponent>(
 			this, m_dcompDevice.Get(),
@@ -818,14 +848,6 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 		{
 			TRACE("Web Page Opened Successfully");
 			ResizeEverything();
-
-			/*RECT rect = { 0 };
-			this->GetWindowRect(&rect);
-
-			m_controller->SetBoundsAndZoomFactor(rect, 1.0);
-
-			RECT availableBounds = { 0 };
-			m_controller->get_Bounds(&availableBounds);*/
 		}
 
 	}

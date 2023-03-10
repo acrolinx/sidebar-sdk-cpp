@@ -47,7 +47,7 @@ ATL::CComVariant CScriptHandler::injectScript(CString script)
     IDispatchPtr pScriptDisp = nullptr;
 
     HRESULT hRes = GetScriptDispatch(pScriptDisp);
-    if (!SUCCEEDED(hRes) || (nullptr == pScriptDisp)) 
+    if (!SUCCEEDED(hRes) || (nullptr == pScriptDisp))
     {
         LOGE << "script dispatch failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
         return S_FALSE;

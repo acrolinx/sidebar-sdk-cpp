@@ -101,6 +101,8 @@ public:
 	void CloseWebView(bool cleanupUserDataFolder = false);
 	HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);
 	HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);
+	HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
+	HRESULT OnCoreWebView2NavigationStarting(ICoreWebView2 * sender, ICoreWebView2NavigationStartingEventArgs * args);
 	void RunAsync(std::function<void(void)> callback);
 	void ResizeEverything();
 	HRESULT DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv);
