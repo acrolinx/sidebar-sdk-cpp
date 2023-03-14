@@ -16,6 +16,7 @@
 #include "LoggerHelper.h"
 #include "ViewComponent.h"
 
+
 using namespace Acrolinx_Sdk_Sidebar_Util;
 
 // CSidebarControl dialog
@@ -100,35 +101,27 @@ void CSidebarControl::Start(CString serverAddress)
 
 CString CSidebarControl::GetStartPageURL(void)
 {
-    CString startPageURL(m_startPageSourceLocation);
-    if(m_startPageSourceLocation.IsEmpty())
-    {
-        WCHAR szPath[MAX_PATH] = {0};
-        if(!GetModuleFileName(GetModuleHandle(_T("Acrolinx.Sidebar.SDK.dll")), szPath, sizeof(szPath)/sizeof(szPath[0])))
-        {
-            LOGE << "Cannot find path, error: " <<  Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
-            return CString();
-        }
-        startPageURL = szPath;
-        if(startPageURL.Replace(_T("Acrolinx.Sidebar.SDK.dll"), _T("Acrolinx.Startpage.dll"))==0)
-        {
-            LOGE << "Path may be wrong, replacement failed: " << startPageURL.GetString();
-            return CString();
-        }
-    }
+	// TODO: Change to extracted path
+	CString extractPath = CString(_T("C:\\Users\\abhijeetnarvekar\\AppData\\Local\\Temp\\Acrolinx\\cpp-sdk"));
+	CString hostName = CString(_T("extensions.acrolinx.cloud"));
 
-    if(PathFileExists(startPageURL))
-    {
-        startPageURL.Insert(0,_T("res://"));
-        startPageURL.Append(_T("//index.html"));
-    }
-    else
-    {
-        LOGE << "Startpage url is not correctly build: "<< startPageURL.GetString() << ". May be Acrolinx.Startpage.dll is missing from the path";
-        return CString();
-    }
+	Microsoft::WRL::ComPtr<ICoreWebView2_3> webView;
+	m_webView->QueryInterface(IID_ICoreWebView2_3, (VOID **)&webView);
+	if (!webView)
+	{
+		// WebView2 Win32 Introduced 1.0.774.44
+		LOGE << "SetVirtualHostNameToFolderMapping not supported";
+		return CString();
+	}
 
-    return startPageURL;
+	// Virtual Host Mapping
+	webView->SetVirtualHostNameToFolderMapping(hostName, extractPath, COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
+
+	CString startPageURL = CString(_T("https://"));
+	startPageURL.Append(hostName);
+	startPageURL.Append(_T("/dist-offline/index.html"));
+
+	return startPageURL;
 }
 
 void CSidebarControl::SetServerAddress(CString serverAddress)
@@ -732,7 +725,6 @@ void CSidebarControl::InitializeWebView()
 
 
 	HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(subFolder, nullptr, options.Get(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
-	//HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(subFolder, nullptr, options.Get(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this, &CEdgeBrowserAppDlg::OnCreateEnvironmentCompleted).Get());
 
 	if (!SUCCEEDED(hr))
 	{
@@ -800,15 +792,17 @@ HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender
 {
 	// Get the new scriptHandler
 	HRESULT hRes = CComObject<CScriptHandler>::CreateInstance(&m_scriptHandler);
+	if (!SUCCEEDED(hRes))
+	{
+		LOGE << "CreateInstance script handle instance failed";
+		return S_FALSE;
+	}
 
-	VARIANT remoteObjectAsVariant = {};
-	
-	//m_scriptHandler.query_to<IDispatch>(&remoteObjectAsVariant.pdispVal);
-	remoteObjectAsVariant.vt = VT_DISPATCH;
-	remoteObjectAsVariant.pdispVal = m_scriptHandler;
+	VARIANT scriptingObjectAsVariant = {};
+	scriptingObjectAsVariant.vt = VT_DISPATCH;
+	scriptingObjectAsVariant.pdispVal = m_scriptHandler;
 
-	m_webView->AddHostObjectToScript(L"bridge", &remoteObjectAsVariant);
-
+	m_webView->AddHostObjectToScript(L"bridge", &scriptingObjectAsVariant);
 
 	return S_OK;
 }
@@ -818,11 +812,10 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 	if (result == S_OK)
 	{
 		m_controller = controller;
-		//m_webBrowser.DestroyWindow();
 
+		//wil::com_ptr<ICoreWebView2> coreWebView2;
 		Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
 		m_controller->get_CoreWebView2(&coreWebView2);
-		//coreWebView2.query_to(&m_webView);
 		m_webView = coreWebView2.Get();;
 
 		// Add Handlers for WebView2 events
@@ -842,13 +835,17 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 		if (!m_webView)
 			return S_FALSE;
 
-		HRESULT hresult = m_webView->Navigate(L"https://www.google.com");
+		CString startPageURL = GetStartPageURL();
+
+		HRESULT hresult = m_webView->Navigate(startPageURL);
 
 		if (hresult == S_OK)
 		{
 			TRACE("Web Page Opened Successfully");
 			ResizeEverything();
 		}
+
+		//TODO: Set plugin object
 
 	}
 	else
@@ -862,7 +859,6 @@ void CSidebarControl::ResizeEverything()
 {
 	RECT availableBounds = { 0 };
 	GetClientRect(&availableBounds);
-	// ClientToScreen(&availableBounds);
 
 	if (auto view = GetComponent<ViewComponent>())
 	{
