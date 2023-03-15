@@ -106,6 +106,9 @@ public:
 	void RunAsync(std::function<void(void)> callback);
 	void ResizeEverything();
 	HRESULT DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv);
+	void Eval(CString script);
+
+	HRESULT ExecuteScriptResponse(HRESULT error, LPCWSTR result);
 
 
 	ICoreWebView2Controller* GetWebViewController()

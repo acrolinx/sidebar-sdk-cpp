@@ -18,6 +18,7 @@
 
 
 using namespace Acrolinx_Sdk_Sidebar_Util;
+using namespace Microsoft::WRL;
 
 // CSidebarControl dialog
 
@@ -759,6 +760,20 @@ HRESULT CSidebarControl::DCompositionCreateDevice2(IUnknown* renderingDevice, RE
 	return hr;
 }
 
+void CSidebarControl::Eval(CString script)
+{
+	m_webView->ExecuteScript(script, Callback<ICoreWebView2ExecuteScriptCompletedHandler>
+		(this, &CSidebarControl::ExecuteScriptResponse).Get());
+}
+
+HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
+{
+	//TODO: Do something with the result
+	return S_OK;
+}
+
+
+
 void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
 {
 
@@ -778,7 +793,8 @@ void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
 HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment)
 {
 	m_webViewEnvironment = environment;
-	m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(this, &CSidebarControl::OnCreateCoreWebView2ControllerCompleted).Get());
+	m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(), Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>
+		(this, &CSidebarControl::OnCreateCoreWebView2ControllerCompleted).Get());
 
 	return S_OK;
 }
@@ -798,11 +814,15 @@ HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender
 		return S_FALSE;
 	}
 
+	m_scriptHandler->SetSidebarControl(this);
+
 	VARIANT scriptingObjectAsVariant = {};
 	scriptingObjectAsVariant.vt = VT_DISPATCH;
 	scriptingObjectAsVariant.pdispVal = m_scriptHandler;
 
 	m_webView->AddHostObjectToScript(L"bridge", &scriptingObjectAsVariant);
+
+	m_scriptHandler->OnAfterObjectSet();
 
 	return S_OK;
 }
@@ -813,7 +833,6 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 	{
 		m_controller = controller;
 
-		//wil::com_ptr<ICoreWebView2> coreWebView2;
 		Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
 		m_controller->get_CoreWebView2(&coreWebView2);
 		m_webView = coreWebView2.Get();;
@@ -845,7 +864,6 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 			ResizeEverything();
 		}
 
-		//TODO: Set plugin object
 
 	}
 	else

@@ -26,23 +26,26 @@ void CScriptHandler::SetWebBrowser(CWebBrowser* pwebBrowser)
 
 void CScriptHandler::OnAfterObjectSet(void)
 {
-    CString log(L"if (!window.console) { window.console = {} }; window.console.logOld = window.console.log; window.console.log = function(msg) { window.external.Log(msg); }");
-    injectScript(log);
+    CString log(L"window.bridge = chrome.webview.hostObjects.bridge; if (!window.console) { window.console = {} }; window.console.logOld = window.console.log; window.console.log = function(msg) { window.bridge.Log(msg); }");
+	m_sidebarCtrl->Eval(log);
+   
 
-    CString onerror(L"window.onerror = function(msg, url, line, col, error) { window.external.OnError(msg, url, line, col, error); }");
-    injectScript(onerror);
+    CString onerror(L"window.bridge = chrome.webview.hostObjects.bridge; window.onerror = function(msg, url, line, col, error) { window.bridge.OnError(msg, url, line, col, error); }");
+	m_sidebarCtrl->Eval(onerror);
 
-    CString acrolinxStorage("window.acrolinxStorage = { getItem: function(key) { return window.external.getItem(key); }, removeItem: function(key) { window.external.removeItem(key); }, setItem: function(key, data) { window.external.setItem(key, data); } }");
-    injectScript(acrolinxStorage);
+	// TODO:Create async acrolinx storage 
+    //CString acrolinxStorage("window.acrolinxStorage = { getItem: function(key) { return window.external.getItem(key); }, removeItem: function(key) { window.external.removeItem(key); }, setItem: function(key, data) { window.external.setItem(key, data); } }");
 
-    CString acrolinxPlugin("window.acrolinxPlugin =   {requestInit: function(){ window.external.requestInit()}, onInitFinished: function(finishResult) {window.external.onInitFinished(JSON.stringify(finishResult))}, configure: function(configuration) { window.external.configure(JSON.stringify(configuration)) }, requestGlobalCheck: function(options) { window.external.requestGlobalCheck(JSON.stringify(options)) }, onCheckResult: function(checkResult) {window.external.onCheckResult(JSON.stringify(checkResult)) }, selectRanges: function(checkId, matches) { window.external.selectRanges(checkId, JSON.stringify(matches))}, replaceRanges: function(checkId, matchesWithReplacements) { window.external.replaceRanges(checkId, JSON.stringify(matchesWithReplacements)) }, download: function(downloadInfo) { window.external.download(JSON.stringify(downloadInfo))}, openWindow: function(openWindowParameters) { window.external.openWindow(JSON.stringify(openWindowParameters)) }, openLogFile: function() {window.external.openLogFile()}}; ");
-    injectScript(acrolinxPlugin);
+    CString acrolinxPlugin("{window.bridge = chrome.webview.hostObjects.bridge; window.acrolinxPlugin =   {requestInit: function(){ window.bridge.requestInit()}, onInitFinished: function(finishResult) {window.bridge.onInitFinished(JSON.stringify(finishResult))}, configure: function(configuration) { window.bridge.configure(JSON.stringify(configuration)) }, requestGlobalCheck: function(options) { window.bridge.requestGlobalCheck(JSON.stringify(options)) }, onCheckResult: function(checkResult) {window.bridge.onCheckResult(JSON.stringify(checkResult)) }, selectRanges: function(checkId, matches) { setTimeout(() => { window.bridge.selectRanges(checkId, JSON.stringify(matches)) }, 10); }, replaceRanges: function(checkId, matchesWithReplacements) { window.bridge.replaceRanges(checkId, JSON.stringify(matchesWithReplacements)) }, download: function(downloadInfo) { window.bridge.download(JSON.stringify(downloadInfo))}, openWindow: function(openWindowParameters) { window.bridge.openWindow(JSON.stringify(openWindowParameters)) }, openLogFile: function() {window.bridge.openLogFile()}}; }");
+	m_sidebarCtrl->Eval(acrolinxPlugin);
 }
 
 
 
 ATL::CComVariant CScriptHandler::injectScript(CString script)
 {
+
+
     DISPID   dispIdEval = 0;
     IDispatchPtr pScriptDisp = nullptr;
 
@@ -189,7 +192,7 @@ STDMETHODIMP CScriptHandler::requestInit(void)
 
     CString initParams = m_sidebarCtrl->RequestInit();
     CString initScript = _T("acrolinxSidebar.init(") +initParams + _T(")");
-    injectScript(initScript);
+	m_sidebarCtrl->Eval(initScript);
 
     return S_OK;
 }
