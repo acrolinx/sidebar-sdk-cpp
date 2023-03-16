@@ -223,8 +223,6 @@ int CAcrolinxSidebar::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-	m_sidebarCtrl.InitializeWebView();
-
     return 0;
 }
 
@@ -233,7 +231,7 @@ void CAcrolinxSidebar::Start(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //m_sidebarCtrl.Start();
+    m_sidebarCtrl.Start();
     m_isSidebarStarted = true;
 }
 

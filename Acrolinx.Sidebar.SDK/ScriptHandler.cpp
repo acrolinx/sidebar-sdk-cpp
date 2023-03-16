@@ -29,12 +29,24 @@ void CScriptHandler::OnAfterObjectSet(void)
     CString log(L"window.bridge = chrome.webview.hostObjects.bridge; if (!window.console) { window.console = {} }; window.console.logOld = window.console.log; window.console.log = function(msg) { window.bridge.Log(msg); }");
 	m_sidebarCtrl->Eval(log);
    
-
     CString onerror(L"window.bridge = chrome.webview.hostObjects.bridge; window.onerror = function(msg, url, line, col, error) { window.bridge.OnError(msg, url, line, col, error); }");
 	m_sidebarCtrl->Eval(onerror);
 
-	// TODO:Create async acrolinx storage 
-    //CString acrolinxStorage("window.acrolinxStorage = { getItem: function(key) { return window.external.getItem(key); }, removeItem: function(key) { window.external.removeItem(key); }, setItem: function(key, data) { window.external.setItem(key, data); } }");
+    BSTR registryStorage;;
+    m_sidebarCtrl->GetStorage()->GetAllItems(&registryStorage);
+
+    // Memory based asynchronous local Storage
+    CString memoryStorage = CString(L"");
+    memoryStorage.Append(L"{window.bridge = chrome.webview.hostObjects.bridge; ");
+    memoryStorage.Append(L"window.acrolinxStorage = { ");
+    memoryStorage.Append(L"memoryStorage: new Map(Object.entries(");
+    memoryStorage.Append(registryStorage);
+    memoryStorage.Append(L")), ");
+    memoryStorage.Append(L"getItem: function(key) { return this.memoryStorage.get(key); }, ");
+    memoryStorage.Append(L"removeItem: async function(key) {  this.memoryStorage.delete(key); await window.bridge.removeItem(key); }, ");
+    memoryStorage.Append(L"setItem: async function(key, data) {  this.memoryStorage.set(key, data); await window.bridge.setItem(key, data); } } }");
+
+    m_sidebarCtrl->Eval(memoryStorage);
 
     CString acrolinxPlugin("{window.bridge = chrome.webview.hostObjects.bridge; window.acrolinxPlugin =   {requestInit: function(){ window.bridge.requestInit()}, onInitFinished: function(finishResult) {window.bridge.onInitFinished(JSON.stringify(finishResult))}, configure: function(configuration) { window.bridge.configure(JSON.stringify(configuration)) }, requestGlobalCheck: function(options) { window.bridge.requestGlobalCheck(JSON.stringify(options)) }, onCheckResult: function(checkResult) {window.bridge.onCheckResult(JSON.stringify(checkResult)) }, selectRanges: function(checkId, matches) { setTimeout(() => { window.bridge.selectRanges(checkId, JSON.stringify(matches)) }, 10); }, replaceRanges: function(checkId, matchesWithReplacements) { window.bridge.replaceRanges(checkId, JSON.stringify(matchesWithReplacements)) }, download: function(downloadInfo) { window.bridge.download(JSON.stringify(downloadInfo))}, openWindow: function(openWindowParameters) { window.bridge.openWindow(JSON.stringify(openWindowParameters)) }, openLogFile: function() {window.bridge.openLogFile()}}; }");
 	m_sidebarCtrl->Eval(acrolinxPlugin);

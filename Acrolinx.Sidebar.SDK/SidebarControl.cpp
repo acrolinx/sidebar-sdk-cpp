@@ -82,7 +82,9 @@ void CSidebarControl::Start(CString serverAddress)
     ACROASSERT(!GetClientSignature().IsEmpty(), "You do not have specified a client signature. Please ask Acrolinx for a client signature and set the client signature via acrolinxSidebar.SetClientSignature().");
     SetDefaults(serverAddress);
 
-    CString startPageURL = GetStartPageURL();
+    InitializeWebView();
+
+    /*CString startPageURL = GetStartPageURL();
     if(startPageURL.IsEmpty())
     {
         m_label.SetWindowText(_T("\n\n\nOops, something went wrong with loading the Sidebar. Check the log file for any errors."));
@@ -96,7 +98,7 @@ void CSidebarControl::Start(CString serverAddress)
     m_webBrowser.Navigate2(&url,NULL,NULL,NULL,NULL);
 
     m_label.ShowWindow(SW_HIDE);
-    UpdateWindow();
+    UpdateWindow();*/
 }
 
 

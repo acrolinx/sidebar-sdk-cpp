@@ -5,6 +5,10 @@
 #include <Windows.h>
 #include "DllUtil.h"
 
+using namespace Acrolinx_Sdk_Sidebar_Util;
+
+#define MAX_KEY_LENGTH 255
+#define MAX_VALUE_NAME 16383
 
 CRegistryAcrolinxStorage::CRegistryAcrolinxStorage(void)
     : keyPath(_T("Software\\Acrolinx\\Plugins\\Storage\\AcrolinxStorage"))
@@ -67,6 +71,111 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
     catch(...)
     {
         LOGE << "Exception thrown by registry";
+    }
+
+    return S_OK;
+}
+
+STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
+{
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    *data = CString().AllocSysString();
+
+    WDocument registryStorage;
+
+    try
+    {
+        HKEY hKey;
+        WCHAR szData[2056];
+        DWORD dwKeyDataType = REG_SZ;
+        DWORD dwDataBufSize = 2056;
+        LONG regAccess;
+
+        TCHAR    achKey[MAX_KEY_LENGTH];        // buffer for subkey name
+        DWORD    cbName;                        // size of name string 
+        TCHAR    achClass[MAX_PATH] = TEXT(""); // buffer for class name 
+        DWORD    cchClassName = MAX_PATH;       // size of class string 
+        DWORD    cSubKeys = 0;                  // number of subkeys 
+        DWORD    cbMaxSubKey;                   // longest subkey size 
+        DWORD    cchMaxClass;                   // longest class string 
+        DWORD    cValues;                       // number of values for key 
+        DWORD    cchMaxValue;                   // longest value name 
+        DWORD    cbMaxValueData;                // longest value data 
+        DWORD    cbSecurityDescriptor;          // size of security descriptor 
+        FILETIME ftLastWriteTime;               // last write time 
+
+
+        TCHAR  achValue[MAX_VALUE_NAME];
+        DWORD cchValue = MAX_VALUE_NAME;
+        DWORD i, retCode;
+
+
+        regAccess = ::RegOpenKeyEx(HKEY_CURRENT_USER, keyPath, 0, KEY_QUERY_VALUE, &hKey);
+        if (regAccess != ERROR_SUCCESS)
+        {
+            regAccess = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, keyPath, 0, KEY_QUERY_VALUE, &hKey);
+        }
+
+        if (regAccess == ERROR_SUCCESS)
+        {
+            retCode = RegQueryInfoKey(
+                hKey,
+                achClass,
+                &cchClassName,
+                NULL,
+                &cSubKeys,
+                &cbMaxSubKey,
+                &cchMaxClass,
+                &cValues,
+                &cchMaxValue,
+                &cbMaxValueData,
+                &cbSecurityDescriptor,
+                &ftLastWriteTime);
+
+            // Enumerate the key values. 
+
+            if (cValues)
+            {
+                printf("\nNumber of values: %d\n", cValues);
+
+                for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
+                {
+                    cchValue = MAX_VALUE_NAME;
+                    achValue[0] = '\0';
+                    retCode = RegEnumValue(hKey, i,
+                        achValue,
+                        &cchValue,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL);
+
+                    if (retCode == ERROR_SUCCESS)
+                    {
+                        DWORD lpData = cbMaxValueData;
+                        LONG dwRes = RegQueryValueEx(hKey, achValue, 0, &dwKeyDataType, (LPBYTE)&szData, &dwDataBufSize);
+
+                        CString key = CString(L"/");
+                        key.Append(achValue);
+                        CString value = CString(szData);
+                        CJsonUtil::SetString(registryStorage, key, value);
+                        int a = 10;
+                    }
+                }
+            }
+
+            *data = CJsonUtil::Stringify(registryStorage).AllocSysString();
+
+            ::RegCloseKey(hKey);
+        }
+        else
+        {
+            LOGE << "Fail to open registry";
+        }
+    }
+    catch (...)
+    {
+        LOGE << "Exception thrown by registry" << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
     }
 
     return S_OK;

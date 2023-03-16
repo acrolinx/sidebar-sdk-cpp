@@ -53,6 +53,7 @@ interface IAcrolinxStorage : IUnknown {
     [id(1)] HRESULT GetItem([in] BSTR key, [out,retval] BSTR* data);
     [id(2)] HRESULT RemoveItem([in] BSTR key);
     [id(3)] HRESULT SetItem([in] BSTR key, [in] BSTR data);
+	[id(4)] HRESULT GetAllItems([out, retval] BSTR* data);
 };
 [
     object,
