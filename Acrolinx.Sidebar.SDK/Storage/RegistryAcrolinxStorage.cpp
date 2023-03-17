@@ -57,11 +57,13 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
         if(regAccess == ERROR_SUCCESS)
         {
             CString value(data);
-            if(::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), (value.GetLength()*(sizeof(WCHAR))) + 1) != ERROR_SUCCESS)
+            LPTSTR lpszData = new TCHAR[value.GetLength() + 1];
+            _tcscpy(lpszData, value);
+            if(::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)lpszData, (value.GetLength()*(sizeof(WCHAR)) + 1)) != ERROR_SUCCESS)
             {
                 LOGE << "Fail to store values";
             }
-
+            delete[] lpszData;
             ::RegCloseKey(hKey);
         }
     }
@@ -89,7 +91,6 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
         
         DWORD dwKeyDataType = REG_SZ;
         DWORD dwDataBufSize = 2056;
-        WCHAR szData[2056];
         LONG regAccess;
 
         TCHAR    achKey[MAX_KEY_LENGTH];        // buffer for subkey name
@@ -152,6 +153,7 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
                     if (retCode == ERROR_SUCCESS)
                     {
                         DWORD lpData = cbMaxValueData;
+                        WCHAR szData[2056];
                         LONG dwRes = ::RegQueryValueEx(hKey, achValue, 0, &dwKeyDataType, (LPBYTE)&szData, &lpData);
 
                         if (dwRes == ERROR_SUCCESS)
