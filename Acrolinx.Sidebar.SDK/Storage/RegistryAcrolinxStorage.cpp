@@ -1,14 +1,11 @@
 /* Copyright Acrolinx GmbH */
 
-#include "StdAfx.h"
-#include "RegistryAcrolinxStorage.h"
+#include "stdafx.h"
 #include <Windows.h>
+#include "RegistryAcrolinxStorage.h"
 #include "DllUtil.h"
 
 using namespace Acrolinx_Sdk_Sidebar_Util;
-
-#define MAX_KEY_LENGTH 255
-#define MAX_VALUE_NAME 16383
 
 CRegistryAcrolinxStorage::CRegistryAcrolinxStorage(void)
     : keyPath(_T("Software\\Acrolinx\\Plugins\\Storage\\AcrolinxStorage"))
@@ -81,14 +78,18 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     *data = CString().AllocSysString();
 
+#define MAX_KEY_LENGTH 255
+#define MAX_VALUE_NAME 16383
+
     WDocument registryStorage;
 
     try
     {
         HKEY hKey;
-        WCHAR szData[2056];
+        
         DWORD dwKeyDataType = REG_SZ;
         DWORD dwDataBufSize = 2056;
+        WCHAR szData[2056];
         LONG regAccess;
 
         TCHAR    achKey[MAX_KEY_LENGTH];        // buffer for subkey name
@@ -132,12 +133,10 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
                 &cbSecurityDescriptor,
                 &ftLastWriteTime);
 
-            // Enumerate the key values. 
+            // Enumerate the key values.
 
             if (cValues)
             {
-                printf("\nNumber of values: %d\n", cValues);
-
                 for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
                 {
                     cchValue = MAX_VALUE_NAME;
@@ -153,13 +152,20 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
                     if (retCode == ERROR_SUCCESS)
                     {
                         DWORD lpData = cbMaxValueData;
-                        LONG dwRes = RegQueryValueEx(hKey, achValue, 0, &dwKeyDataType, (LPBYTE)&szData, &dwDataBufSize);
+                        LONG dwRes = ::RegQueryValueEx(hKey, achValue, 0, &dwKeyDataType, (LPBYTE)&szData, &lpData);
 
-                        CString key = CString(L"/");
-                        key.Append(achValue);
-                        CString value = CString(szData);
-                        CJsonUtil::SetString(registryStorage, key, value);
-                        int a = 10;
+                        if (dwRes == ERROR_SUCCESS)
+                        {
+                            CString key = CString(L"/");
+                            key.Append(achValue);
+                            CString value = CString(szData);
+                            CJsonUtil::SetString(registryStorage, key, value);
+                            int a = 10;
+                        }
+                        else
+                        {
+                            LOGE << "Could not read value from registry " << achValue << " " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+                        }
                     }
                 }
             }
