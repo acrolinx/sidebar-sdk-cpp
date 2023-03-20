@@ -95,7 +95,7 @@ public:
     void AdjustControlSize(long width = 300, long height = 540);
 
 	// WebView2 Stuff
-	void InitializeWebView();
+	BOOL InitializeWebView();
 	void CloseWebView(bool cleanupUserDataFolder = false);
 	HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);
 	HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);

@@ -48,7 +48,7 @@ CSidebarControl::CSidebarControl(CWnd* pParent /*=NULL*/)
 
 CSidebarControl::~CSidebarControl()
 {
-    if(m_acrolinxStorage)
+    if (m_acrolinxStorage)
     {
         m_acrolinxStorage->Release();
         m_acrolinxStorage = NULL;
@@ -81,34 +81,38 @@ void CSidebarControl::Start(CString serverAddress)
     ACROASSERT(!GetClientSignature().IsEmpty(), "You do not have specified a client signature. Please ask Acrolinx for a client signature and set the client signature via acrolinxSidebar.SetClientSignature().");
     SetDefaults(serverAddress);
 
-    InitializeWebView();
+    BOOL isSuccess = InitializeWebView();
+    if (!isSuccess)
+    {
+        LOGE << "Initializing WebView2 failed";
+    }
     UpdateWindow();
 }
 
 
 CString CSidebarControl::GetStartPageURL(void)
 {
-	// TODO: Change to extracted path
-	CString extractPath = CString(_T("C:\\Users\\abhijeetnarvekar\\AppData\\Local\\Temp\\Acrolinx\\cpp-sdk"));
-	CString hostName = CString(_T("extensions.acrolinx.cloud"));
+    // TODO: Change to extracted path
+    CString extractPath = CString(_T("C:\\Users\\abhijeetnarvekar\\AppData\\Local\\Temp\\Acrolinx\\cpp-sdk"));
+    CString hostName = CString(_T("extensions.acrolinx.cloud"));
 
-	Microsoft::WRL::ComPtr<ICoreWebView2_3> webView;
-	m_webView->QueryInterface(IID_ICoreWebView2_3, (VOID **)&webView);
-	if (!webView)
-	{
-		// WebView2 Win32 Introduced 1.0.774.44
-		LOGE << "SetVirtualHostNameToFolderMapping not supported";
-		return CString();
-	}
+    Microsoft::WRL::ComPtr<ICoreWebView2_3> webView;
+    m_webView->QueryInterface(IID_ICoreWebView2_3, (VOID **)&webView);
+    if (!webView)
+    {
+        // WebView2 Win32 1.0.774.44 onwards
+        LOGE << "SetVirtualHostNameToFolderMapping not supported";
+        return CString();
+    }
 
-	// Virtual Host Mapping
-	webView->SetVirtualHostNameToFolderMapping(hostName, extractPath, COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
+    // Virtual Host Mapping
+    webView->SetVirtualHostNameToFolderMapping(hostName, extractPath, COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
 
-	CString startPageURL = CString(_T("https://"));
-	startPageURL.Append(hostName);
-	startPageURL.Append(_T("/dist-offline/index.html"));
+    CString startPageURL = CString(_T("https://"));
+    startPageURL.Append(hostName);
+    startPageURL.Append(_T("/dist-offline/index.html"));
 
-	return startPageURL;
+    return startPageURL;
 }
 
 void CSidebarControl::SetServerAddress(CString serverAddress)
@@ -137,7 +141,7 @@ CString CSidebarControl::GetStartPageSourceLocation(void)
 
 void CSidebarControl::SetShowServerSelector(BOOL showServerSelector)
 {
-    CJsonUtil::SetBool(m_initParameters, _T("/showServerSelector"),(showServerSelector?true:false));
+    CJsonUtil::SetBool(m_initParameters, _T("/showServerSelector"), (showServerSelector ? true : false));
 }
 
 
@@ -152,11 +156,11 @@ void CSidebarControl::SetDefaults(CString serverAddress)
     ShowHideServerSelectorIfServerAddressParameterSet(serverAddress);
 
     //ClientLocale
-    if(GetClientLocale().IsEmpty())
+    if (GetClientLocale().IsEmpty())
     {
         LANGID defaultLang = GetUserDefaultUILanguage();
 
-        WCHAR strNameBuffer[LOCALE_NAME_MAX_LENGTH] = {0};
+        WCHAR strNameBuffer[LOCALE_NAME_MAX_LENGTH] = { 0 };
         if (LCIDToLocaleName(defaultLang, strNameBuffer, LOCALE_NAME_MAX_LENGTH, 0) == 0)
         {
             LOGE << DllUtil::GetLastErrorAsString().GetString();
@@ -172,7 +176,7 @@ void CSidebarControl::SetDefaults(CString serverAddress)
     }
 
     //Default Storage
-    if(m_acrolinxStorage == NULL)
+    if (m_acrolinxStorage == NULL)
     {
         CComObject<CRegistryAcrolinxStorage>* instance;
         CComObject<CRegistryAcrolinxStorage>::CreateInstance(&instance);
@@ -192,7 +196,7 @@ void CSidebarControl::ShowHideServerSelectorIfServerAddressParameterSet(CString 
         SetServerAddress(serverAddress);
         SetShowServerSelector(FALSE);
     }
-    else if(GetServerAddress().IsEmpty())
+    else if (GetServerAddress().IsEmpty())
     {
         SetShowServerSelector(TRUE);
     }
@@ -205,7 +209,7 @@ END_EVENTSINK_MAP()
 BOOL CSidebarControl::DestroyWindow()
 {
     HRESULT hRes = S_FALSE;
-    if(m_scriptHandler)
+    if (m_scriptHandler)
     {
         m_scriptHandler->Release();
         m_webView->Release();
@@ -221,7 +225,7 @@ void CSidebarControl::SetStorage(IAcrolinxStorage* storage)
 {
     ACROASSERT(m_acrolinxStorage == NULL, "Look like you have already loaded sidebar. Set storage before starting sidebar.");
 
-    if(m_acrolinxStorage == NULL)
+    if (m_acrolinxStorage == NULL)
     {
         m_acrolinxStorage = storage;
     }
@@ -260,13 +264,13 @@ void CSidebarControl::SetMinimumSidebarVersion(CString version)
 
 void CSidebarControl::SetReadOnlySuggestions(BOOL isReadOnly)
 {
-    CJsonUtil::SetBool(m_initParameters, _T("/readOnlySuggestions"), (isReadOnly?true:false));
+    CJsonUtil::SetBool(m_initParameters, _T("/readOnlySuggestions"), (isReadOnly ? true : false));
 }
 
 
 void CSidebarControl::SetSupportCheckSelection(BOOL isCheckSelectionSupported)
 {
-    CJsonUtil::SetBool(m_initParameters, _T("/supported/checkSelection"), (isCheckSelectionSupported?true:false));
+    CJsonUtil::SetBool(m_initParameters, _T("/supported/checkSelection"), (isCheckSelectionSupported ? true : false));
 }
 
 
@@ -302,37 +306,37 @@ CString CSidebarControl::GetClientLocale(void)
 
 void CSidebarControl::AdjustControlSize(long width, long height)
 {
-   /* this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
-    m_webBrowser.put_Width(width);
-    m_webBrowser.put_Height(height);
-    IDispatchPtr document = m_webBrowser.get_Document();
-    if (document != nullptr)
-    {
-        AdjustZoomFactor();
-    }*/
+    /* this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
+     m_webBrowser.put_Width(width);
+     m_webBrowser.put_Height(height);
+     IDispatchPtr document = m_webBrowser.get_Document();
+     if (document != nullptr)
+     {
+         AdjustZoomFactor();
+     }*/
 }
 
 
 void CSidebarControl::AdjustZoomFactor()
 {
-   /* try
-    {
-        CDC* pdc = GetDC();
-        HDC screen = pdc->GetSafeHdc();
+    /* try
+     {
+         CDC* pdc = GetDC();
+         HDC screen = pdc->GetSafeHdc();
 
-        double horizontalPPI = GetDeviceCaps(screen, LOGPIXELSX);
-        double scalingFactor = horizontalPPI / 96;
+         double horizontalPPI = GetDeviceCaps(screen, LOGPIXELSX);
+         double scalingFactor = horizontalPPI / 96;
 
-        VARIANT opticalZoom;
-        opticalZoom.vt = VT_I4;
-        opticalZoom.lVal = (LONG)(m_webBrowser.get_Width() * 100 * scalingFactor / 300);
+         VARIANT opticalZoom;
+         opticalZoom.vt = VT_I4;
+         opticalZoom.lVal = (LONG)(m_webBrowser.get_Width() * 100 * scalingFactor / 300);
 
-        m_webBrowser.ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DONTPROMPTUSER, &opticalZoom, NULL);
-    }
-    catch (...)
-    {
-        LOGE << "Unable to set zoom to sidebar";
-    }*/
+         m_webBrowser.ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DONTPROMPTUSER, &opticalZoom, NULL);
+     }
+     catch (...)
+     {
+         LOGE << "Unable to set zoom to sidebar";
+     }*/
 }
 
 
@@ -351,15 +355,15 @@ void CSidebarControl::FireInitFinished(void)
 void CSidebarControl::RegisterComponents(void)
 {
     CString id, name, version;
-    if(DllUtil::GetAppInfo(id, name, version))
+    if (DllUtil::GetAppInfo(id, name, version))
     {
         RegisterClientComponent(id, name, version, CC_MAIN);
     }
-    if(DllUtil::GetDllInfo(id, name, version))
+    if (DllUtil::GetDllInfo(id, name, version))
     {
         RegisterClientComponent(id, name, version, CC_DEFAULT);
     }
-    if(DllUtil::GetOSInfo(id, name, version))
+    if (DllUtil::GetOSInfo(id, name, version))
     {
         RegisterClientComponent(id, name, version, CC_DEFAULT);
     }
@@ -368,12 +372,12 @@ void CSidebarControl::RegisterComponents(void)
 
 void CSidebarControl::RegisterClientComponent(CString id, CString name, CString version, Software_Component_Category category)
 {
-    if(category == CC_MAIN && m_isMainCategorySet)
+    if (category == CC_MAIN && m_isMainCategorySet)
     {
         LOGW << "MAIN component is already set. If you want to set MAIN compoment do it before sidebar start";
         return;
     }
-    if(category == CC_MAIN)
+    if (category == CC_MAIN)
     {
         m_isMainCategorySet = TRUE;
     }
@@ -382,10 +386,10 @@ void CSidebarControl::RegisterClientComponent(CString id, CString name, CString 
 
     CString domKey;
     domKey.Format(_T("/clientComponents/%d"), m_clientComponents);
-    CJsonUtil::SetString(m_initParameters, domKey +_T("/id"), id);
-    CJsonUtil::SetString(m_initParameters, domKey +_T("/name"), name);
-    CJsonUtil::SetString(m_initParameters, domKey +_T("/version"), version);
-    CJsonUtil::SetString(m_initParameters, domKey +_T("/category"), softwareComponentCategory);
+    CJsonUtil::SetString(m_initParameters, domKey + _T("/id"), id);
+    CJsonUtil::SetString(m_initParameters, domKey + _T("/name"), name);
+    CJsonUtil::SetString(m_initParameters, domKey + _T("/version"), version);
+    CJsonUtil::SetString(m_initParameters, domKey + _T("/category"), softwareComponentCategory);
     m_clientComponents++;
 }
 
@@ -415,12 +419,12 @@ CString CSidebarControl::Check(CDokument* document)
 
     CString selectionRanges = _T("[]");
     IRanges* ranges = document->GetSelectionRanges();
-    if(ranges != NULL)
+    if (ranges != NULL)
     {
         LONG selectionRangeCount = 0;
         ranges->GetRangeCount(&selectionRangeCount);
 
-        for(size_t index = 0 ; index < (size_t)selectionRangeCount; index++)
+        for (size_t index = 0; index < (size_t)selectionRangeCount; index++)
         {
             IRange* selRange = nullptr;
             ranges->GetRangeAt(index, &selRange);
@@ -461,7 +465,7 @@ void CSidebarControl::OpenWindow(CString urlJson)
     WDocument urlDom;
     CJsonUtil::Parse(urlJson, urlDom);
     CString urlStr(urlDom[_T("url")].GetString());
-    if(urlStr.IsEmpty())
+    if (urlStr.IsEmpty())
     {
         LOGE << "URL is empty";
         return;
@@ -483,7 +487,7 @@ void CSidebarControl::OpenWindow(CString urlJson)
 void CSidebarControl::FireSelectRanges(CString checkId, CString matches)
 {
     IMatches* matchesObj = ConvertToMatches(checkId, matches);
-    if(matchesObj != nullptr)
+    if (matchesObj != nullptr)
     {
         m_sidebar->SelectRanges(matchesObj);
         matchesObj->Release();
@@ -498,7 +502,7 @@ void CSidebarControl::FireSelectRanges(CString checkId, CString matches)
 void CSidebarControl::FireReplaceRanges(CString checkId, CString matchesWithReplacement)
 {
     IMatches* matchesObj = ConvertToMatches(checkId, matchesWithReplacement, TRUE);
-    if(matchesObj != nullptr)
+    if (matchesObj != nullptr)
     {
         m_sidebar->ReplaceRanges(matchesObj);
         matchesObj->Release();
@@ -513,7 +517,7 @@ void CSidebarControl::FireReplaceRanges(CString checkId, CString matchesWithRepl
 IMatches* CSidebarControl::ConvertToMatches(CString checkId, CString matches, BOOL isReplacement)
 {
     CComObject<CMatches>* matchesObj = nullptr;
-    try{
+    try {
         HRESULT hRes = CComObject<CMatches>::CreateInstance(&matchesObj);
         if (SUCCEEDED(hRes))
         {
@@ -523,7 +527,7 @@ IMatches* CSidebarControl::ConvertToMatches(CString checkId, CString matches, BO
             WDocument matchesDom;
             CJsonUtil::Parse(matches, matchesDom);
             LOGD << "matches dom is ready";
-            for(size_t i = 0; i < matchesDom.Size(); i++)
+            for (size_t i = 0; i < matchesDom.Size(); i++)
             {
                 CComObject<CMatch>* match = nullptr;
                 CComObject<CMatch>::CreateInstance(&match);
@@ -538,7 +542,7 @@ IMatches* CSidebarControl::ConvertToMatches(CString checkId, CString matches, BO
                 extractedRange->InitInstance(matchesDom[i][_T("extractedRange")][0].GetInt(), matchesDom[i][_T("extractedRange")][1].GetInt());
                 CString content = matchesDom[i][_T("content")].GetString();
                 CString replacement = CString();
-                if(isReplacement)
+                if (isReplacement)
                 {
                     replacement = matchesDom[i][_T("replacement")].GetString();
                 }
@@ -547,10 +551,11 @@ IMatches* CSidebarControl::ConvertToMatches(CString checkId, CString matches, BO
                 matchesObj->Add(match);
             }
         }
-    }catch(...)
+    }
+    catch (...)
     {
         LOGE << "Fail to prepare matches";
-        if(matchesObj != nullptr)
+        if (matchesObj != nullptr)
         {
             matchesObj->Release();
         }
@@ -565,12 +570,12 @@ void CSidebarControl::InvalidateRanges(CMatches* matches)
 {
     WDocument matchRanges;
 
-    for(size_t i=0; i<matches->GetCount(); i++)
+    for (size_t i = 0; i < matches->GetCount(); i++)
     {
         _bstr_t checkId;
         matches->GetCheckId(checkId.GetAddress());
         CString domKey;
-        domKey.Format(_T("/%d/checkId"),i);
+        domKey.Format(_T("/%d/checkId"), i);
         CJsonUtil::SetString(matchRanges, domKey, CString(checkId.GetBSTR()));
         IMatch* match = nullptr;
         matches->GetMatchAt(i, &match);
@@ -579,9 +584,9 @@ void CSidebarControl::InvalidateRanges(CMatches* matches)
         LONG start = 0, end = 0;
         range->GetStart(&start);
         range->GetEnd(&end);
-        domKey.Format(_T("/%d/range/0"),i);
+        domKey.Format(_T("/%d/range/0"), i);
         CJsonUtil::SetInt(matchRanges, domKey, start);
-        domKey.Format(_T("/%d/range/1"),i);
+        domKey.Format(_T("/%d/range/1"), i);
         CJsonUtil::SetInt(matchRanges, domKey, end);
 
         range->Release();
@@ -596,11 +601,11 @@ CString CSidebarControl::GetSoftwareComponentCategoryAsString(Component_Category
 {
     CString softwareComponentCategory = _T("DEFAULT");
 
-    if(CC_MAIN == category)
+    if (CC_MAIN == category)
     {
         softwareComponentCategory = _T("MAIN");
     }
-    else if(CC_DETAIL == category)
+    else if (CC_DETAIL == category)
     {
         softwareComponentCategory = _T("DETAIL");
     }
@@ -610,81 +615,77 @@ CString CSidebarControl::GetSoftwareComponentCategoryAsString(Component_Category
 
 void CSidebarControl::RunAsync(std::function<void()> callback)
 {
-	auto* task = new std::function<void()>(callback);
-	PostMessage(s_runAsyncWindowMessage, reinterpret_cast<WPARAM>(task), 0);
+    auto* task = new std::function<void()>(callback);
+    PostMessage(s_runAsyncWindowMessage, reinterpret_cast<WPARAM>(task), 0);
 }
 
-void CSidebarControl::InitializeWebView()
+BOOL CSidebarControl::InitializeWebView()
 {
 
-	CloseWebView();
-	m_dcompDevice = nullptr;
+    CloseWebView();
+    m_dcompDevice = nullptr;
 
 
-	HRESULT hr2 = DCompositionCreateDevice2(nullptr, IID_PPV_ARGS(&m_dcompDevice));
-	if (!SUCCEEDED(hr2))
-	{
-		AfxMessageBox(L"Attempting to create WebView using DComp Visual is not supported.\r\n"
-			"DComp device creation failed.\r\n"
-			"Current OS may not support DComp.\r\n"
-			"Create with Windowless DComp Visual Failed", MB_OK);
-		return;
-	}
+    HRESULT hRes = DCompositionCreateDevice2(nullptr, IID_PPV_ARGS(&m_dcompDevice));
+    if (!SUCCEEDED(hRes))
+    {
+        LOGE << "Attempting to create WebView using DComp Visual is not supported.";
+        return false;
+    }
 
 
-#ifdef USE_WEBVIEW2_WIN10
-	m_wincompCompositor = nullptr;
-#endif
-	LPCWSTR subFolder = nullptr;
-	auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
-	options->put_AllowSingleSignOnUsingOSPrimaryAccount(FALSE);
+    // TODO: Create user directory for WebView2
+    LPCWSTR subFolder = nullptr;
+    auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
+    options->put_AllowSingleSignOnUsingOSPrimaryAccount(FALSE);
 
 
-	HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(subFolder, nullptr, options.Get(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
 
-	if (!SUCCEEDED(hr))
-	{
-		if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
-		{
-			TRACE("Couldn't find Edge installation. Do you have a version installed that is compatible with this ");
-		}
-		else
-		{
-			AfxMessageBox(L"Failed to create webview environment");
-		}
-	}
+    hRes = CreateCoreWebView2EnvironmentWithOptions(subFolder, nullptr, options.Get(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
+
+    if (!SUCCEEDED(hRes))
+    {
+        if (hRes == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            LOGE << "Couldn't find WebView2 installation. Check if Edge and WebView2 runtime is installed";
+        }
+        else
+        {
+            LOGE << "Failed to create webview environment";
+        }
+    }
 }
 
 HRESULT CSidebarControl::DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv)
 {
-	HRESULT hr = E_FAIL;
-	static decltype(::DCompositionCreateDevice2)* fnCreateDCompDevice2 = nullptr;
-	if (fnCreateDCompDevice2 == nullptr)
-	{
-		HMODULE hmod = ::LoadLibraryEx(L"dcomp.dll", nullptr, 0);
-		if (hmod != nullptr)
-		{
-			fnCreateDCompDevice2 = reinterpret_cast<decltype(::DCompositionCreateDevice2)*>(
-				::GetProcAddress(hmod, "DCompositionCreateDevice2"));
-		}
-	}
-	if (fnCreateDCompDevice2 != nullptr)
-	{
-		hr = fnCreateDCompDevice2(renderingDevice, riid, ppv);
-	}
-	return hr;
+    HRESULT hr = E_FAIL;
+    static decltype(::DCompositionCreateDevice2)* fnCreateDCompDevice2 = nullptr;
+    if (fnCreateDCompDevice2 == nullptr)
+    {
+        HMODULE hmod = ::LoadLibraryEx(L"dcomp.dll", nullptr, 0);
+        if (hmod != nullptr)
+        {
+            fnCreateDCompDevice2 = reinterpret_cast<decltype(::DCompositionCreateDevice2)*>(
+                ::GetProcAddress(hmod, "DCompositionCreateDevice2"));
+        }
+    }
+    if (fnCreateDCompDevice2 != nullptr)
+    {
+        hr = fnCreateDCompDevice2(renderingDevice, riid, ppv);
+    }
+    return hr;
 }
 
 void CSidebarControl::Eval(CString script)
 {
-	m_webView->ExecuteScript(script, Callback<ICoreWebView2ExecuteScriptCompletedHandler>
-		(this, &CSidebarControl::ExecuteScriptResponse).Get());
+    m_webView->ExecuteScript(script, Callback<ICoreWebView2ExecuteScriptCompletedHandler>
+        (this, &CSidebarControl::ExecuteScriptResponse).Get());
 }
 
 HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
 {
-	//TODO: Do something with the result
-	return S_OK;
+    //TODO: Do something with the result
+    return S_OK;
 }
 
 
@@ -692,108 +693,123 @@ HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
 void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
 {
 
-	if (m_controller)
-	{
-		m_controller->Close();
-		m_controller = nullptr;
-		m_webView = nullptr;
-	}
-	m_webViewEnvironment = nullptr;
-	if (cleanupUserDataFolder)
-	{
-		//Clean user data        
-	}
+    if (m_controller)
+    {
+        m_controller->Close();
+        m_controller = nullptr;
+        m_webView = nullptr;
+    }
+    m_webViewEnvironment = nullptr;
+    if (cleanupUserDataFolder)
+    {
+        //Clean user data        
+    }
 }
 
 HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment)
 {
-	m_webViewEnvironment = environment;
-	m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(), Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>
-		(this, &CSidebarControl::OnCreateCoreWebView2ControllerCompleted).Get());
+    m_webViewEnvironment = environment;
+    m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(), Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>
+        (this, &CSidebarControl::OnCreateCoreWebView2ControllerCompleted).Get());
 
-	return S_OK;
+    return S_OK;
 }
 
 HRESULT CSidebarControl::OnCoreWebView2NavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args)
 {
-	return S_OK;
+    return S_OK;
 }
 
 HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args)
 {
-	// Get the new scriptHandler
-	HRESULT hRes = CComObject<CScriptHandler>::CreateInstance(&m_scriptHandler);
-	if (!SUCCEEDED(hRes))
-	{
-		LOGE << "CreateInstance script handle instance failed";
-		return S_FALSE;
-	}
+    // Get the new scriptHandler
+    HRESULT hRes = CComObject<CScriptHandler>::CreateInstance(&m_scriptHandler);
+    if (!SUCCEEDED(hRes))
+    {
+        LOGE << "CreateInstance script handle instance failed";
+        return S_FALSE;
+    }
 
-	m_scriptHandler->SetSidebarControl(this);
+    m_scriptHandler->SetSidebarControl(this);
 
-	VARIANT scriptingObjectAsVariant = {};
-	scriptingObjectAsVariant.vt = VT_DISPATCH;
-	scriptingObjectAsVariant.pdispVal = m_scriptHandler;
+    VARIANT scriptingObjectAsVariant = {};
+    scriptingObjectAsVariant.vt = VT_DISPATCH;
+    scriptingObjectAsVariant.pdispVal = m_scriptHandler;
 
-	m_webView->AddHostObjectToScript(L"bridge", &scriptingObjectAsVariant);
+    m_webView->AddHostObjectToScript(L"bridge", &scriptingObjectAsVariant);
 
-	m_scriptHandler->OnAfterObjectSet();
+    m_scriptHandler->OnAfterObjectSet();
 
-	return S_OK;
+    return S_OK;
 }
 
 HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller)
 {
-	if (result == S_OK)
-	{
-		m_controller = controller;
+    if (result == S_OK)
+    {
+        m_controller = controller;
 
-		Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
-		m_controller->get_CoreWebView2(&coreWebView2);
-		m_webView = coreWebView2.Get();;
+        Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
+        m_controller->get_CoreWebView2(&coreWebView2);
+        m_webView = coreWebView2.Get();;
 
-		// Add Handlers for WebView2 events
-		m_webView->add_NavigationCompleted(Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>
-			(this, &CSidebarControl::OnCoreWebView2NavigationCompleted).Get(), nullptr);
+        // Add Handlers for WebView2 events
+        m_webView->add_NavigationCompleted(Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>
+            (this, &CSidebarControl::OnCoreWebView2NavigationCompleted).Get(), nullptr);
 
-		m_webView->add_NavigationStarting(Microsoft::WRL::Callback<ICoreWebView2NavigationStartingEventHandler>
-			(this, &CSidebarControl::OnCoreWebView2NavigationStarting).Get(), nullptr);
+        m_webView->add_NavigationStarting(Microsoft::WRL::Callback<ICoreWebView2NavigationStartingEventHandler>
+            (this, &CSidebarControl::OnCoreWebView2NavigationStarting).Get(), nullptr);
 
-		NewComponent<ViewComponent>(
-			this, m_dcompDevice.Get(),
-#ifdef USE_WEBVIEW2_WIN10
-			m_wincompCompositor,
-#endif
-			m_creationModeId == IDM_CREATION_MODE_TARGET_DCOMP);
+        NewComponent<ViewComponent>(this, m_dcompDevice.Get(), m_creationModeId == IDM_CREATION_MODE_TARGET_DCOMP);
 
-		if (!m_webView)
-			return S_FALSE;
+        if (!m_webView)
+        {
+            return S_FALSE;
+        }
 
-		CString startPageURL = GetStartPageURL();
+        // Disable some WebView2 features
+        Microsoft::WRL::ComPtr<ICoreWebView2Settings> webViewSettings;
+        m_webView->get_Settings(&webViewSettings);
 
-		HRESULT hresult = m_webView->Navigate(startPageURL);
+        //TODO: Uncomment the following lines after dev work is completed.
+        //webViewSettings->put_AreDefaultContextMenusEnabled(FALSE);
+        //webViewSettings->put_IsStatusBarEnabled(FALSE);
 
-		if (hresult == S_OK)
-		{
+        Microsoft::WRL::ComPtr<ICoreWebView2Settings3> webViewSettings3;
+        webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings);
+        if (webViewSettings3)
+        {
+            webViewSettings3->put_AreBrowserAcceleratorKeysEnabled(FALSE);
+        }
+        else
+        {
+            LOGW << "Browser accelerator keys can't be disabled.";
+        }
+
+        CString startPageURL = GetStartPageURL();
+        HRESULT hresult = m_webView->Navigate(startPageURL);
+
+        if (hresult == S_OK)
+        {
             m_label.ShowWindow(SW_HIDE);
             LOGI << "Successfully navigated to start page";
-			ResizeEverything();
-		}
-	}
-	else
-	{
+            ResizeEverything();
+        }
+    }
+    else
+    {
         LOGE << "Failed to create webview2";
-	}
-	return S_OK;
+    }
+    return S_OK;
 }
 
 void CSidebarControl::ResizeEverything()
 {
-	RECT availableBounds = { 0 };
-	GetClientRect(&availableBounds);
+    RECT availableBounds = { 0 };
+    GetClientRect(&availableBounds);
 
-	if (auto view = GetComponent<ViewComponent>())
-	{
-		view->SetBounds(availableBounds);
-	}
+    if (auto view = GetComponent<ViewComponent>())
+    {
+        view->SetBounds(availableBounds);
+    }
 }
