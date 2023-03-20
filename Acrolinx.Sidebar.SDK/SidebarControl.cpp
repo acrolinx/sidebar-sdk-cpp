@@ -42,7 +42,7 @@ CSidebarControl::CSidebarControl(CWnd* pParent /*=NULL*/)
     SetReadOnlySuggestions(FALSE);
     SetClientLocale(_T(""));
     CJsonUtil::SetString(m_initParameters, _T("/logFileLocation"), LoggerHelper::GetLogFileName());
-    SetMinimumSidebarVersion(_T("14.5.0"));
+    SetMinimumSidebarVersion(_T("15.0.0"));
     SetSupportCheckSelection(false);
 }
 
@@ -82,22 +82,7 @@ void CSidebarControl::Start(CString serverAddress)
     SetDefaults(serverAddress);
 
     InitializeWebView();
-
-    /*CString startPageURL = GetStartPageURL();
-    if(startPageURL.IsEmpty())
-    {
-        m_label.SetWindowText(_T("\n\n\nOops, something went wrong with loading the Sidebar. Check the log file for any errors."));
-        UpdateWindow();
-        return;
-    }
-
-    VARIANT url;
-    url.vt = VT_BSTR;
-    url.bstrVal =  startPageURL.AllocSysString();
-    m_webBrowser.Navigate2(&url,NULL,NULL,NULL,NULL);
-
-    m_label.ShowWindow(SW_HIDE);
-    UpdateWindow();*/
+    UpdateWindow();
 }
 
 
@@ -790,15 +775,14 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 
 		if (hresult == S_OK)
 		{
-			TRACE("Web Page Opened Successfully");
+            m_label.ShowWindow(SW_HIDE);
+            LOGI << "Successfully navigated to start page";
 			ResizeEverything();
 		}
-
-
 	}
 	else
 	{
-		TRACE("Failed to create webview");
+        LOGE << "Failed to create webview2";
 	}
 	return S_OK;
 }

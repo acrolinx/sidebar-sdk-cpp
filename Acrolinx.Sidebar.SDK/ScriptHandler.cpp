@@ -40,11 +40,6 @@ void CScriptHandler::OnAfterObjectSet(void)
 	m_sidebarCtrl->Eval(acrolinxPlugin);
 }
 
-IOleClientSite* CScriptHandler::GetDeafultClientSite(void)
-{
-    return m_defaultClientSite;
-}
-
 void CScriptHandler::SetSidebarControl(CSidebarControl* sidebar)
 {
     m_sidebarCtrl = sidebar;
