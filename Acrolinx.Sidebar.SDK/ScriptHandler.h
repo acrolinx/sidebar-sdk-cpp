@@ -4,7 +4,6 @@
 
 #pragma once
 #include "resource.h"       // main symbols
-#include "WebBrowser.h"
 #include "Acrolinx.Sidebar.SDK_i.h"
 
 using namespace ATL;
@@ -22,7 +21,6 @@ public:
     CScriptHandler()
         : m_defaultDocHostUIHandler(nullptr)
         , m_defaultClientSite(nullptr)
-        , m_webBrowser(nullptr)
         , m_sidebarCtrl(nullptr)
         , m_documentContent(_T(""))
     {
@@ -62,7 +60,6 @@ public:
 
         m_documentContent = _T("");
 
-        m_webBrowser = nullptr;
         m_sidebarCtrl = nullptr;
     }
 
@@ -100,20 +97,15 @@ public:
 private:
     IDocHostUIHandler* m_defaultDocHostUIHandler;
     IOleClientSite* m_defaultClientSite;
-    CWebBrowser* m_webBrowser;
     CSidebarControl* m_sidebarCtrl;
-public:
 
-    void SetMsHtmlDefaults(IOleClientSite* pclientSite);
-    void SetWebBrowser(CWebBrowser* pwebBrowser);
+public:
     void OnAfterObjectSet(void);
     IOleClientSite* GetDeafultClientSite(void);
     void SetSidebarControl(CSidebarControl* sidebar);
     CString Check(CString content, CString reference, CString format, CString selectionRanges);
     void InvalidateRanges(CString matchesJson);
 
-private:
-    HRESULT GetScriptDispatch(IDispatchPtr& scriptDisp);
 public:
     STDMETHOD(Log)(BSTR logMessage);
     STDMETHOD(OnError)(BSTR msg, BSTR url, BSTR line, BSTR col, BSTR error);

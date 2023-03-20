@@ -296,7 +296,6 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClCompile Include="Utilities\DllUtil\DllUtil.cpp" />
     <ClCompile Include="Utilities\JSONUtil\JsonUtil.cpp" />
     <ClCompile Include="ViewComponent.cpp" />
-    <ClCompile Include="WebBrowser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Acrolinx.Sidebar.SDK.h" />
@@ -325,7 +324,6 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="Utilities\DllUtil\DllUtil.h" />
     <ClInclude Include="Utilities\JSONUtil\JsonUtil.h" />
     <ClInclude Include="ViewComponent.h" />
-    <ClInclude Include="WebBrowser.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Acrolinx.Sidebar.SDK.rc" />

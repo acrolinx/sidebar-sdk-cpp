@@ -12,18 +12,6 @@
 
 using namespace Acrolinx_Sdk_Sidebar_Util;
 
-void CScriptHandler::SetMsHtmlDefaults(IOleClientSite* pclientSite)
-{
-    pclientSite->AddRef();
-    m_defaultClientSite = pclientSite;
-    m_defaultClientSite->QueryInterface(IID_IDocHostUIHandler, (VOID **)&m_defaultDocHostUIHandler);
-}
-
-void CScriptHandler::SetWebBrowser(CWebBrowser* pwebBrowser)
-{
-    m_webBrowser = pwebBrowser;
-}
-
 void CScriptHandler::OnAfterObjectSet(void)
 {
     CString log(L"window.bridge = chrome.webview.hostObjects.bridge; if (!window.console) { window.console = {} }; window.console.logOld = window.console.log; window.console.log = function(msg) { window.bridge.Log(msg); }");
@@ -51,37 +39,6 @@ void CScriptHandler::OnAfterObjectSet(void)
     CString acrolinxPlugin("{window.bridge = chrome.webview.hostObjects.bridge; window.acrolinxPlugin =   {requestInit: function(){ window.bridge.requestInit()}, onInitFinished: function(finishResult) {window.bridge.onInitFinished(JSON.stringify(finishResult))}, configure: function(configuration) { window.bridge.configure(JSON.stringify(configuration)) }, requestGlobalCheck: function(options) { window.bridge.requestGlobalCheck(JSON.stringify(options)) }, onCheckResult: function(checkResult) {window.bridge.onCheckResult(JSON.stringify(checkResult)) }, selectRanges: function(checkId, matches) { setTimeout(() => { window.bridge.selectRanges(checkId, JSON.stringify(matches)) }, 10); }, replaceRanges: function(checkId, matchesWithReplacements) { window.bridge.replaceRanges(checkId, JSON.stringify(matchesWithReplacements)) }, download: function(downloadInfo) { window.bridge.download(JSON.stringify(downloadInfo))}, openWindow: function(openWindowParameters) { window.bridge.openWindow(JSON.stringify(openWindowParameters)) }, openLogFile: function() {window.bridge.openLogFile()}}; }");
 	m_sidebarCtrl->Eval(acrolinxPlugin);
 }
-
-
-HRESULT CScriptHandler::GetScriptDispatch(IDispatchPtr& scriptDisp)
-{
-    scriptDisp = nullptr;
-
-    CComPtr<IDispatch>  pDocDisp;
-    pDocDisp = m_webBrowser->get_Document();
-    if ((nullptr == pDocDisp))
-    {
-        LOGE << "Browser has no document";
-        return S_FALSE;
-    }
-
-    CComPtr<IHTMLDocument2>  pDocHtm;
-    HRESULT hRes = pDocDisp->QueryInterface(IID_IHTMLDocument2, (void**)&pDocHtm);
-    if (!SUCCEEDED(hRes) || (nullptr == pDocHtm))
-    {
-        LOGE << "Document has no html/script";
-        return S_FALSE;
-    }
-    else
-    {
-        hRes = pDocHtm->get_Script(&scriptDisp);
-    }
-    pDocHtm.Release();
-    pDocDisp.Release();
-
-    return hRes;
-}
-
 
 IOleClientSite* CScriptHandler::GetDeafultClientSite(void)
 {

@@ -60,7 +60,6 @@ void CSidebarControl::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LABEL, m_label);
-    DDX_Control(pDX, IDC_WEB_BROWSER, m_webBrowser);
 }
 
 
@@ -215,59 +214,7 @@ void CSidebarControl::ShowHideServerSelectorIfServerAddressParameterSet(CString 
 
 }
 BEGIN_EVENTSINK_MAP(CSidebarControl, CDialogEx)
-    ON_EVENT(CSidebarControl, IDC_WEB_BROWSER, 259, CSidebarControl::DocumentCompleteWebBrowser, VTS_DISPATCH VTS_PVARIANT)
 END_EVENTSINK_MAP()
-
-
-void CSidebarControl::DocumentCompleteWebBrowser(LPDISPATCH pDisp, VARIANT* URL)
-{
-    CComPtr<IDispatch> document = m_webBrowser.get_Document();
-    if (document != nullptr && m_scriptHandler == nullptr)
-    {
-        CComPtr<IOleObject> oleObject = nullptr;
-        HRESULT hRes = document->QueryInterface(IID_IOleObject, (void**)&oleObject);
-        if (!SUCCEEDED(hRes))
-        {
-            LOGE << "Could not find OleObject";
-            return;
-        }
-        // Get the new scriptHandler
-        hRes = CComObject<CScriptHandler>::CreateInstance(&m_scriptHandler);
-        if (!SUCCEEDED(hRes))
-        {
-            LOGE << "CreateInstance script handle instance failed";
-            return;
-        }
-
-        CComPtr<IOleClientSite> clientSite = nullptr;
-        hRes = oleObject->GetClientSite(&clientSite);
-        if (!SUCCEEDED(hRes) || nullptr == clientSite)
-        {
-            LOGE << "Could not find client site";
-            return;            
-        }
-
-        m_scriptHandler->SetMsHtmlDefaults(clientSite);
-        clientSite.Release();
-
-        oleObject->SetClientSite(nullptr);
-        hRes = oleObject->SetClientSite(m_scriptHandler);
-        if (!SUCCEEDED(hRes))
-        {
-            LOGE << "Client site setup failed";
-            return;
-        }
-        oleObject.Release();
-        m_scriptHandler->SetSidebarControl(this);
-        m_scriptHandler->SetWebBrowser(&m_webBrowser);
-        m_scriptHandler->OnAfterObjectSet();
-
-        m_sidebar->SidebarLoaded(URL->bstrVal);
-
-        AdjustZoomFactor();
-    }
-    document.Release();
-}
 
 
 BOOL CSidebarControl::DestroyWindow()
@@ -275,31 +222,12 @@ BOOL CSidebarControl::DestroyWindow()
     HRESULT hRes = S_FALSE;
     if(m_scriptHandler)
     {
-        CComPtr<IDispatch> document = m_webBrowser.get_Document();
-        if (document != nullptr)
-        {
-            CComPtr<IOleObject> oleObject = nullptr;
-            hRes = document->QueryInterface(IID_IOleObject, (void**)&oleObject);
-            if (!SUCCEEDED(hRes))
-            {
-                LOGE << "Could not find OleObject";
-                return hRes;
-            }
-            IOleClientSite* clientsite;
-            oleObject->GetClientSite(&clientsite);
-
-            hRes = oleObject->SetClientSite(nullptr);
-            hRes = oleObject->SetClientSite(m_scriptHandler->GetDeafultClientSite());
-            if (!SUCCEEDED(hRes))
-            {
-                LOGE << "Client site setup failed even after retries";
-                return hRes;
-            }
-            oleObject.Release();
-        }
         m_scriptHandler->Release();
-        document.Release();
+        m_webView->Release();
     }
+
+    // TODO: Fix access violation exception
+    // Release webview stuff
     return CDialog::DestroyWindow();
 }
 
@@ -389,20 +317,20 @@ CString CSidebarControl::GetClientLocale(void)
 
 void CSidebarControl::AdjustControlSize(long width, long height)
 {
-    this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
+   /* this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
     m_webBrowser.put_Width(width);
     m_webBrowser.put_Height(height);
     IDispatchPtr document = m_webBrowser.get_Document();
     if (document != nullptr)
     {
         AdjustZoomFactor();
-    }
+    }*/
 }
 
 
 void CSidebarControl::AdjustZoomFactor()
 {
-    try
+   /* try
     {
         CDC* pdc = GetDC();
         HDC screen = pdc->GetSafeHdc();
@@ -419,7 +347,7 @@ void CSidebarControl::AdjustZoomFactor()
     catch (...)
     {
         LOGE << "Unable to set zoom to sidebar";
-    }
+    }*/
 }
 
 

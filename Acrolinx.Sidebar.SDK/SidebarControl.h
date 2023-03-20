@@ -3,7 +3,6 @@
 #pragma once
 #include "afxwin.h"
 #include "ComponentBase.h"
-#include "WebBrowser.h"
 #include "JsonUtil.h"
 #include "Dokument.h"
 #include "Matches.h"
@@ -43,7 +42,6 @@ protected:
     DECLARE_MESSAGE_MAP()
 private:
     CStatic m_label;
-    CWebBrowser m_webBrowser;
     CString m_startPageSourceLocation;
     IAcrolinxStorage* m_acrolinxStorage;
     CString m_logFileLocation;
@@ -130,7 +128,6 @@ public:
 
 protected:
     DECLARE_EVENTSINK_MAP()
-    void DocumentCompleteWebBrowser(LPDISPATCH pDisp, VARIANT* URL);
 };
 
 template <class ComponentType, class... Args> void CSidebarControl::NewComponent(Args&&... args)

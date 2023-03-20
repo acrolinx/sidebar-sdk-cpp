@@ -96,9 +96,6 @@
     <ClCompile Include="AcrolinxSidebarPpg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WebBrowser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ScriptHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -177,9 +174,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SidebarControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WebBrowser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScriptHandler.h">
