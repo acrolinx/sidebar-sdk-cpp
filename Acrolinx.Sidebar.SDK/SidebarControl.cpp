@@ -306,6 +306,7 @@ CString CSidebarControl::GetClientLocale(void)
 
 void CSidebarControl::AdjustControlSize(long width, long height)
 {
+    this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
     /* this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
      m_webBrowser.put_Width(width);
      m_webBrowser.put_Height(height);
@@ -678,8 +679,13 @@ HRESULT CSidebarControl::DCompositionCreateDevice2(IUnknown* renderingDevice, RE
 
 void CSidebarControl::Eval(CString script)
 {
-    m_webView->ExecuteScript(script, Callback<ICoreWebView2ExecuteScriptCompletedHandler>
+    HRESULT hRes = m_webView->ExecuteScript(script, Callback<ICoreWebView2ExecuteScriptCompletedHandler>
         (this, &CSidebarControl::ExecuteScriptResponse).Get());
+    if(FAILED(hRes))
+    {
+        LOGE << "Script execution failed";
+        LOGD << "Failed script: " << script;
+    }
 }
 
 HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
@@ -687,8 +693,6 @@ HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
     //TODO: Do something with the result
     return S_OK;
 }
-
-
 
 void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
 {
@@ -709,7 +713,8 @@ void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
 HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment)
 {
     m_webViewEnvironment = environment;
-    m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(), Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>
+    m_webViewEnvironment->CreateCoreWebView2Controller(this->GetSafeHwnd(),
+        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>
         (this, &CSidebarControl::OnCreateCoreWebView2ControllerCompleted).Get());
 
     return S_OK;
@@ -717,6 +722,7 @@ HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebVi
 
 HRESULT CSidebarControl::OnCoreWebView2NavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args)
 {
+    //TODO: Do something
     return S_OK;
 }
 
@@ -737,7 +743,6 @@ HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender
     scriptingObjectAsVariant.pdispVal = m_scriptHandler;
 
     m_webView->AddHostObjectToScript(L"bridge", &scriptingObjectAsVariant);
-
     m_scriptHandler->OnAfterObjectSet();
 
     return S_OK;
@@ -749,15 +754,15 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
     {
         m_controller = controller;
 
-        Microsoft::WRL::ComPtr<ICoreWebView2> coreWebView2;
+        ComPtr<ICoreWebView2> coreWebView2;
         m_controller->get_CoreWebView2(&coreWebView2);
         m_webView = coreWebView2.Get();;
 
         // Add Handlers for WebView2 events
-        m_webView->add_NavigationCompleted(Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>
+        m_webView->add_NavigationCompleted(Callback<ICoreWebView2NavigationCompletedEventHandler>
             (this, &CSidebarControl::OnCoreWebView2NavigationCompleted).Get(), nullptr);
 
-        m_webView->add_NavigationStarting(Microsoft::WRL::Callback<ICoreWebView2NavigationStartingEventHandler>
+        m_webView->add_NavigationStarting(Callback<ICoreWebView2NavigationStartingEventHandler>
             (this, &CSidebarControl::OnCoreWebView2NavigationStarting).Get(), nullptr);
 
         NewComponent<ViewComponent>(this, m_dcompDevice.Get(), m_creationModeId == IDM_CREATION_MODE_TARGET_DCOMP);
@@ -768,17 +773,18 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         }
 
         // Disable some WebView2 features
-        Microsoft::WRL::ComPtr<ICoreWebView2Settings> webViewSettings;
+        ComPtr<ICoreWebView2Settings> webViewSettings;
         m_webView->get_Settings(&webViewSettings);
 
         //TODO: Uncomment the following lines after dev work is completed.
         //webViewSettings->put_AreDefaultContextMenusEnabled(FALSE);
         //webViewSettings->put_IsStatusBarEnabled(FALSE);
 
-        Microsoft::WRL::ComPtr<ICoreWebView2Settings3> webViewSettings3;
+        ComPtr<ICoreWebView2Settings3> webViewSettings3;
         webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings);
         if (webViewSettings3)
         {
+            // WebView version 1.0.864.35
             webViewSettings3->put_AreBrowserAcceleratorKeysEnabled(FALSE);
         }
         else
