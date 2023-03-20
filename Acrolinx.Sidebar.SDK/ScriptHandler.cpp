@@ -53,52 +53,6 @@ void CScriptHandler::OnAfterObjectSet(void)
 }
 
 
-
-ATL::CComVariant CScriptHandler::injectScript(CString script)
-{
-
-
-    DISPID   dispIdEval = 0;
-    IDispatchPtr pScriptDisp = nullptr;
-
-    HRESULT hRes = GetScriptDispatch(pScriptDisp);
-    if (!SUCCEEDED(hRes) || (nullptr == pScriptDisp))
-    {
-        LOGE << "script dispatch failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
-        return S_FALSE;
-    }
-
-    if (dispIdEval <= 0)
-    {
-        CComBSTR  fktName(L"eval");
-        hRes = pScriptDisp->GetIDsOfNames(IID_NULL, &fktName, 1, LOCALE_USER_DEFAULT, &dispIdEval);
-        if (!SUCCEEDED(hRes))
-        {
-            LOGE << "script dispatch failed to get ids of name: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
-            pScriptDisp.Release();
-            return S_FALSE;
-        }
-    }
-
-    ATL::CComVariant retVariant;
-    CComVariant varArgs[1];
-    varArgs[0] = script.GetString();
-    DISPPARAMS dispParams = { &varArgs[0], nullptr, 1, 0 };
-    hRes = pScriptDisp->Invoke(dispIdEval, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD,
-        &dispParams, &retVariant, nullptr, nullptr);
-
-    pScriptDisp.Release();
-
-    if (!SUCCEEDED(hRes))
-    {
-        LOGE << "script execution failed: " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
-        return S_FALSE;
-    }
-
-    return retVariant;
-}
-
-
 HRESULT CScriptHandler::GetScriptDispatch(IDispatchPtr& scriptDisp)
 {
     scriptDisp = nullptr;
@@ -325,17 +279,19 @@ CString CScriptHandler::Check(CString content, CString reference, CString format
     reference.Replace(_T("\n"), _T(""));
     reference.Replace(_T("\r"), _T(""));
 
-    CString code = _T("new function(){var c = window.external.getContent(); return acrolinxSidebar.checkGlobal(c, {inputFormat:'") + format + _T("', requestDescription:{documentReference: '")
-        + reference + _T("'}, selection:{ranges: "+ selectionRanges +"}})}();");
 
+    CString code = CString();
+    code.Append(L"(async()=>{window.bridge = chrome.webview.hostObjects.bridge;");
+    code.Append(L" var c = await window.bridge.getContent(); ");
+    code.Append(L"return acrolinxSidebar.checkGlobal(c, {inputFormat:'");
+    code.Append(format);
+    code.Append(L"', requestDescription:{documentReference: '");
+    code.Append(reference);
+    code.Append(L"'}, selection:{ranges:");
+    code.Append(selectionRanges);
+    code.Append(L"}})})();");
 
-    ATL::CComVariant result = injectScript(code);
-    if(result.vt == VT_BSTR)
-    {
-        return result.bstrVal;
-    }
-
-    m_documentContent = _T("");
+    m_sidebarCtrl->Eval(code);
     return CString();
 }
 
@@ -346,6 +302,7 @@ STDMETHODIMP CScriptHandler::getContent(BSTR* content)
 
     *content = m_documentContent.AllocSysString();
 
+    m_documentContent = _T("");
     return S_OK;
 }
 
@@ -353,5 +310,5 @@ STDMETHODIMP CScriptHandler::getContent(BSTR* content)
 void CScriptHandler::InvalidateRanges(CString matchesJson)
 {
     CString code = _T("new function(){ return acrolinxSidebar.invalidateRanges(") + matchesJson + _T(")}();");
-    injectScript(code);
+    m_sidebarCtrl->Eval(code);
 }

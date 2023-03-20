@@ -113,7 +113,6 @@ public:
     void InvalidateRanges(CString matchesJson);
 
 private:
-    ATL::CComVariant injectScript(CString script);
     HRESULT GetScriptDispatch(IDispatchPtr& scriptDisp);
 public:
     STDMETHOD(Log)(BSTR logMessage);
