@@ -54,16 +54,14 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
         HKEY hKey;
         LONG regAccess;
         regAccess = ::RegCreateKeyEx(HKEY_CURRENT_USER, keyPath, 0, nullptr, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, nullptr, &hKey, 0);
-        if(regAccess == ERROR_SUCCESS)
+        if (regAccess == ERROR_SUCCESS)
         {
             CString value(data);
-            LPTSTR lpszData = new TCHAR[value.GetLength() + 1];
-            _tcscpy(lpszData, value);
-            if(::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)lpszData, (value.GetLength()*(sizeof(WCHAR)) + 1)) != ERROR_SUCCESS)
+            if (::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), (value.GetLength()*(sizeof(WCHAR))) + 1) != ERROR_SUCCESS)
             {
                 LOGE << "Fail to store values";
             }
-            delete[] lpszData;
+
             ::RegCloseKey(hKey);
         }
     }
@@ -152,17 +150,14 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
 
                     if (retCode == ERROR_SUCCESS)
                     {
-                        DWORD lpData = cbMaxValueData;
-                        WCHAR szData[2056];
-                        LONG dwRes = ::RegQueryValueEx(hKey, achValue, 0, &dwKeyDataType, (LPBYTE)&szData, &lpData);
-
-                        if (dwRes == ERROR_SUCCESS)
+                        BSTR data;
+                        HRESULT res = GetItem(achValue, &data);
+                        if (SUCCEEDED(res))
                         {
                             CString key = CString(L"/");
                             key.Append(achValue);
-                            CString value = CString(szData);
+                            CString value = CString(data);
                             CJsonUtil::SetString(registryStorage, key, value);
-                            int a = 10;
                         }
                         else
                         {
