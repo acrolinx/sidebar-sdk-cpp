@@ -28,16 +28,16 @@ public:
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-	// WebView2 Stuff
-	DWORD m_creationModeId = 0;
-	Microsoft::WRL::ComPtr<ICoreWebView2Environment> m_webViewEnvironment;
-	Microsoft::WRL::ComPtr<ICoreWebView2Controller> m_controller;
-	Microsoft::WRL::ComPtr<ICoreWebView2> m_webView;
-	Microsoft::WRL::ComPtr<IDCompositionDevice> m_dcompDevice;
-	std::vector<std::unique_ptr<ComponentBase>> m_components;
+    // WebView2 Stuff
+    DWORD m_creationModeId = 0;
+    Microsoft::WRL::ComPtr<ICoreWebView2Environment> m_webViewEnvironment;
+    Microsoft::WRL::ComPtr<ICoreWebView2Controller> m_controller;
+    Microsoft::WRL::ComPtr<ICoreWebView2> m_webView;
+    Microsoft::WRL::ComPtr<IDCompositionDevice> m_dcompDevice;
+    std::vector<std::unique_ptr<ComponentBase>> m_components;
 
-	template <class ComponentType, class... Args> void NewComponent(Args&&... args);
-	template <class ComponentType> ComponentType* GetComponent();
+    template <class ComponentType, class... Args> void NewComponent(Args&&... args);
+    template <class ComponentType> ComponentType* GetComponent();
 
     DECLARE_MESSAGE_MAP()
 private:
@@ -94,37 +94,37 @@ public:
     void InvalidateRanges(CMatches* matches);
     void AdjustControlSize(long width = 300, long height = 540);
 
-	// WebView2 Stuff
-	BOOL InitializeWebView();
-	void CloseWebView(bool cleanupUserDataFolder = false);
-	HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);
-	HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);
-	HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
-	HRESULT OnCoreWebView2NavigationStarting(ICoreWebView2 * sender, ICoreWebView2NavigationStartingEventArgs * args);
-	void RunAsync(std::function<void(void)> callback);
-	void ResizeEverything();
-	HRESULT DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv);
-	void Eval(CString script);
+    // WebView2 Stuff
+    BOOL InitializeWebView();
+    void CloseWebView(bool cleanupUserDataFolder = false);
+    HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);
+    HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);
+    HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
+    HRESULT OnCoreWebView2NavigationStarting(ICoreWebView2 * sender, ICoreWebView2NavigationStartingEventArgs * args);
+    void RunAsync(std::function<void(void)> callback);
+    void ResizeEverything();
+    HRESULT DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv);
+    void Eval(CString script);
 
-	HRESULT ExecuteScriptResponse(HRESULT error, LPCWSTR result);
+    HRESULT ExecuteScriptResponse(HRESULT error, LPCWSTR result);
 
 
-	ICoreWebView2Controller* GetWebViewController()
-	{
-		return m_controller.Get();
-	}
-	ICoreWebView2* GetWebView()
-	{
-		return m_webView.Get();
-	}
-	ICoreWebView2Environment* GetWebViewEnvironment()
-	{
-		return m_webViewEnvironment.Get();
-	}
-	HWND GetMainWindow()
-	{
-		return this->GetSafeHwnd();
-	}
+    ICoreWebView2Controller* GetWebViewController()
+    {
+        return m_controller.Get();
+    }
+    ICoreWebView2* GetWebView()
+    {
+        return m_webView.Get();
+    }
+    ICoreWebView2Environment* GetWebViewEnvironment()
+    {
+        return m_webViewEnvironment.Get();
+    }
+    HWND GetMainWindow()
+    {
+        return this->GetSafeHwnd();
+    }
 
 protected:
     DECLARE_EVENTSINK_MAP()
@@ -132,17 +132,17 @@ protected:
 
 template <class ComponentType, class... Args> void CSidebarControl::NewComponent(Args&&... args)
 {
-	m_components.emplace_back(new ComponentType(std::forward<Args>(args)...));
+    m_components.emplace_back(new ComponentType(std::forward<Args>(args)...));
 }
 
 template <class ComponentType> ComponentType* CSidebarControl::GetComponent()
 {
-	for (auto& component : m_components)
-	{
-		if (auto wanted = dynamic_cast<ComponentType*>(component.get()))
-		{
-			return wanted;
-		}
-	}
-	return nullptr;
+    for (auto& component : m_components)
+    {
+        if (auto wanted = dynamic_cast<ComponentType*>(component.get()))
+        {
+            return wanted;
+        }
+    }
+    return nullptr;
 }

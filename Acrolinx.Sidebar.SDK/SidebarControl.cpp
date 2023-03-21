@@ -208,15 +208,6 @@ END_EVENTSINK_MAP()
 
 BOOL CSidebarControl::DestroyWindow()
 {
-    HRESULT hRes = S_FALSE;
-    if (m_scriptHandler)
-    {
-        m_scriptHandler->Release();
-        m_webView->Release();
-    }
-
-    // TODO: Fix access violation exception
-    // Release webview stuff
     return CDialog::DestroyWindow();
 }
 
@@ -681,7 +672,7 @@ void CSidebarControl::Eval(CString script)
 {
     HRESULT hRes = m_webView->ExecuteScript(script, Callback<ICoreWebView2ExecuteScriptCompletedHandler>
         (this, &CSidebarControl::ExecuteScriptResponse).Get());
-    if(FAILED(hRes))
+    if (FAILED(hRes))
     {
         LOGE << "Script execution failed";
         LOGD << "Failed script: " << script;
@@ -696,7 +687,6 @@ HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
 
 void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
 {
-
     if (m_controller)
     {
         m_controller->Close();

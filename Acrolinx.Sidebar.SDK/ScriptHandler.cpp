@@ -15,10 +15,10 @@ using namespace Acrolinx_Sdk_Sidebar_Util;
 void CScriptHandler::OnAfterObjectSet(void)
 {
     CString log(L"window.bridge = chrome.webview.hostObjects.bridge; if (!window.console) { window.console = {} }; window.console.logOld = window.console.log; window.console.log = function(msg) { window.bridge.Log(msg); }");
-	m_sidebarCtrl->Eval(log);
-   
+    m_sidebarCtrl->Eval(log);
+
     CString onerror(L"window.bridge = chrome.webview.hostObjects.bridge; window.onerror = function(msg, url, line, col, error) { window.bridge.OnError(msg, url, line, col, error); }");
-	m_sidebarCtrl->Eval(onerror);
+    m_sidebarCtrl->Eval(onerror);
 
     BSTR registryStorage;;
     m_sidebarCtrl->GetStorage()->GetAllItems(&registryStorage);
@@ -37,7 +37,7 @@ void CScriptHandler::OnAfterObjectSet(void)
     m_sidebarCtrl->Eval(memoryStorage);
 
     CString acrolinxPlugin("{window.bridge = chrome.webview.hostObjects.bridge; window.acrolinxPlugin =   {requestInit: function(){ window.bridge.requestInit()}, onInitFinished: function(finishResult) {window.bridge.onInitFinished(JSON.stringify(finishResult))}, configure: function(configuration) { window.bridge.configure(JSON.stringify(configuration)) }, requestGlobalCheck: function(options) { window.bridge.requestGlobalCheck(JSON.stringify(options)) }, onCheckResult: function(checkResult) {window.bridge.onCheckResult(JSON.stringify(checkResult)) }, selectRanges: function(checkId, matches) { setTimeout(() => { window.bridge.selectRanges(checkId, JSON.stringify(matches)) }, 10); }, replaceRanges: function(checkId, matchesWithReplacements) { window.bridge.replaceRanges(checkId, JSON.stringify(matchesWithReplacements)) }, download: function(downloadInfo) { window.bridge.download(JSON.stringify(downloadInfo))}, openWindow: function(openWindowParameters) { window.bridge.openWindow(JSON.stringify(openWindowParameters)) }, openLogFile: function() {window.bridge.openLogFile()}}; }");
-	m_sidebarCtrl->Eval(acrolinxPlugin);
+    m_sidebarCtrl->Eval(acrolinxPlugin);
 }
 
 void CScriptHandler::SetSidebarControl(CSidebarControl* sidebar)
@@ -48,7 +48,7 @@ void CScriptHandler::SetSidebarControl(CSidebarControl* sidebar)
 STDMETHODIMP CScriptHandler::Log(BSTR logMessage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LOGI << "JavaScript Log: "<< CString(logMessage).GetString();
+    LOGI << "JavaScript Log: " << CString(logMessage).GetString();
     return S_OK;
 }
 
@@ -109,8 +109,8 @@ STDMETHODIMP CScriptHandler::requestInit(void)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     CString initParams = m_sidebarCtrl->RequestInit();
-    CString initScript = _T("acrolinxSidebar.init(") +initParams + _T(")");
-	m_sidebarCtrl->Eval(initScript);
+    CString initScript = _T("acrolinxSidebar.init(") + initParams + _T(")");
+    m_sidebarCtrl->Eval(initScript);
 
     return S_OK;
 }
@@ -131,7 +131,7 @@ STDMETHODIMP CScriptHandler::configure(BSTR configuration)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     ASSERT(&configuration != nullptr);
-    LOGI <<"configure: " << CString(configuration).GetString();
+    LOGI << "configure: " << CString(configuration).GetString();
     return S_OK;
 }
 
@@ -162,7 +162,7 @@ STDMETHODIMP CScriptHandler::selectRanges(BSTR checkId, BSTR jsonMatches)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     m_sidebarCtrl->FireSelectRanges(checkId, jsonMatches);
-    LOGD <<"Selection Matches: " << CString(jsonMatches).GetString();
+    LOGD << "Selection Matches: " << CString(jsonMatches).GetString();
 
     return S_OK;
 }
@@ -173,7 +173,7 @@ STDMETHODIMP CScriptHandler::replaceRanges(BSTR checkId, BSTR jsonMatchesWithRep
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     m_sidebarCtrl->FireReplaceRanges(checkId, jsonMatchesWithReplacements);
-    LOGD <<"Replacement Matches: " << CString(jsonMatchesWithReplacements).GetString();
+    LOGD << "Replacement Matches: " << CString(jsonMatchesWithReplacements).GetString();
 
     return S_OK;
 }

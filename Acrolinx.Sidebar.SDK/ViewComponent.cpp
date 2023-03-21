@@ -347,42 +347,6 @@ void ViewComponent::DestroyDCompVisualTree()
     }*/
 }
 
-#ifdef USE_WEBVIEW2_WIN10
-void ViewComponent::BuildWinCompVisualTree()
-{
-    namespace abiComp = ABI::Windows::UI::Composition;
-
-    if (m_wincompWebViewVisual == nullptr)
-    {
-        auto interop = m_wincompCompositor.as<abiComp::Desktop::ICompositorDesktopInterop>();
-        winrt::check_hresult(interop->CreateDesktopWindowTarget(
-            m_appWindow->GetMainWindow(), false,
-            reinterpret_cast<abiComp::Desktop::IDesktopWindowTarget**>(winrt::put_abi(m_wincompHwndTarget))));
-
-        m_wincompRootVisual = m_wincompCompositor.CreateContainerVisual();
-        m_wincompHwndTarget.Root(m_wincompRootVisual);
-
-        m_wincompWebViewVisual = m_wincompCompositor.CreateContainerVisual();
-        m_wincompRootVisual.Children().InsertAtTop(m_wincompWebViewVisual);
-    }
-}
-
-void ViewComponent::DestroyWinCompVisualTree()
-{
-    if (m_wincompWebViewVisual != nullptr)
-    {
-        m_wincompWebViewVisual.Children().RemoveAll();
-        m_wincompWebViewVisual = nullptr;
-
-        m_wincompRootVisual.Children().RemoveAll();
-        m_wincompRootVisual = nullptr;
-
-        m_wincompHwndTarget.Root(nullptr);
-        m_wincompHwndTarget = nullptr;
-    }
-}
-#endif
-
 ViewComponent::~ViewComponent()
 {
     m_controller->remove_ZoomFactorChanged(m_zoomFactorChangedToken);

@@ -45,7 +45,7 @@ public:
         m_sidebarCtrl = nullptr;
     }
 
-// IDocHostUIHandlerDispatch Methods
+    // IDocHostUIHandlerDispatch Methods
 public:
     STDMETHOD(GetExternal)(IDispatch **ppDispatch) {
         return GetUnknown()->QueryInterface(IID_IScriptHandler, (void**)ppDispatch);
@@ -54,7 +54,7 @@ public:
     STDMETHOD(GetHostInfo)(DOCHOSTUIINFO *pInfo) { return S_OK; };
     STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject*, IOleCommandTarget*,
         IOleInPlaceFrame*, IOleInPlaceUIWindow* pDoc) {
-            return S_OK;
+        return S_OK;
     };
     STDMETHOD(HideUI)() { return S_OK; };
     STDMETHOD(UpdateUI)() { return S_OK; };
