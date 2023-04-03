@@ -23,3 +23,5 @@ distrib/x86/Acrolinx.Sidebar.SDK.pdb
 distrib/x86/Acrolinx.Sidebar.SDK.tlb
 distrib/x86/AcrolinxInterface.h
 packages
+node_modules
+Acrolinx.Sidebar.SDK/startpage.zip

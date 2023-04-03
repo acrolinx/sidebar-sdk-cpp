@@ -298,7 +298,7 @@ CString CSidebarControl::GetClientLocale(void)
 void CSidebarControl::AdjustControlSize(long width, long height)
 {
     this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
-    ResizeEverything();
+    ResizeWebView();
     AdjustZoomFactor();
 }
 
@@ -792,7 +792,7 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         {
             m_label.ShowWindow(SW_HIDE);
             LOGI << "Successfully navigated to start page";
-            ResizeEverything();
+            ResizeWebView();
         }
     }
     else
@@ -802,7 +802,7 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
     return S_OK;
 }
 
-void CSidebarControl::ResizeEverything()
+void CSidebarControl::ResizeWebView()
 {
     RECT availableBounds = { 0 };
     GetClientRect(&availableBounds);

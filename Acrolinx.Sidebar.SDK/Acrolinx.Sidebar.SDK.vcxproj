@@ -126,6 +126,9 @@
       <Command>xcopy /yi "$(SolutionDir)distrib\x86\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -161,6 +164,9 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <Command>xcopy /yi "$(SolutionDir)distrib\x64\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -209,6 +215,9 @@ xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x86\"
 xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"
 xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x86\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -256,6 +265,9 @@ xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x64\"
 xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x64\"
 xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="acrolinx.ico" />
@@ -264,6 +276,8 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <None Include="DocumentModel.rgs" />
     <None Include="Dokument.rgs" />
     <None Include="loading.bmp" />
+    <None Include="package-lock.json" />
+    <None Include="package.json" />
     <None Include="packages.config" />
     <None Include="Range.rgs" />
   </ItemGroup>
@@ -368,6 +382,9 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
       <UserProperties RESOURCE_FILE="Acrolinx.Sidebar.SDK.rc" _x007B_8856F961-340A-11D0-A96B-00C04FD705A2_x007D_="CWebBrowser" />
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="RunNpmInstall" BeforeTargets="PrepareForBuild">
+    <Exec Command="npm install" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

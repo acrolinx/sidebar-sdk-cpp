@@ -82,6 +82,8 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="package.json" />
+    <None Include="package-lock.json" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
