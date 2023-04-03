@@ -32,6 +32,7 @@ public:
         LRESULT* result) override;
 
     void SetBounds(RECT bounds);
+    void SetScale(float scale);
 
     ~ViewComponent() override;
 
@@ -47,7 +48,7 @@ private:
     void ToggleVisibility();
     void SetSizeRatio(float ratio);
     void SetZoomFactor(float zoom);
-    void SetScale(float scale);
+    
     void SetTransform(TransformType transformType);
     void ShowWebViewBounds();
     void ShowWebViewZoom();

@@ -298,20 +298,19 @@ CString CSidebarControl::GetClientLocale(void)
 void CSidebarControl::AdjustControlSize(long width, long height)
 {
     this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
-    /* this->SetWindowPos(NULL, 0, 0, width, height, SWP_NOZORDER);
-     m_webBrowser.put_Width(width);
-     m_webBrowser.put_Height(height);
-     IDispatchPtr document = m_webBrowser.get_Document();
-     if (document != nullptr)
-     {
-         AdjustZoomFactor();
-     }*/
+    ResizeEverything();
+    AdjustZoomFactor();
 }
 
 
 void CSidebarControl::AdjustZoomFactor()
 {
-    /* try
+    if (m_controller == NULL)
+    {
+        return;
+    }
+
+    try
      {
          CDC* pdc = GetDC();
          HDC screen = pdc->GetSafeHdc();
@@ -319,16 +318,20 @@ void CSidebarControl::AdjustZoomFactor()
          double horizontalPPI = GetDeviceCaps(screen, LOGPIXELSX);
          double scalingFactor = horizontalPPI / 96;
 
-         VARIANT opticalZoom;
-         opticalZoom.vt = VT_I4;
-         opticalZoom.lVal = (LONG)(m_webBrowser.get_Width() * 100 * scalingFactor / 300);
+         RECT bounds;
+         m_controller->get_Bounds(&bounds);
 
-         m_webBrowser.ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DONTPROMPTUSER, &opticalZoom, NULL);
+         int width = bounds.right - bounds.left;
+
+         if (width > 0)
+         {
+             m_controller->put_ZoomFactor(width / (300 * scalingFactor));
+         }
      }
      catch (...)
      {
          LOGE << "Unable to set zoom to sidebar";
-     }*/
+     }
 }
 
 
@@ -808,4 +811,7 @@ void CSidebarControl::ResizeEverything()
     {
         view->SetBounds(availableBounds);
     }
+
+    AdjustZoomFactor();
+
 }
