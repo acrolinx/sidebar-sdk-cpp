@@ -280,6 +280,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <None Include="package.json" />
     <None Include="packages.config" />
     <None Include="Range.rgs" />
+    <None Include="startpage.zip" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Acrolinx.Sidebar.SDK.cpp" />
@@ -291,6 +292,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClCompile Include="DiffMatchPatchWorker.cpp" />
     <ClCompile Include="DocumentModel.cpp" />
     <ClCompile Include="Dokument.cpp" />
+    <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="LoggerHelper.cpp" />
     <ClCompile Include="Match.cpp" />
     <ClCompile Include="Matches.cpp" />
@@ -322,6 +324,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="DiffMatchPatchWorker.h" />
     <ClInclude Include="DocumentModel.h" />
     <ClInclude Include="Dokument.h" />
+    <ClInclude Include="FileUtil.h" />
     <ClInclude Include="LoggerHelper.h" />
     <ClInclude Include="Match.h" />
     <ClInclude Include="Matches.h" />

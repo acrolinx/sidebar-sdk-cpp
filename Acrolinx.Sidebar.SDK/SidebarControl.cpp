@@ -15,6 +15,7 @@
 #include "Range.h"
 #include "LoggerHelper.h"
 #include "ViewComponent.h"
+#include "FileUtil.h"
 
 
 using namespace Acrolinx_Sdk_Sidebar_Util;
@@ -92,6 +93,7 @@ void CSidebarControl::Start(CString serverAddress)
 
 CString CSidebarControl::GetStartPageURL(void)
 {
+    FileUtil::ExtractEmbeddedStartPage();
     // TODO: Change to extracted path
     CString extractPath = CString(_T("C:\\Users\\abhijeetnarvekar\\AppData\\Local\\Temp\\Acrolinx\\cpp-sdk"));
     CString hostName = CString(_T("extensions.acrolinx.cloud"));

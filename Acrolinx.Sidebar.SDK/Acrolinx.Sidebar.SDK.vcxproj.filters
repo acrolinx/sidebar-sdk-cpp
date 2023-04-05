@@ -58,6 +58,12 @@
     <Filter Include="Source Files\Util\Logger">
       <UniqueIdentifier>{b5d1f7d4-37bc-40d3-8ac7-74926fdcd46d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Util\File">
+      <UniqueIdentifier>{b7e07d52-d85b-4995-be5a-7fe2258fdb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\File">
+      <UniqueIdentifier>{2a74a2f1-69ee-414e-a811-5be6d8c03a1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="AcrolinxSidebarCtrl.bmp">
@@ -84,6 +90,7 @@
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="package-lock.json" />
+    <None Include="startpage.zip" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -154,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="ViewComponent.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtil.cpp">
+      <Filter>Source Files\Util\File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="ComponentBase.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtil.h">
+      <Filter>Header Files\Utils\File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
