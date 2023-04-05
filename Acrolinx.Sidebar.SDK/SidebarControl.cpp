@@ -93,9 +93,7 @@ void CSidebarControl::Start(CString serverAddress)
 
 CString CSidebarControl::GetStartPageURL(void)
 {
-    FileUtil::ExtractEmbeddedStartPage();
-    // TODO: Change to extracted path
-    CString extractPath = CString(_T("C:\\Users\\abhijeetnarvekar\\AppData\\Local\\Temp\\Acrolinx\\cpp-sdk"));
+    CString extractPath = FileUtil::ExtractEmbeddedStartPage();
     CString hostName = CString(_T("extensions.acrolinx.cloud"));
 
     Microsoft::WRL::ComPtr<ICoreWebView2_3> webView;

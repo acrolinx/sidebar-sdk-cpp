@@ -8,7 +8,8 @@ namespace Acrolinx_Sdk_Sidebar_Util
         FileUtil(void);
         ~FileUtil(void);
     public:
-        static void ExtractEmbeddedStartPage();
+        static CString ExtractEmbeddedStartPage();
+        static bool UnzipToFolder(BSTR lpZipFile, BSTR lpFolder);
     };
 
 }
