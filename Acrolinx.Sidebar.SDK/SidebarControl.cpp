@@ -633,7 +633,7 @@ BOOL CSidebarControl::InitializeWebView()
     auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
     options->put_AllowSingleSignOnUsingOSPrimaryAccount(FALSE);
 
-    CString userDataFolder = FileUtil::GetWebViewWorkingDirectory();
+    CString userDataFolder = FileUtil::GetWebViewUserDataDirectory();
 
     hRes = CreateCoreWebView2EnvironmentWithOptions(subFolder, userDataFolder, options.Get(),
         Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>

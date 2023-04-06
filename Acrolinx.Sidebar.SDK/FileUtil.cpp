@@ -64,7 +64,7 @@ CString Acrolinx_Sdk_Sidebar_Util::FileUtil::ExtractEmbeddedStartPage()
     return startPageTempPath;
 }
 
-CString Acrolinx_Sdk_Sidebar_Util::FileUtil::GetWebViewWorkingDirectory()
+CString Acrolinx_Sdk_Sidebar_Util::FileUtil::GetWebViewUserDataDirectory()
 {
     WCHAR wcharPath[MAX_PATH];
     CString webViewWorkingDir = _T("");
