@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>Acrolinx</owners>
+    <licenseUrl>https://github.com/acrolinx/sidebar-sdk-cpp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/acrolinx/sidebar-sdk-cpp</projectUrl>
+    <repository type="git" url="https://github.com/acrolinx/sidebar-sdk-cpp" />
+    <iconUrl>https://github.com/acrolinx/sidebar-sdk-cpp/raw/master/Acrolinx.Sidebar/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Acrolinx CPP SDK for Sidebar Integration</description>
+    <releaseNotes>Promoting to NuGet</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>Acrolinx Sidebar SDK</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

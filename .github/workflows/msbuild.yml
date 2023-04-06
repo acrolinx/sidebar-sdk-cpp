@@ -25,13 +25,10 @@ on:
         default: "Manual Workflow Run"
 
 env:
-  # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: .
-
-  # Configuration type to build.
-  # You can convert this to a build matrix if you need coverage of multiple configuration types.
-  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
+  Solution_Name: Acrolinx.Sidebar.SDK.sln
+  BUILD_NUMBER: ${{ github.run_number }}
 
 permissions:
   contents: read
@@ -41,10 +38,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: download sonar
+      run: powershell Invoke-WebRequest -Uri "https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.10.0.19059/sonar-scanner-msbuild-4.10.0.19059-net46.zip" -OutFile ".\download\sonarmsbuild.zip"
+    
+    - name: Set up JDK 11 - required by sonar
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.3.1
+      uses: microsoft/setup-msbuild@v1.3.1 
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -55,7 +61,44 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}}
+        $version = git describe --abbrev=0 --tags
+        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
+
+    # - name: Code signing
+    #   env:
+    #     CERTIFICATE: ${{ secrets.CERTIFICATE }}
+    #     CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+    #     BINARY: "./Release/Acrolinx.Sidebar.SDK.dll"
+    #     SIGNTOOL: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe"
+    #   shell: powershell
+    #   run : |
+    #     $ErrorActionPreference = 'stop'
+    #     $env:CERTIFICATE | Out-File -FilePath .\Certificate
+    #     certutil -decode Certificate AcrolinxCertificate.pfx
+    #     & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY
+    #     del .\Certificate
+    #     del AcrolinxCertificate.pfx
+
+    # Update .nuspec (Nuget Specification) with version number
+    - name: Patch version in nuget spec
+      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK\Acrolinx.Sidebar.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK\Acrolinx.Sidebar.nuspec
+    
+    # Creating nuget package
+    - name: Create nuget package
+      run: nuget pack "Acrolinx.Sidebar.SDK\Acrolinx.Sidebar.SDK.vcxproj" -properties Configuration=Release -symbols
+
+    # Change source of nuget package to Github, to publish on Github registry
+    - name: Add nuget source to github (replacement for nexus)
+      run: nuget source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/acrolinx/index.json" -UserName ${{ github.actor }} -Password ${{ secrets.GITHUB_TOKEN }}
+
+    # Push package to Github registry.
+    - name: Push nuget package to github
+      shell: powershell
+      run: |
+        $NugetPackage  = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
+        Write-Host "Pushing to Github registry.. NuGet package name is : " $NugetPackage
+        nuget push $NugetPackage -source "GitHub" -ApiKey ${{ secrets.GITHUB_TOKEN }} 
     
     - uses: actions/upload-artifact@v3
       with:
