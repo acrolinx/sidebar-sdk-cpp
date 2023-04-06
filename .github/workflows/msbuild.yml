@@ -64,7 +64,7 @@ jobs:
         java-version: 1.11
     
     - name: Begin sonar
-      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output=".\build_wrapper_output_directory"
+      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory"
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.3.1 
@@ -83,7 +83,7 @@ jobs:
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
         $version = git describe --abbrev=0 --tags
         $version = $version.substring(1) + "." + $env:BUILD_NUMBER
-        .\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir ".\build_wrapper_output_directory" msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
+        build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
     
     - name: End sonar
       env:
