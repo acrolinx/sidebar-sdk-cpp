@@ -64,6 +64,12 @@
     <Filter Include="Header Files\Utils\File">
       <UniqueIdentifier>{2a74a2f1-69ee-414e-a811-5be6d8c03a1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Util\Registry">
+      <UniqueIdentifier>{ab2a4c4d-da62-4ebb-a9cf-74c6e8ed6139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\Registry">
+      <UniqueIdentifier>{41b20fef-2636-4204-9ba7-d7deaa3d68d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="AcrolinxSidebarCtrl.bmp">
@@ -165,6 +171,9 @@
     <ClCompile Include="FileUtil.cpp">
       <Filter>Source Files\Util\File</Filter>
     </ClCompile>
+    <ClCompile Include="RegistryUtil.cpp">
+      <Filter>Source Files\Util\Registry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -247,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="FileUtil.h">
       <Filter>Header Files\Utils\File</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistryUtil.h">
+      <Filter>Header Files\Utils\Registry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

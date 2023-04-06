@@ -16,6 +16,7 @@
 #include "LoggerHelper.h"
 #include "ViewComponent.h"
 #include "FileUtil.h"
+#include "RegistryUtil.h"
 
 
 using namespace Acrolinx_Sdk_Sidebar_Util;
@@ -639,6 +640,7 @@ BOOL CSidebarControl::InitializeWebView()
         Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>
         (this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
 
+    // TODO: Verify if there are more error codes to handle
     if (!SUCCEEDED(hRes))
     {
         if (hRes == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
@@ -770,9 +772,11 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         ComPtr<ICoreWebView2Settings> webViewSettings;
         m_webView->get_Settings(&webViewSettings);
 
-        //TODO: Uncomment the following lines after dev work is completed.
-        //webViewSettings->put_AreDefaultContextMenusEnabled(FALSE);
-        //webViewSettings->put_IsStatusBarEnabled(FALSE);
+        DWORD enableContextMenu(0);
+        RegistryUtil::GetDWORDRegHKCU(L"", L"EnableContextMenu", enableContextMenu);
+
+        webViewSettings->put_AreDefaultContextMenusEnabled(enableContextMenu);
+        webViewSettings->put_IsStatusBarEnabled(FALSE);
 
         ComPtr<ICoreWebView2Settings3> webViewSettings3;
         webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings);

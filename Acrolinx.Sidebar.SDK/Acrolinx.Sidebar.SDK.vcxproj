@@ -299,6 +299,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClCompile Include="MultiAdapter.cpp" />
     <ClCompile Include="Range.cpp" />
     <ClCompile Include="Ranges.cpp" />
+    <ClCompile Include="RegistryUtil.cpp" />
     <ClCompile Include="ScriptHandler.cpp" />
     <ClCompile Include="SidebarControl.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -330,6 +331,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="Matches.h" />
     <ClInclude Include="Range.h" />
     <ClInclude Include="Ranges.h" />
+    <ClInclude Include="RegistryUtil.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScriptHandler.h" />
     <ClInclude Include="SidebarControl.h" />
