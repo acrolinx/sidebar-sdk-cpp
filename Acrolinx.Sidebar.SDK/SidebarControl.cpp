@@ -79,7 +79,8 @@ BOOL CSidebarControl::Create(CWnd* pParent)
 
 void CSidebarControl::Start(CString serverAddress)
 {
-    ACROASSERT(!GetClientSignature().IsEmpty(), "You do not have specified a client signature. Please ask Acrolinx for a client signature and set the client signature via acrolinxSidebar.SetClientSignature().");
+    ACROASSERT(!GetClientSignature().IsEmpty(),
+        "You do not have specified a client signature. Please ask Acrolinx for a client signature and set the client signature via acrolinxSidebar.SetClientSignature().");
     SetDefaults(serverAddress);
 
     BOOL isSuccess = InitializeWebView();
@@ -311,27 +312,27 @@ void CSidebarControl::AdjustZoomFactor()
     }
 
     try
-     {
-         CDC* pdc = GetDC();
-         HDC screen = pdc->GetSafeHdc();
+    {
+        CDC* pdc = GetDC();
+        HDC screen = pdc->GetSafeHdc();
 
-         double horizontalPPI = GetDeviceCaps(screen, LOGPIXELSX);
-         double scalingFactor = horizontalPPI / 96;
+        double horizontalPPI = GetDeviceCaps(screen, LOGPIXELSX);
+        double scalingFactor = horizontalPPI / 96;
 
-         RECT bounds;
-         m_controller->get_Bounds(&bounds);
+        RECT bounds;
+        m_controller->get_Bounds(&bounds);
 
-         int width = bounds.right - bounds.left;
+        int width = bounds.right - bounds.left;
 
-         if (width > 0)
-         {
-             m_controller->put_ZoomFactor(width / (300 * scalingFactor));
-         }
-     }
-     catch (...)
-     {
-         LOGE << "Unable to set zoom to sidebar";
-     }
+        if (width > 0)
+        {
+            m_controller->put_ZoomFactor(width / (300 * scalingFactor));
+        }
+    }
+    catch (...)
+    {
+        LOGE << "Unable to set zoom to sidebar";
+    }
 }
 
 
@@ -628,15 +629,15 @@ BOOL CSidebarControl::InitializeWebView()
         return false;
     }
 
-
-    // TODO: Create user directory for WebView2
     LPCWSTR subFolder = nullptr;
     auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
     options->put_AllowSingleSignOnUsingOSPrimaryAccount(FALSE);
 
+    CString userDataFolder = FileUtil::GetWebViewWorkingDirectory();
 
-
-    hRes = CreateCoreWebView2EnvironmentWithOptions(subFolder, nullptr, options.Get(), Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
+    hRes = CreateCoreWebView2EnvironmentWithOptions(subFolder, userDataFolder, options.Get(),
+        Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>
+        (this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
 
     if (!SUCCEEDED(hRes))
     {

@@ -39,7 +39,7 @@ CString Acrolinx_Sdk_Sidebar_Util::FileUtil::ExtractEmbeddedStartPage()
 
     CString startPageZip = startPageTempPath + _T("startpage.zip");
 
-    startPageTempPath = startPageTempPath + _T("startpage-") +DllUtil::GetAppName() + _T("\\");
+    startPageTempPath = startPageTempPath + _T("startpage-") + DllUtil::GetAppName() + _T("\\");
     CreateDirectory(startPageTempPath, NULL);
 
     HANDLE hFile = CreateFile(startPageZip, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -62,6 +62,25 @@ CString Acrolinx_Sdk_Sidebar_Util::FileUtil::ExtractEmbeddedStartPage()
     }
 
     return startPageTempPath;
+}
+
+CString Acrolinx_Sdk_Sidebar_Util::FileUtil::GetWebViewWorkingDirectory()
+{
+    WCHAR wcharPath[MAX_PATH];
+    CString webViewWorkingDir = _T("");
+    if (GetTempPathW(MAX_PATH, wcharPath))
+    {
+        webViewWorkingDir = wcharPath;
+        webViewWorkingDir = webViewWorkingDir + _T("Acrolinx\\");
+        CreateDirectory(webViewWorkingDir, NULL);
+        webViewWorkingDir = webViewWorkingDir + _T("webview-") + DllUtil::GetAppName() + _T("\\");
+        CreateDirectory(webViewWorkingDir, NULL);
+    }
+    else
+    {
+        LOGE << "Creating working directory for webview failed.";
+    }
+    return webViewWorkingDir;
 }
 
 bool Acrolinx_Sdk_Sidebar_Util::FileUtil::UnzipToFolder(BSTR lpZipFile, BSTR lpFolder)

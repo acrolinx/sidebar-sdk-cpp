@@ -9,6 +9,7 @@ namespace Acrolinx_Sdk_Sidebar_Util
         ~FileUtil(void);
     public:
         static CString ExtractEmbeddedStartPage();
+        static CString GetWebViewWorkingDirectory();
         static bool UnzipToFolder(BSTR lpZipFile, BSTR lpFolder);
     };
 
