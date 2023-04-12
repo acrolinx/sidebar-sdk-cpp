@@ -80,7 +80,7 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
-        
+        Import-Module build-wrapper-win-x86
         $version = git describe --abbrev=0 --tags
         $version = $version.substring(1) + "." + $env:BUILD_NUMBER
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser; build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
