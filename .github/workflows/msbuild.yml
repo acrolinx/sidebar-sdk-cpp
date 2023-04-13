@@ -109,7 +109,7 @@ jobs:
 
     # Update .nuspec (Nuget Specification) with version number
     - name: Patch version in nuget spec
-      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.nuspec
+      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
     
     # Creating nuget package
     - name: Create nuget package
