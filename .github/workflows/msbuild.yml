@@ -113,7 +113,7 @@ jobs:
     
     # Creating nuget package
     - name: Create nuget package
-      run: nuget pack "Acrolinx.Sidebar.SDK\Acrolinx.Sidebar.SDK.vcxproj" -properties Configuration=Release -symbols
+      run: nuget pack -NonInteractive
 
     # Change source of nuget package to Github, to publish on Github registry
     - name: Add nuget source to github (replacement for nexus)
