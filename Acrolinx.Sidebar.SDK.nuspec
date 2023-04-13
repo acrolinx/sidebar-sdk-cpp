@@ -21,11 +21,17 @@
   </metadata>
 
   <files>
-    <file src="Release\Acrolinx.Sidebar.SDK.dll" target="lib\x86" />
-    <file src="Release\Acrolinx.Sidebar.SDK.lib" target="lib\x86" />
-    <file src="Release\Acrolinx.Sidebar.SDK.tlb" target="lib\x86" />
-    <file src="Release\Acrolinx.Sidebar.SDK.pdb" target="lib\x86" />
-    <file src="Release\AcrolinxInterface.h" target="lib\x86" />
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.dll" target="lib\x86" />
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.lib" target="lib\x86" />
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.tlb" target="lib\x86" />
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.pdb" target="lib\x86" />
+    <file src="distrib\x86\AcrolinxInterface.h" target="lib\x86" />
+
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.dll" target="lib\x64" />
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.lib" target="lib\x64" />
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.tlb" target="lib\x64" />
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.pdb" target="lib\x64" />
+    <file src="distrib\x64\AcrolinxInterface.h" target="lib\x64" />
   </files>
 </package>
 

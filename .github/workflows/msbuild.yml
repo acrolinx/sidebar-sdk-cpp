@@ -82,6 +82,7 @@ jobs:
       run: |
         $version = git describe --abbrev=0 --tags
         $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
         sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
     
     # - name: End sonar
