@@ -88,7 +88,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: sonar-msbuild\SonarScanner.MSBuild.exe end
+      run: |
+        if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
+        sonar-msbuild\SonarScanner.MSBuild.exe end
 
     # - name: Code signing
     #   env:
