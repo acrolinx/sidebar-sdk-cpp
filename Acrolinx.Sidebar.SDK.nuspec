@@ -5,7 +5,6 @@
     <version>2.0.0.1</version>
     <authors>Acrolinx</authors>
     <owners>Acrolinx</owners>
-    <licenseUrl>https://github.com/acrolinx/sidebar-sdk-cpp/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/acrolinx/sidebar-sdk-cpp</projectUrl>
     <repository type="git" url="https://github.com/acrolinx/sidebar-sdk-cpp" />
     <iconUrl>https://github.com/acrolinx/sidebar-sdk-cpp/raw/master/Acrolinx.Sidebar/icon.png</iconUrl>
