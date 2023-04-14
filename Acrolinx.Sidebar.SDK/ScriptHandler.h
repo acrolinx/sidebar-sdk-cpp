@@ -4,7 +4,6 @@
 
 #pragma once
 #include "resource.h"       // main symbols
-#include "WebBrowser.h"
 #include "Acrolinx.Sidebar.SDK_i.h"
 
 using namespace ATL;
@@ -14,25 +13,18 @@ class CSidebarControl;
 
 class ATL_NO_VTABLE CScriptHandler :
     public CComObjectRootEx<CComSingleThreadModel>,
-    public IOleClientSite,
-    public IDocHostUIHandler,
     public IDispatchImpl<IScriptHandler, &IID_IScriptHandler, &LIBID_AcrolinxSidebarSDKLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
     CScriptHandler()
-        : m_defaultDocHostUIHandler(nullptr)
-        , m_defaultClientSite(nullptr)
-        , m_webBrowser(nullptr)
-        , m_sidebarCtrl(nullptr)
+        : m_sidebarCtrl(nullptr)
         , m_documentContent(_T(""))
     {
     }
 
 
     BEGIN_COM_MAP(CScriptHandler)
-        COM_INTERFACE_ENTRY(IOleClientSite)
         COM_INTERFACE_ENTRY(IScriptHandler)
-        COM_INTERFACE_ENTRY(IDocHostUIHandler)
         COM_INTERFACE_ENTRY(IDispatch)
 
     END_COM_MAP()
@@ -48,25 +40,12 @@ public:
 
     void FinalRelease()
     {
-        if (m_defaultClientSite != nullptr)
-        {
-            m_defaultClientSite->Release();
-            m_defaultClientSite = nullptr;
-        }
-
-        if (m_defaultDocHostUIHandler != nullptr)
-        {
-            m_defaultDocHostUIHandler->Release();
-            m_defaultDocHostUIHandler = nullptr;
-        }
-
         m_documentContent = _T("");
 
-        m_webBrowser = nullptr;
         m_sidebarCtrl = nullptr;
     }
 
-// IDocHostUIHandlerDispatch Methods
+    // IDocHostUIHandlerDispatch Methods
 public:
     STDMETHOD(GetExternal)(IDispatch **ppDispatch) {
         return GetUnknown()->QueryInterface(IID_IScriptHandler, (void**)ppDispatch);
@@ -75,7 +54,7 @@ public:
     STDMETHOD(GetHostInfo)(DOCHOSTUIINFO *pInfo) { return S_OK; };
     STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject*, IOleCommandTarget*,
         IOleInPlaceFrame*, IOleInPlaceUIWindow* pDoc) {
-            return S_OK;
+        return S_OK;
     };
     STDMETHOD(HideUI)() { return S_OK; };
     STDMETHOD(UpdateUI)() { return S_OK; };
@@ -98,23 +77,14 @@ public:
     STDMETHOD(OnShowWindow)(BOOL fShow) { return S_OK; };
     STDMETHOD(RequestNewObjectLayout)() { return S_OK; };
 private:
-    IDocHostUIHandler* m_defaultDocHostUIHandler;
-    IOleClientSite* m_defaultClientSite;
-    CWebBrowser* m_webBrowser;
     CSidebarControl* m_sidebarCtrl;
-public:
 
-    void SetMsHtmlDefaults(IOleClientSite* pclientSite);
-    void SetWebBrowser(CWebBrowser* pwebBrowser);
+public:
     void OnAfterObjectSet(void);
-    IOleClientSite* GetDeafultClientSite(void);
     void SetSidebarControl(CSidebarControl* sidebar);
     CString Check(CString content, CString reference, CString format, CString selectionRanges);
     void InvalidateRanges(CString matchesJson);
 
-private:
-    ATL::CComVariant injectScript(CString script);
-    HRESULT GetScriptDispatch(IDispatchPtr& scriptDisp);
 public:
     STDMETHOD(Log)(BSTR logMessage);
     STDMETHOD(OnError)(BSTR msg, BSTR url, BSTR line, BSTR col, BSTR error);

@@ -14,7 +14,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
   schedule:
     - cron: "0 2 * * *"
   workflow_dispatch:
@@ -25,13 +25,10 @@ on:
         default: "Manual Workflow Run"
 
 env:
-  # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: .
-
-  # Configuration type to build.
-  # You can convert this to a build matrix if you need coverage of multiple configuration types.
-  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
+  Solution_Name: Acrolinx.Sidebar.SDK.sln
+  BUILD_NUMBER: ${{ github.run_number }}
 
 permissions:
   contents: read
@@ -41,10 +38,38 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+          fetch-depth: 0
+
+    - name: mkdir download
+      run: |
+        mkdir download
+        mkdir build_wrapper_output_directory 
+    
+    - name: download sonar
+      run: |
+        powershell Invoke-WebRequest -Uri "https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.10.0.19059/sonar-scanner-msbuild-4.10.0.19059-net46.zip" -OutFile ".\download\sonarmsbuild.zip"
+        powershell Invoke-WebRequest -Uri "https://sonarcloud.io/static/cpp/build-wrapper-win-x86.zip" -OutFile ".\download\sonar-build-wrapper.zip"
+
+    - name: extract sonar
+      run: |
+        powershell Expand-Archive .\download\sonarmsbuild.zip .\sonar-msbuild\
+        powershell Expand-Archive .\download\sonar-build-wrapper.zip .\sonar-msbuild\
+    
+    - name: Set up JDK 11 - required by sonar
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    
+    - name: Begin sonar
+      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory"
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.3.1
+      uses: microsoft/setup-msbuild@v1.3.1 
+      env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -55,7 +80,53 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}}
+        $version = git describe --abbrev=0 --tags
+        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
+        sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
+    
+    # - name: End sonar
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #   run: |
+    #     if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
+    #     sonar-msbuild\SonarScanner.MSBuild.exe end
+
+    # - name: Code signing
+    #   env:
+    #     CERTIFICATE: ${{ secrets.CERTIFICATE }}
+    #     CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+    #     BINARY: "./Release/Acrolinx.Sidebar.SDK.dll"
+    #     SIGNTOOL: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe"
+    #   shell: powershell
+    #   run : |
+    #     $ErrorActionPreference = 'stop'
+    #     $env:CERTIFICATE | Out-File -FilePath .\Certificate
+    #     certutil -decode Certificate AcrolinxCertificate.pfx
+    #     & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY
+    #     del .\Certificate
+    #     del AcrolinxCertificate.pfx
+
+    # Update .nuspec (Nuget Specification) with version number
+    - name: Patch version in nuget spec
+      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
+    
+    # Creating nuget package
+    - name: Create nuget package
+      run: nuget pack Acrolinx.Sidebar.SDK.nuspec -NonInteractive
+
+    # Change source of nuget package to Github, to publish on Github registry
+    - name: Add nuget source to github (replacement for nexus)
+      run: nuget source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/acrolinx/index.json" -UserName ${{ github.actor }} -Password ${{ secrets.GITHUB_TOKEN }}
+
+    # Push package to Github registry.
+    # - name: Push nuget package to github
+    #   shell: powershell
+    #   run: |
+    #     $NugetPackage  = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
+    #     Write-Host "Pushing to Github registry.. NuGet package name is : " $NugetPackage
+    #     nuget push $NugetPackage -source "GitHub" -ApiKey ${{ secrets.GITHUB_TOKEN }} 
     
     - uses: actions/upload-artifact@v3
       with:
@@ -63,3 +134,4 @@ jobs:
         path: |
           .\Acrolinx.Sidebar.SDK.Setup\bin\Release\*
           .\Release\*
+          .\*.nupkg

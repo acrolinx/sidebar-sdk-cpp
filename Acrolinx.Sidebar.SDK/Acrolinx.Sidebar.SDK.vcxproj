@@ -126,6 +126,9 @@
       <Command>xcopy /yi "$(SolutionDir)distrib\x86\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -161,6 +164,9 @@ xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
       <Command>xcopy /yi "$(SolutionDir)distrib\x64\Acrolinx.Startpage.dll" "$(OutDir)"
 xcopy /yi "$(ProjectDir)AcrolinxInterface.h" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -209,6 +215,9 @@ xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x86\"
 xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x86\"
 xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x86\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -256,6 +265,9 @@ xcopy /yi "$(OutDir)$(ProjectName).dll" "$(SolutionDir)distrib\x64\"
 xcopy /yi "$(OutDir)$(ProjectName).lib" "$(SolutionDir)distrib\x64\"
 xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell Compress-Archive -Path $(ProjectDir)\node_modules\@acrolinx\sidebar-startpage\dist\dist-offline\ -DestinationPath $(ProjectDir)\startpage.zip -Force</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="acrolinx.ico" />
@@ -264,8 +276,11 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <None Include="DocumentModel.rgs" />
     <None Include="Dokument.rgs" />
     <None Include="loading.bmp" />
+    <None Include="package-lock.json" />
+    <None Include="package.json" />
     <None Include="packages.config" />
     <None Include="Range.rgs" />
+    <None Include="startpage.zip" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Acrolinx.Sidebar.SDK.cpp" />
@@ -277,12 +292,14 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClCompile Include="DiffMatchPatchWorker.cpp" />
     <ClCompile Include="DocumentModel.cpp" />
     <ClCompile Include="Dokument.cpp" />
+    <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="LoggerHelper.cpp" />
     <ClCompile Include="Match.cpp" />
     <ClCompile Include="Matches.cpp" />
     <ClCompile Include="MultiAdapter.cpp" />
     <ClCompile Include="Range.cpp" />
     <ClCompile Include="Ranges.cpp" />
+    <ClCompile Include="RegistryUtil.cpp" />
     <ClCompile Include="ScriptHandler.cpp" />
     <ClCompile Include="SidebarControl.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -295,7 +312,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClCompile Include="UniversalAdapter.cpp" />
     <ClCompile Include="Utilities\DllUtil\DllUtil.cpp" />
     <ClCompile Include="Utilities\JSONUtil\JsonUtil.cpp" />
-    <ClCompile Include="WebBrowser.cpp" />
+    <ClCompile Include="ViewComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Acrolinx.Sidebar.SDK.h" />
@@ -304,14 +321,17 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="CheckOptions.h" />
     <ClInclude Include="CheckResult.h" />
     <ClInclude Include="COMInstanceMngr.h" />
+    <ClInclude Include="ComponentBase.h" />
     <ClInclude Include="DiffMatchPatchWorker.h" />
     <ClInclude Include="DocumentModel.h" />
     <ClInclude Include="Dokument.h" />
+    <ClInclude Include="FileUtil.h" />
     <ClInclude Include="LoggerHelper.h" />
     <ClInclude Include="Match.h" />
     <ClInclude Include="Matches.h" />
     <ClInclude Include="Range.h" />
     <ClInclude Include="Ranges.h" />
+    <ClInclude Include="RegistryUtil.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScriptHandler.h" />
     <ClInclude Include="SidebarControl.h" />
@@ -322,7 +342,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="Utilities\diff-match-patch\diff_match_patch.h" />
     <ClInclude Include="Utilities\DllUtil\DllUtil.h" />
     <ClInclude Include="Utilities\JSONUtil\JsonUtil.h" />
-    <ClInclude Include="WebBrowser.h" />
+    <ClInclude Include="ViewComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Acrolinx.Sidebar.SDK.rc" />
@@ -367,6 +387,9 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
       <UserProperties RESOURCE_FILE="Acrolinx.Sidebar.SDK.rc" _x007B_8856F961-340A-11D0-A96B-00C04FD705A2_x007D_="CWebBrowser" />
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="RunNpmInstall" BeforeTargets="PrepareForBuild">
+    <Exec Command="npm install" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
