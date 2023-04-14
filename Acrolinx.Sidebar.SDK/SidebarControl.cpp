@@ -610,12 +610,6 @@ CString CSidebarControl::GetSoftwareComponentCategoryAsString(Component_Category
     return softwareComponentCategory;
 }
 
-void CSidebarControl::RunAsync(std::function<void()> callback)
-{
-    auto* task = new std::function<void()>(callback);
-    PostMessage(s_runAsyncWindowMessage, reinterpret_cast<WPARAM>(task), 0);
-}
-
 BOOL CSidebarControl::InitializeWebView()
 {
 
