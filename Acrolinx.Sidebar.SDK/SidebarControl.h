@@ -101,7 +101,6 @@ public:
     HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);
     HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
     HRESULT OnCoreWebView2NavigationStarting(ICoreWebView2 * sender, ICoreWebView2NavigationStartingEventArgs * args);
-    void RunAsync(std::function<void(void)> callback);
     void ResizeWebView();
     HRESULT DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv);
     void Eval(CString script);
