@@ -342,6 +342,7 @@ xcopy /yi "$(OutDir)$(ProjectName).pdb" "$(SolutionDir)distrib\x64\"</Command>
     <ClInclude Include="Utilities\diff-match-patch\diff_match_patch.h" />
     <ClInclude Include="Utilities\DllUtil\DllUtil.h" />
     <ClInclude Include="Utilities\JSONUtil\JsonUtil.h" />
+    <ClInclude Include="Version.h" />
     <ClInclude Include="ViewComponent.h" />
   </ItemGroup>
   <ItemGroup>

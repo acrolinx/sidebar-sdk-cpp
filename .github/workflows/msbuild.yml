@@ -30,9 +30,6 @@ env:
   Solution_Name: Acrolinx.Sidebar.SDK.sln
   BUILD_NUMBER: ${{ github.run_number }}
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: windows-latest
@@ -70,6 +67,12 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3.1 
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    
+    - name: Replace version info
+      run: |
+        $version = git describe --abbrev=0 --tags
+        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        ((Get-Content -path .\Acrolinx.Sidebar.SDK\Version.h -Raw) -replace '1.0.0.0', $version) | Set-Content -Path .\Acrolinx.Sidebar.SDK\Version.h
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -79,12 +82,9 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: |
-        $version = git describe --abbrev=0 --tags
-        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
-        sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+      run: sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
     
-    # SONAR confusion - End SONAR before building 64 bit.
+     # SONAR confusion - End SONAR before building 64 bit.
     - name: End sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,29 +97,31 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: |
-        $version = git describe --abbrev=0 --tags
-        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 ${{env.SOLUTION_FILE_PATH}}
 
-    # - name: Code signing
-    #   env:
-    #     CERTIFICATE: ${{ secrets.CERTIFICATE }}
-    #     CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-    #     BINARY: "./Release/Acrolinx.Sidebar.SDK.dll"
-    #     SIGNTOOL: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe"
-    #   shell: powershell
-    #   run : |
-    #     $ErrorActionPreference = 'stop'
-    #     $env:CERTIFICATE | Out-File -FilePath .\Certificate
-    #     certutil -decode Certificate AcrolinxCertificate.pfx
-    #     & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY
-    #     del .\Certificate
-    #     del AcrolinxCertificate.pfx
+    - name: Code signing
+      env:
+        CERTIFICATE: ${{ secrets.CERTIFICATE }}
+        CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+        BINARY32: "distrib/x86/Acrolinx.Sidebar.SDK.dll"
+        BINARY64: "distrib/x64/Acrolinx.Sidebar.SDK.dll"
+        SIGNTOOL: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe"
+      shell: powershell
+      run : |
+        $ErrorActionPreference = 'stop'
+        $env:CERTIFICATE | Out-File -FilePath .\Certificate
+        certutil -decode Certificate AcrolinxCertificate.pfx
+        & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY32
+        & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY64
+        del .\Certificate
+        del AcrolinxCertificate.pfx
 
     # Update .nuspec (Nuget Specification) with version number
     - name: Patch version in nuget spec
-      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
+      run: |
+        $version = git describe --abbrev=0 --tags
+        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$', $version) | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
     
     # Creating nuget package
     - name: Create nuget package
@@ -135,7 +137,26 @@ jobs:
       run: |
         $NugetPackage  = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
         Write-Host "Pushing to Github registry.. NuGet package name is : " $NugetPackage
-        nuget push $NugetPackage -source "GitHub" -ApiKey ${{ secrets.GITHUB_TOKEN }} 
+        nuget push $NugetPackage -source "GitHub" -ApiKey  ${{ secrets.GITHUB_TOKEN }}
+    
+    # Push package to Nuget.org Only for tags(v*)
+    - name: Push nuget package to Nuget.org
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        $NugetPackage = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
+        Write-Host "Pushing to Nuget.org. NuGet package name is : " $NugetPackage
+        nuget push $NugetPackage ${{ secrets.NUGET_API_KEY }} -Source nuget.org -Timeout 600
+
+    # Create a release on GitHub. Only for tags(v*)
+    - name: Create a release in Github
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          *.nupkg
+          Acrolinx.Sidebar/bin/Release/
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - uses: actions/upload-artifact@v3
       with:
