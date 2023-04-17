@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Acrolinx.Sidebar.SDK.CPP</id>
-    <version>2.0.0.1</version>
+    <version>$version$</version>
     <authors>Acrolinx</authors>
     <owners>Acrolinx</owners>
     <projectUrl>https://github.com/acrolinx/sidebar-sdk-cpp</projectUrl>

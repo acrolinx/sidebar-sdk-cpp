@@ -67,6 +67,12 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3.1 
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    
+    - name: Replace version info
+      run: |
+        $version = git describe --abbrev=0 --tags
+        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        ((Get-Content -path .\Acrolinx.Sidebar.SDK\Version.h -Raw) -replace '1.0.0.0', $version) | Set-Content -Path .\Acrolinx.Sidebar.SDK\Version.h
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -76,10 +82,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: |
-        $version = git describe --abbrev=0 --tags
-        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
-        sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+      run: sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
     
     # SONAR confusion - End SONAR before building 64 bit.
     # - name: End sonar
@@ -94,10 +97,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: |
-        $version = git describe --abbrev=0 --tags
-        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 /p:Version=$version ${{env.SOLUTION_FILE_PATH}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 ${{env.SOLUTION_FILE_PATH}}
 
     - name: Code signing
       env:
@@ -118,7 +118,10 @@ jobs:
 
     # Update .nuspec (Nuget Specification) with version number
     - name: Patch version in nuget spec
-      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
+      run: |
+        $version = git describe --abbrev=0 --tags
+        $version = $version.substring(1) + "." + $env:BUILD_NUMBER
+        ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$', $version) | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
     
     # Creating nuget package
     - name: Create nuget package
