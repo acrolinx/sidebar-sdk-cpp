@@ -12,7 +12,7 @@
     <license type="expression">Apache-2.0</license>
     <description>Acrolinx CPP SDK for Sidebar Integration</description>
     <copyright>Copyright © Acrolinx 2017-present</copyright>
-     <tags>Acrolinx Sidebar SDK</tags>
+    <tags>Acrolinx Sidebar SDK</tags>
 
     <dependencies>
       <dependency id ="Microsoft.Web.WebView2" version="1.0.1587.40"/>
