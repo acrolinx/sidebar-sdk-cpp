@@ -30,9 +30,6 @@ env:
   Solution_Name: Acrolinx.Sidebar.SDK.sln
   BUILD_NUMBER: ${{ github.run_number }}
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: windows-latest
@@ -120,8 +117,8 @@ jobs:
         del AcrolinxCertificate.pfx
 
     # Update .nuspec (Nuget Specification) with version number
-    # - name: Patch version in nuget spec
-    #   run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
+    - name: Patch version in nuget spec
+      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
     
     # Creating nuget package
     - name: Create nuget package
@@ -137,7 +134,7 @@ jobs:
       run: |
         $NugetPackage  = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
         Write-Host "Pushing to Github registry.. NuGet package name is : " $NugetPackage
-        nuget push $NugetPackage -source "GitHub" -ApiKey ${{ secrets.NUGET_GITHUB_PUBLISH_TOKEN }}
+        nuget push $NugetPackage -source "GitHub" -ApiKey  ${{ secrets.GITHUB_TOKEN }}
     
     # Push package to Nuget.org Only for tags(v*)
     - name: Push nuget package to Nuget.org
