@@ -85,13 +85,13 @@ jobs:
         sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 /p:Version=$version ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
     
     # SONAR confusion - End SONAR before building 64 bit.
-    - name: End sonar
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-      run: |
-        if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
-        sonar-msbuild\SonarScanner.MSBuild.exe end
+    # - name: End sonar
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+    #   run: |
+    #     if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
+    #     sonar-msbuild\SonarScanner.MSBuild.exe end
 
     - name: Build x64 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -120,8 +120,8 @@ jobs:
         del AcrolinxCertificate.pfx
 
     # Update .nuspec (Nuget Specification) with version number
-    - name: Patch version in nuget spec
-      run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
+    # - name: Patch version in nuget spec
+    #   run:  ((Get-Content -path .\Acrolinx.Sidebar.SDK.nuspec -Raw) -replace '\$version\$',"`$version`$.$env:BUILD_NUMBER") | Set-Content -Path .\Acrolinx.Sidebar.SDK.nuspec
     
     # Creating nuget package
     - name: Create nuget package
