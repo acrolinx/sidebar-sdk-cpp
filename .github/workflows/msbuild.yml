@@ -52,9 +52,6 @@ jobs:
       run: |
         powershell Invoke-WebRequest -Uri "https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.10.0.19059/sonar-scanner-msbuild-4.10.0.19059-net46.zip" -OutFile ".\download\sonarmsbuild.zip"
         powershell Invoke-WebRequest -Uri "https://sonarcloud.io/static/cpp/build-wrapper-win-x86.zip" -OutFile ".\download\sonar-build-wrapper.zip"
-    
-    - name: Setup Nuget
-      uses: nuget/setup-nuget@v1
 
     - name: extract sonar
       run: |
@@ -140,7 +137,7 @@ jobs:
       run: |
         $NugetPackage  = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
         Write-Host "Pushing to Github registry.. NuGet package name is : " $NugetPackage
-        nuget push $NugetPackage -source "GitHub" -ApiKey ${{ secrets.GITHUB_TOKEN }}
+        nuget push $NugetPackage -source "GitHub" -ApiKey ${{ secrets.NUGET_GITHUB_PUBLISH_TOKEN }}
     
     # Push package to Nuget.org Only for tags(v*)
     - name: Push nuget package to Nuget.org
