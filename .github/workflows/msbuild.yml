@@ -52,6 +52,9 @@ jobs:
       run: |
         powershell Invoke-WebRequest -Uri "https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.10.0.19059/sonar-scanner-msbuild-4.10.0.19059-net46.zip" -OutFile ".\download\sonarmsbuild.zip"
         powershell Invoke-WebRequest -Uri "https://sonarcloud.io/static/cpp/build-wrapper-win-x86.zip" -OutFile ".\download\sonar-build-wrapper.zip"
+    
+    - name: Setup Nuget
+      uses: nuget/setup-nuget@v1
 
     - name: extract sonar
       run: |
