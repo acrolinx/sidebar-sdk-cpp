@@ -634,12 +634,48 @@ BOOL CSidebarControl::InitializeWebView()
         Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>
         (this, &CSidebarControl::OnCreateEnvironmentCompleted).Get());
 
-    // TODO: Verify if there are more error codes to handle
+    // Error codes - https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/webview2-idl?view=webview2-1.0.1722.45#createcorewebview2environmentwithoptions
     if (!SUCCEEDED(hRes))
     {
         if (hRes == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
         {
-            LOGE << "Couldn't find WebView2 installation. Check if Edge and WebView2 runtime is installed";
+            LOGE << "Could not find Edge installation.";
+        }
+        else if (hRes == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+        {
+            LOGE << "Edge Application path used in browserExecutableFolder.";
+        }
+        else if (hRes == HRESULT_FROM_WIN32(ERROR_INVALID_STATE))
+        {
+            LOGE << "Specified options do not match the options of the WebViews that are currently running in the shared browser process.";
+        }
+        else if (hRes == HRESULT_FROM_WIN32(ERROR_DISK_FULL))
+        {
+            LOGE << "Too many previous WebView2 Runtime versions exist.";
+        }
+        else if (hRes == HRESULT_FROM_WIN32(ERROR_PRODUCT_UNINSTALLED))
+        {
+            LOGE << "WebView2 Runtime uninstalled.";
+        }
+        else if (hRes == HRESULT_FROM_WIN32(ERROR_FILE_EXISTS))
+        {
+            LOGW << "User data folder cannot be created because a file with the same name already exists.";
+        }
+        else if(hRes == E_ACCESSDENIED)
+        {
+            LOGE << "Unable to create user data folder, Access Denied.";
+        }
+        else if (hRes == E_FAIL)
+        {
+            LOGE << "Edge runtime unable to start.";
+        }
+        else if (hRes == CO_E_NOTINITIALIZED)
+        {
+            LOGE << "CoInitializeEx was not called.";
+        }
+        else if (hRes == RPC_E_CHANGED_MODE)
+        {
+            LOGE << "CoInitializeEx was previously called with COINIT_MULTITHREADED.";
         }
         else
         {
@@ -681,8 +717,11 @@ void CSidebarControl::Eval(CString script)
 
 HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
 {
-    //TODO: Do something with the result
-    return S_OK;
+    if (FAILED(error))
+    {
+        LOGE << "Script execution failed" << result;
+    }
+    return error;
 }
 
 void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
@@ -712,7 +751,7 @@ HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebVi
 
 HRESULT CSidebarControl::OnCoreWebView2NavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args)
 {
-    //TODO: Do something
+    LOGI << "WebView Navigation Started";
     return S_OK;
 }
 

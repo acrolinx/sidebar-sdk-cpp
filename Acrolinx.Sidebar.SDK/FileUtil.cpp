@@ -44,13 +44,15 @@ CString Acrolinx_Sdk_Sidebar_Util::FileUtil::ExtractEmbeddedStartPage()
 
     HANDLE hFile = CreateFile(startPageZip, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-        // TODO: Handle error
+        LOGE << "Creating startpage zip file failed.";
+        startPageTempPath = _T("");
     }
 
     DWORD dwBytesWritten = 0;
     BOOL bSuccess = WriteFile(hFile, lpRes, resSize, &dwBytesWritten, NULL);
     if (!bSuccess || dwBytesWritten != resSize) {
-        // TODO: Handle error
+        LOGE << "Writing startpage temp file failed .";
+        startPageTempPath = _T("");
     }
 
     CloseHandle(hFile);
@@ -58,7 +60,8 @@ CString Acrolinx_Sdk_Sidebar_Util::FileUtil::ExtractEmbeddedStartPage()
     bool success = FileUtil::UnzipToFolder(startPageZip.AllocSysString(), startPageTempPath.AllocSysString());
     if (!success)
     {
-        // TODO: Handle error
+        LOGE << "Unzipping startpage failed";
+        startPageTempPath = _T("");
     }
 
     return startPageTempPath;
