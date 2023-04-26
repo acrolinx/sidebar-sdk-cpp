@@ -41,6 +41,6 @@ void Acrolinx_Sdk_Sidebar_Util::RegistryUtil::GetDWORDRegHKCU(CString relativeKe
     }
     else
     {
-        LOGE << "Unable to registry key: " << absKeyPath;
+        LOGE << "Unable to open registry key: " << absKeyPath;
     }
 }
