@@ -73,11 +73,9 @@ jobs:
 
     - name: Build x86 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
     
-     # SONAR confusion - End SONAR before building 64 bit.
+     # SONAR is confused - End SONAR before building 64 bit.
     - name: End sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -157,5 +155,6 @@ jobs:
         path: |
           .\Acrolinx.Sidebar.SDK.Setup\bin\Release\*
           .\Release\*
+          .\x64\Release\*
           .\*.nupkg
           .\Acrolinx.Sidebar.SDK\Resource.h
