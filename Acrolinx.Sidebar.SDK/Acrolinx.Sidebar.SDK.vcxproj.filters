@@ -260,9 +260,6 @@
     <ClInclude Include="RegistryUtil.h">
       <Filter>Header Files\Utils\Registry</Filter>
     </ClInclude>
-    <ClInclude Include="Version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Acrolinx.Sidebar.SDK.rc">
