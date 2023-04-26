@@ -157,3 +157,4 @@ jobs:
           .\Acrolinx.Sidebar.SDK.Setup\bin\Release\*
           .\Release\*
           .\*.nupkg
+          .\Acrolinx.Sidebar.SDK\Resource.h
