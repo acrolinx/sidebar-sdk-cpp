@@ -724,7 +724,7 @@ HRESULT CSidebarControl::ExecuteScriptResponse(HRESULT error, LPCWSTR result)
     return error;
 }
 
-void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
+void CSidebarControl::CloseWebView()
 {
     if (m_controller)
     {
@@ -733,10 +733,6 @@ void CSidebarControl::CloseWebView(bool cleanupUserDataFolder)
         m_webView = nullptr;
     }
     m_webViewEnvironment = nullptr;
-    if (cleanupUserDataFolder)
-    {
-        //Clean user data        
-    }
 }
 
 HRESULT CSidebarControl::OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment)
