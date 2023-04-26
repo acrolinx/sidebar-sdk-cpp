@@ -1,12 +1,12 @@
 /* Copyright 2023-present Acrolinx GmbH */
 
 #pragma once
+
 #include "stdafx.h"
 #include "ViewComponent.h"
 
 using namespace Microsoft::WRL;
-ViewComponent::ViewComponent(
-	CSidebarControl* appWindow)
+ViewComponent::ViewComponent(CSidebarControl* appWindow)
     : m_appWindow(appWindow), m_controller(appWindow->GetWebViewController())
 {
 

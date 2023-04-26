@@ -8,21 +8,17 @@ class ViewComponent : public ComponentBase
 {
 
 public:
-    ViewComponent(
-		CSidebarControl* appWindow
-    );
+    ViewComponent(CSidebarControl* appWindow);
+    ~ViewComponent() override;
 
     void SetBounds(RECT bounds);
-
-    ~ViewComponent() override;
 
 private:
 
     void ResizeWebView();
 
-	CSidebarControl* m_appWindow = nullptr;
+    CSidebarControl* m_appWindow = nullptr;
     Microsoft::WRL::ComPtr<ICoreWebView2Controller> m_controller;
-    
 
     float m_webViewRatio = 1.0f;
     RECT m_webViewBounds = {};
