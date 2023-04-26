@@ -612,16 +612,16 @@ CString CSidebarControl::GetSoftwareComponentCategoryAsString(Component_Category
 
 BOOL CSidebarControl::InitializeWebView()
 {
-
+    BOOL intializeStatus = true;
     CloseWebView();
     m_dcompDevice = nullptr;
-
 
     HRESULT hRes = DCompositionCreateDevice2(nullptr, IID_PPV_ARGS(&m_dcompDevice));
     if (!SUCCEEDED(hRes))
     {
         LOGE << "Attempting to create WebView using DComp Visual is not supported.";
-        return false;
+        intializeStatus = false;
+        return intializeStatus;
     }
 
     LPCWSTR subFolder = nullptr;
@@ -640,22 +640,27 @@ BOOL CSidebarControl::InitializeWebView()
         if (hRes == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
         {
             LOGE << "Could not find Edge installation.";
+            intializeStatus = false;
         }
         else if (hRes == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
         {
             LOGE << "Edge Application path used in browserExecutableFolder.";
+            intializeStatus = false;
         }
         else if (hRes == HRESULT_FROM_WIN32(ERROR_INVALID_STATE))
         {
             LOGE << "Specified options do not match the options of the WebViews that are currently running in the shared browser process.";
+            intializeStatus = false;
         }
         else if (hRes == HRESULT_FROM_WIN32(ERROR_DISK_FULL))
         {
             LOGE << "Too many previous WebView2 Runtime versions exist.";
+            intializeStatus = false;
         }
         else if (hRes == HRESULT_FROM_WIN32(ERROR_PRODUCT_UNINSTALLED))
         {
             LOGE << "WebView2 Runtime uninstalled.";
+            intializeStatus = false;
         }
         else if (hRes == HRESULT_FROM_WIN32(ERROR_FILE_EXISTS))
         {
@@ -664,23 +669,30 @@ BOOL CSidebarControl::InitializeWebView()
         else if(hRes == E_ACCESSDENIED)
         {
             LOGE << "Unable to create user data folder, Access Denied.";
+            intializeStatus = false;
         }
         else if (hRes == E_FAIL)
         {
             LOGE << "Edge runtime unable to start.";
+            intializeStatus = false;
         }
         else if (hRes == CO_E_NOTINITIALIZED)
         {
             LOGE << "CoInitializeEx was not called.";
+            intializeStatus = false;
         }
         else if (hRes == RPC_E_CHANGED_MODE)
         {
             LOGE << "CoInitializeEx was previously called with COINIT_MULTITHREADED.";
+            intializeStatus = false;
         }
         else
         {
             LOGE << "Failed to create webview environment";
+            intializeStatus = false;
         }
+
+        return intializeStatus;
     }
 }
 
