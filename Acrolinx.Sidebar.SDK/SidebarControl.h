@@ -96,7 +96,7 @@ public:
 
     // WebView2 Stuff
     BOOL InitializeWebView();
-    void CloseWebView(bool cleanupUserDataFolder = false);
+    void CloseWebView(void);
     HRESULT OnCreateEnvironmentCompleted(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnCreateCoreWebView2ControllerCompleted(HRESULT result, ICoreWebView2Controller* controller);
     HRESULT CSidebarControl::OnCoreWebView2NavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
