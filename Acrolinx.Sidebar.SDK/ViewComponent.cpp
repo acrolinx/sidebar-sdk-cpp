@@ -4,19 +4,12 @@
 #include <sstream>
 #include <windowsx.h>
 #include <WinUser.h>
-#ifdef USE_WEBVIEW2_WIN10
-#include <windows.ui.composition.interop.h>
-#endif
 
-//#include "CheckFailure.h"
-
+// TODO: ViewComponent needs cleanup
 using namespace Microsoft::WRL;
 ViewComponent::ViewComponent(
 	CSidebarControl* appWindow,
     IDCompositionDevice* dcompDevice,
-#ifdef USE_WEBVIEW2_WIN10
-    winrtComp::Compositor wincompCompositor,
-#endif
     bool isDcompTargetMode)
     : m_appWindow(appWindow), m_controller(appWindow->GetWebViewController()),
     m_webView(appWindow->GetWebView()), m_dcompDevice(dcompDevice),
@@ -281,11 +274,8 @@ bool ViewComponent::OnMouseMessage(UINT message, WPARAM wParam, LPARAM lParam)
 bool ViewComponent::OnPointerMessage(UINT message, WPARAM wParam, LPARAM lParam)
 {
     bool handled = false;
-#ifdef USE_WEBVIEW2_WIN10
-    if (m_dcompDevice || m_wincompCompositor)
-#else
+
     if (m_dcompDevice)
-#endif
     {
         POINT point;
         POINTSTOPOINT(point, lParam);

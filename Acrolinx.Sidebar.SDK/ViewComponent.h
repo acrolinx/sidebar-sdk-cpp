@@ -4,10 +4,8 @@
 #include "SidebarControl.h"
 #include <dcomp.h>
 #include <unordered_set>
-#ifdef USE_WEBVIEW2_WIN10
-#include <winrt/Windows.UI.Composition.Desktop.h>
-#endif
 
+// TODO: ViewComponent needs cleanup
 class DCompTargetImpl;
 
 class ViewComponent : public ComponentBase
@@ -81,16 +79,6 @@ private:
     Microsoft::WRL::ComPtr<IDCompositionTarget> m_dcompHwndTarget;
     Microsoft::WRL::ComPtr<IDCompositionVisual> m_dcompRootVisual;
     Microsoft::WRL::ComPtr<IDCompositionVisual> m_dcompWebViewVisual;
-
-#ifdef USE_WEBVIEW2_WIN10
-    void BuildWinCompVisualTree();
-    void DestroyWinCompVisualTree();
-
-    winrt::Windows::UI::Composition::Compositor m_wincompCompositor{ nullptr };
-    winrt::Windows::UI::Composition::Desktop::DesktopWindowTarget m_wincompHwndTarget{ nullptr };
-    winrt::Windows::UI::Composition::ContainerVisual m_wincompRootVisual{ nullptr };
-    winrt::Windows::UI::Composition::ContainerVisual m_wincompWebViewVisual{ nullptr };
-#endif
 
 
     EventRegistrationToken m_cursorChangedToken = {};
