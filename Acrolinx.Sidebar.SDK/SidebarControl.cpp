@@ -755,7 +755,7 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         m_webView->add_NavigationStarting(Callback<ICoreWebView2NavigationStartingEventHandler>
             (this, &CSidebarControl::OnCoreWebView2NavigationStarting).Get(), nullptr);
 
-        NewComponent<ViewComponent>(this, m_dcompDevice.Get(), m_creationModeId == IDM_CREATION_MODE_TARGET_DCOMP);
+        NewComponent<ViewComponent>(this);
 
         if (!m_webView)
         {

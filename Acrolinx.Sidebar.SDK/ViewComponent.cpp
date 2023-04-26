@@ -3,18 +3,11 @@
 #pragma once
 #include "stdafx.h"
 #include "ViewComponent.h"
-#include <sstream>
-#include <windowsx.h>
-#include <WinUser.h>
 
 using namespace Microsoft::WRL;
 ViewComponent::ViewComponent(
-	CSidebarControl* appWindow,
-    IDCompositionDevice* dcompDevice,
-    bool isDcompTargetMode)
-    : m_appWindow(appWindow), m_controller(appWindow->GetWebViewController()),
-    m_webView(appWindow->GetWebView()), m_dcompDevice(dcompDevice),
-    m_isDcompTargetMode(isDcompTargetMode)
+	CSidebarControl* appWindow)
+    : m_appWindow(appWindow), m_controller(appWindow->GetWebViewController())
 {
 
     m_controller->add_ZoomFactorChanged(
