@@ -62,7 +62,7 @@ jobs:
       run: |
         $version = git describe --abbrev=0 --tags
         $version = $version.substring(1) + "." + $env:BUILD_NUMBER
-        $commaSeperatedVersion = $version -replace '.' ','
+        $commaSeperatedVersion = $version -replace '\.' , ','
         ((Get-Content -path .\Acrolinx.Sidebar.SDK\Resource.h -Raw) -replace '1.0.0.99', $version) | Set-Content -Path .\Acrolinx.Sidebar.SDK\Resource.h
         ((Get-Content -path .\Acrolinx.Sidebar.SDK\Resource.h -Raw) -replace '1,0,0,99', $commaSeperatedVersion) | Set-Content -Path .\Acrolinx.Sidebar.SDK\Resource.h
 
