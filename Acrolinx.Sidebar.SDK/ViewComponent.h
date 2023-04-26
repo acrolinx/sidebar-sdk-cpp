@@ -16,21 +16,10 @@ public:
     ViewComponent(
 		CSidebarControl* appWindow,
         IDCompositionDevice* dcompDevice,
-#ifdef USE_WEBVIEW2_WIN10
-        winrtComp::Compositor wincompCompositor,
-#endif
         bool isDCompTargetMode
     );
 
-    bool HandleWindowMessage(
-        HWND hWnd,
-        UINT message,
-        WPARAM wParam,
-        LPARAM lParam,
-        LRESULT* result) override;
-
     void SetBounds(RECT bounds);
-    void SetScale(float scale);
 
     ~ViewComponent() override;
 
@@ -43,13 +32,6 @@ private:
         kRotate60DegDiagonally
     };
     void ResizeWebView();
-    void ToggleVisibility();
-    void SetSizeRatio(float ratio);
-    void SetZoomFactor(float zoom);
-    
-    void SetTransform(TransformType transformType);
-    void ShowWebViewBounds();
-    void ShowWebViewZoom();
 
     //Browser* m_appWindow = nullptr;
 	CSidebarControl* m_appWindow = nullptr;
@@ -65,15 +47,9 @@ private:
     bool m_useCursorId = false;
     EventRegistrationToken m_zoomFactorChangedToken = {};
 
-    bool OnMouseMessage(UINT message, WPARAM wParam, LPARAM lParam);
-    bool OnPointerMessage(UINT message, WPARAM wParam, LPARAM lParam);
-    void TrackMouseEvents(DWORD mouseTrackingFlags);
     bool m_isTrackingMouse = false;
     bool m_isCapturingMouse = false;
     std::unordered_set<UINT> m_pointerIdsStartingInWebView;
-
-    void BuildDCompTreeUsingVisual();
-    void DestroyDCompVisualTree();
 
     Microsoft::WRL::ComPtr<IDCompositionDevice> m_dcompDevice;
     Microsoft::WRL::ComPtr<IDCompositionTarget> m_dcompHwndTarget;
