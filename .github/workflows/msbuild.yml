@@ -188,3 +188,9 @@ jobs:
         msbuild /m /p:Configuration=Test /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
         '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Test\DefaultTest.dll" /resultsfile:"Test\testResult.xml"'
 
+    - uses: actions/upload-artifact@v3
+      with:
+        name: C++ Test Artifacts
+        path: |
+          .\Test\*
+
