@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.33403.129
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Acrolinx.Sidebar.SDK", "Acrolinx.Sidebar.SDK\Acrolinx.Sidebar.SDK.vcxproj", "{814BB5CA-2293-4AF6-9C10-FD8B531788CC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Acrolinx.Sidebar.SDK.Test", "Acrolinx.Sidebar.SDK.Test\Acrolinx.Sidebar.SDK.Test.vcxproj", "{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AcrolinxSidebarSDKTest", "Acrolinx.Sidebar.SDK.Test\Acrolinx.Sidebar.SDK.Test.vcxproj", "{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}"
 	ProjectSection(ProjectDependencies) = postProject
 		{814BB5CA-2293-4AF6-9C10-FD8B531788CC} = {814BB5CA-2293-4AF6-9C10-FD8B531788CC}
 	EndProjectSection
@@ -31,6 +31,9 @@ Global
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		Test|Win32 = Test|Win32
+		Test|x64 = Test|x64
+		Test|x86 = Test|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -45,12 +48,23 @@ Global
 		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Release|x64.Build.0 = Release|x64
 		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Release|x86.ActiveCfg = Release|Win32
 		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Release|x86.Build.0 = Release|Win32
+		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Test|Win32.ActiveCfg = Test|Win32
+		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Test|Win32.Build.0 = Test|Win32
+		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Test|x64.ActiveCfg = Test|x64
+		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Test|x64.Build.0 = Test|x64
+		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Test|x86.ActiveCfg = Test|Win32
+		{814BB5CA-2293-4AF6-9C10-FD8B531788CC}.Test|x86.Build.0 = Test|Win32
 		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Debug|x64.ActiveCfg = Debug|Win32
 		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Debug|x86.ActiveCfg = Debug|Win32
 		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Release|Win32.ActiveCfg = Release|Win32
 		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Release|x64.ActiveCfg = Release|Win32
 		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Release|x86.ActiveCfg = Release|Win32
+		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Test|Win32.ActiveCfg = Test|Win32
+		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Test|Win32.Build.0 = Test|Win32
+		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Test|x64.ActiveCfg = Test|Win32
+		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Test|x86.ActiveCfg = Test|Win32
+		{DF45CD55-5BD9-44A1-83B3-FE45CE578B35}.Test|x86.Build.0 = Test|Win32
 		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Debug|Win32.ActiveCfg = Debug|x86
 		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Debug|x64.ActiveCfg = Debug|x64
 		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Debug|x86.ActiveCfg = Debug|x86
@@ -61,6 +75,11 @@ Global
 		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Release|x64.Build.0 = Release|x64
 		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Release|x86.ActiveCfg = Release|x86
 		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Release|x86.Build.0 = Release|x86
+		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Test|Win32.ActiveCfg = Release|x86
+		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Test|x64.ActiveCfg = Release|x64
+		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Test|x64.Build.0 = Release|x64
+		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Test|x86.ActiveCfg = Release|x86
+		{59CB05E5-56D4-4419-8A13-FBB3713C3EFD}.Test|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

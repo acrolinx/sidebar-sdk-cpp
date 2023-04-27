@@ -165,3 +165,35 @@ jobs:
           .\x64\Release\*
           .\*.nupkg
           .\Acrolinx.Sidebar.SDK\Resource.h
+
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+          fetch-depth: 0
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.3.1 
+      env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build x86 bit
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+    
+    - name: Register x86 SDK DLL
+      run:  regsvr32 "Release\Acrolinx.Sidebar.SDK.dll"
+
+    - name: Run Tests
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        msbuild /m /p:Configuration=Test /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+        '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Test\DefaultTest.dll" /resultsfile:"Test\testResult.xml"'
+
