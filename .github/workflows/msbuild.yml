@@ -75,9 +75,6 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
 
-    - name: Register x86 \DefaultTest.dll
-      run:  regsvr32 "Release\Acrolinx.Sidebar.SDK.dll"
-
      # SONAR is confused - End SONAR before building 64 bit.
     - name: End sonar
       env:
@@ -86,14 +83,18 @@ jobs:
       run: |
         if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
         sonar-msbuild\SonarScanner.MSBuild.exe end
+    
+    - name: Register x86 SDK DLL
+      run:  regsvr32 "Release\Acrolinx.Sidebar.SDK.dll"
 
-    - name: Set up MS Test
-      run:  '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Release\DefaultTest.dll" /resultsfile:"Release\testResult.xml"'
+    - name: Run Tests
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Acrolinx.Sidebar.SDK.Test:rebuild
+        '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Release\DefaultTest.dll" /resultsfile:"Release\testResult.xml"'
 
     - name: Build x64 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 ${{env.SOLUTION_FILE_PATH}}
 
     - name: Code signing
