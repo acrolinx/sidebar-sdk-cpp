@@ -32,7 +32,8 @@ Before you start developing your own integration, you might benefit from looking
 * the [Acrolinx SDKs](https://github.com/acrolinx?q=sdk), and
 * the [Acrolinx Demo Projects](https://github.com/acrolinx?q=demo).
 
-Also note that "Visual C++ 2010 redistributable x86" is a run time requirement.
+Also note that "Visual C++ 2017 redistributable x86" is a run time requirement.
+Download from [Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 
 ## Getting Started
 
@@ -43,8 +44,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 1. Provides lookup functionality.
 2. **Start page**: Provides interactive way to sign in to Acrolinx with built-in error handling.
 3. Provides logging using [Plog v1.1.4](https://github.com/SergiusTheBest/plog).
-4. **Acrolinx Storage**: Applications using the Internet Explorer web browser control may be denied to access LocalStorage.
-   The SDK uses its own storage mechanism using the Windows registry.
+4. **Acrolinx Storage**: The SDK uses its own storage mechanism using the Windows registry.
    + **Registry path**: `HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
    + **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
 5. **Acrolinx Adapter**: Provides reusable functionality for all integrations.
@@ -57,7 +57,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
   and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson).
 * Plog v1.1.4 for logging utility. Plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
   and Copyright (c) 2016 Sergey Podobry (sergey.podobry@gmail.com). You can get the source [here]( https://github.com/SergiusTheBest/plog).
-* Wix Toolset v3.10.4 for simple installer. Wix Toolset is licensed under the [MS-RL](https://wixtoolset.org/about/license/).
+* Wix Toolset v3.11.2 for simple installer. Wix Toolset is licensed under the [MS-RL](https://wixtoolset.org/about/license/).
   The Wix Toolset website is at [wixtoolset.org](https://wixtoolset.org/).
 
 ## License
