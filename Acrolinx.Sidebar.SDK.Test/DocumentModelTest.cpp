@@ -58,7 +58,7 @@ namespace AcrolinxSidebarSDKTest
         void InvalidRangeDoesNotCrash()
         {
             DocumentModelClass^ documentModel = gcnew DocumentModelClass();
-            documentModel->InitInstance("If Purple People Eaters are real… where do they find purple people to eat?");
+            documentModel->InitInstance("If Purple People Eaters are realï¿½ where do they find purple people to eat?");
 
             RangeClass^ range = gcnew RangeClass();
             range->InitInstance(-3, 9);
@@ -70,7 +70,7 @@ namespace AcrolinxSidebarSDKTest
         {
 
             DocumentModelClass^ documentModel = gcnew DocumentModelClass();
-            documentModel->InitInstance("Last Friday in three week’s time I saw a spotted striped blue worm shake hands with a legless lizard.");
+            documentModel->InitInstance("Last Friday in three weekï¿½s time I saw a spotted striped blue worm shake hands with a legless lizard.");
 
             RangeClass^ range1 = gcnew RangeClass();
             range1->InitInstance(57, 61);
