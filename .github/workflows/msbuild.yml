@@ -84,6 +84,9 @@ jobs:
         if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
         sonar-msbuild\SonarScanner.MSBuild.exe end
 
+    - name: Set up MS Test
+      run:  '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Release\DefaultTest.dll" /resultsfile:"Release\testResult.xml"'
+
     - name: Build x64 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
