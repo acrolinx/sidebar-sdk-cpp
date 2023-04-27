@@ -74,7 +74,10 @@ jobs:
     - name: Build x86 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
-    
+
+    - name: Register x86 \DefaultTest.dll
+      run:  regsvr32 "Release\Acrolinx.Sidebar.SDK.dll"
+
      # SONAR is confused - End SONAR before building 64 bit.
     - name: End sonar
       env:
