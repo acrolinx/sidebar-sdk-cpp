@@ -90,7 +90,7 @@ jobs:
     - name: Run Tests
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Acrolinx.Sidebar.SDK.Test
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:"Acrolinx.Sidebar.SDK.Test"
         '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Release\DefaultTest.dll" /resultsfile:"Release\testResult.xml"'
 
     - name: Build x64 bit
