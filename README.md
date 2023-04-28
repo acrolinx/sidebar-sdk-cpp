@@ -35,6 +35,16 @@ Before you start developing your own integration, you might benefit from looking
 Also note that "Visual C++ 2017 redistributable x86" is a run time requirement.
 Download from [Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 
+## Using the SDK
+
+TODO:// update URL
+
+For simplified development experience get SDK from [Nuget](https://www.nuget.org/)
+
+Make sure to register the DLL before executing your application.
+
+For handy registration you can use this [utility](https://github.com/acrolinx/sidebar-demo-cpp)
+
 ## Getting Started
 
 See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/README.md).
@@ -48,6 +58,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
    + **Registry path**: `HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
    + **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
 5. **Acrolinx Adapter**: Provides reusable functionality for all integrations.
+
   
 ## References
 
