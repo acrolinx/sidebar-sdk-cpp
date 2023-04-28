@@ -698,9 +698,9 @@ BOOL CSidebarControl::InitializeWebView()
             LOGE << "Failed to create webview environment";
             intializeStatus = false;
         }
-
-        return intializeStatus;
     }
+
+    return intializeStatus;
 }
 
 HRESULT CSidebarControl::DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv)
