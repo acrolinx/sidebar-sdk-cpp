@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Acrolinx.Sidebar.SDK.CPP</id>
+    <version>$version$</version>
+    <authors>Acrolinx</authors>
+    <owners>Acrolinx</owners>
+    <projectUrl>https://github.com/acrolinx/sidebar-sdk-cpp</projectUrl>
+    <repository type="git" url="https://github.com/acrolinx/sidebar-sdk-cpp" />
+    <iconUrl>https://github.com/acrolinx/sidebar-sdk-cpp/raw/master/Acrolinx.Sidebar/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <description>Acrolinx CPP SDK for Sidebar Integration</description>
+    <copyright>Copyright © Acrolinx 2017-present</copyright>
+    <tags>Acrolinx Sidebar SDK</tags>
+
+    <dependencies>
+      <dependency id ="Microsoft.Web.WebView2" version="1.0.1587.40"/>
+      <dependency id ="Microsoft.Windows.ImplementationLibrary" version="1.0.230202.1"/>
+    </dependencies>
+  </metadata>
+
+  <files>
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.dll" target="lib\x86" />
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.lib" target="lib\x86" />
+    <file src="distrib\x86\Acrolinx.Sidebar.SDK.tlb" target="lib\x86" />
+    <file src="distrib\x86\AcrolinxInterface.h" target="lib\x86" />
+
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.dll" target="lib\x64" />
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.lib" target="lib\x64" />
+    <file src="distrib\x64\Acrolinx.Sidebar.SDK.tlb" target="lib\x64" />
+    <file src="distrib\x64\AcrolinxInterface.h" target="lib\x64" />
+  </files>
+</package>
+

@@ -58,6 +58,18 @@
     <Filter Include="Source Files\Util\Logger">
       <UniqueIdentifier>{b5d1f7d4-37bc-40d3-8ac7-74926fdcd46d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Util\File">
+      <UniqueIdentifier>{b7e07d52-d85b-4995-be5a-7fe2258fdb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\File">
+      <UniqueIdentifier>{2a74a2f1-69ee-414e-a811-5be6d8c03a1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util\Registry">
+      <UniqueIdentifier>{ab2a4c4d-da62-4ebb-a9cf-74c6e8ed6139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\Registry">
+      <UniqueIdentifier>{41b20fef-2636-4204-9ba7-d7deaa3d68d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="AcrolinxSidebarCtrl.bmp">
@@ -81,6 +93,10 @@
     <None Include="Range.rgs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="packages.config" />
+    <None Include="package.json" />
+    <None Include="package-lock.json" />
+    <None Include="startpage.zip" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -93,9 +109,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AcrolinxSidebarPpg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WebBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScriptHandler.cpp">
@@ -152,6 +165,15 @@
     <ClCompile Include="COMInstanceMngr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ViewComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtil.cpp">
+      <Filter>Source Files\Util\File</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistryUtil.cpp">
+      <Filter>Source Files\Util\Registry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -173,9 +195,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SidebarControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WebBrowser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScriptHandler.h">
@@ -229,6 +248,18 @@
     <ClInclude Include="COMInstanceMngr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ViewComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtil.h">
+      <Filter>Header Files\Utils\File</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistryUtil.h">
+      <Filter>Header Files\Utils\Registry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Acrolinx.Sidebar.SDK.rc">
@@ -239,5 +270,8 @@
     <Midl Include="AcrolinxSidebarSDK.idl">
       <Filter>Source Files</Filter>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>

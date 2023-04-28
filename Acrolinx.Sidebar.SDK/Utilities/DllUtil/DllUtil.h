@@ -20,6 +20,8 @@ namespace Acrolinx_Sdk_Sidebar_Util
         static BOOL GetDllInfo(CString& id, CString& name, CString& version);
         static CString GetAppName(void);
         static CString GetLastErrorAsString(void);
+        static HINSTANCE GetDllHandle(void);
+        static HRSRC GetEmbeddedresource(int resourceId, CString type);
     private:
         static CString GetFormatedID(const CString& name);
     };

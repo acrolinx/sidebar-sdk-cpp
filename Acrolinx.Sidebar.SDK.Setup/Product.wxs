@@ -44,7 +44,6 @@
     </Directory>
 
     <Feature Id="Feature.CPP.SDK" Title="Acrolinx C++ Sidebar SDK" Level="1">
-      <ComponentRef Id="Component.Acrolinx.Startpage.dll"/>
       <ComponentRef Id="Component.Acrolinx.Interface.h"/>
       <?if $(sys.BUILDARCH) = x64 ?>
       <ComponentRef Id="Component.Acrolinx.Sidebar.SDK.64bit.dll"/>
@@ -65,9 +64,6 @@
 
   <Fragment>
     <DirectoryRef Id="CPPSDK">
-      <Component Id="Component.Acrolinx.Startpage.dll" Guid="421223B6-FE51-40A9-A46A-6697688BC2CE" Location="local" KeyPath="yes">
-        <File Id="Acrolinx.Startpage.dll" Name="Acrolinx.Startpage.dll" Source="..\distrib\x86\Acrolinx.Startpage.dll" DiskId="1"/>
-      </Component>
       <Component Id="Component.Acrolinx.Interface.h" Guid="E922B579-B52B-4476-ADDE-FFA8B6F4B3CA" Location="local" KeyPath="yes">
         <File Id="AcrolinxInterface.h" Name="AcrolinxInterface.h" Source="..\distrib\x86\AcrolinxInterface.h" DiskId="1"/>
       </Component>

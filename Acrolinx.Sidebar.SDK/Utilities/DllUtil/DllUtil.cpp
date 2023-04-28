@@ -6,8 +6,6 @@
 #include <Wbemcli.h>
 #include <Strsafe.h>
 
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-
 Acrolinx_Sdk_Sidebar_Util::DllUtil::DllUtil(void)
 {
 }
@@ -327,3 +325,18 @@ CString Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString(void)
 
     return message;
 }
+
+HINSTANCE Acrolinx_Sdk_Sidebar_Util::DllUtil::GetDllHandle(void)
+{
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    HINSTANCE sdkHwnd = AfxGetInstanceHandle();
+    return sdkHwnd;
+}
+
+HRSRC Acrolinx_Sdk_Sidebar_Util::DllUtil::GetEmbeddedresource(int resourceId, CString type)
+{
+    HINSTANCE hwnd = DllUtil::GetDllHandle();
+    HRSRC hRes = FindResource(hwnd, MAKEINTRESOURCE(resourceId), type);
+    return hRes;
+}
+

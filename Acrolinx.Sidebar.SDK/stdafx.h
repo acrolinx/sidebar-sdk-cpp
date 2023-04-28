@@ -38,6 +38,11 @@
 
 #include <plog/Log.h>
 
+#include <wrl.h>
+
+#include "WebView2EnvironmentOptions.h"
+#include "WebView2.h"
+
 #ifdef _DEBUG
 #define ACROASSERT(f, m) ASSERT(f) ; LOGE_IF(!(f)) << m
 #else

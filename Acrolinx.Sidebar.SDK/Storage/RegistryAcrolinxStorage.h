@@ -3,6 +3,7 @@
 #pragma once
 
 #include "..\Acrolinx.Sidebar.SDK_i.h"
+#include "JsonUtil.h"
 
 using namespace ATL;
 
@@ -22,6 +23,8 @@ public:
     STDMETHOD(GetItem)(BSTR key, BSTR* data);
     STDMETHOD(RemoveItem)(BSTR key);
     STDMETHOD(SetItem)(BSTR key, BSTR data);
+	STDMETHOD(GetAllItems)(BSTR* data);
+    
 
 private:
     const CString keyPath;

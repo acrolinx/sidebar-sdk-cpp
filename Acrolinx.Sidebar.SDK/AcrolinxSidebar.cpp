@@ -493,6 +493,7 @@ void CAcrolinxSidebar::OnDestroy()
 {
     COleControl::OnDestroy();
 
+    m_sidebarCtrl.CloseWebView();
     m_sidebarCtrl.DestroyWindow();
 }
 

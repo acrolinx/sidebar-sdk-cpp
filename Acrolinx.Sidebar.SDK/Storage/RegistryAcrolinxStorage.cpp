@@ -1,10 +1,11 @@
 /* Copyright Acrolinx GmbH */
 
-#include "StdAfx.h"
-#include "RegistryAcrolinxStorage.h"
+#include "stdafx.h"
 #include <Windows.h>
+#include "RegistryAcrolinxStorage.h"
 #include "DllUtil.h"
 
+using namespace Acrolinx_Sdk_Sidebar_Util;
 
 CRegistryAcrolinxStorage::CRegistryAcrolinxStorage(void)
     : keyPath(_T("Software\\Acrolinx\\Plugins\\Storage\\AcrolinxStorage"))
@@ -53,10 +54,10 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
         HKEY hKey;
         LONG regAccess;
         regAccess = ::RegCreateKeyEx(HKEY_CURRENT_USER, keyPath, 0, nullptr, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, nullptr, &hKey, 0);
-        if(regAccess == ERROR_SUCCESS)
+        if (regAccess == ERROR_SUCCESS)
         {
             CString value(data);
-            if(::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), (value.GetLength()*(sizeof(WCHAR))) + 1) != ERROR_SUCCESS)
+            if (::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), (value.GetLength()*(sizeof(WCHAR))) + 1) != ERROR_SUCCESS)
             {
                 LOGE << "Fail to store values";
             }
@@ -67,6 +68,117 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
     catch(...)
     {
         LOGE << "Exception thrown by registry";
+    }
+
+    return S_OK;
+}
+
+STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
+{
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    *data = CString().AllocSysString();
+
+#define MAX_KEY_LENGTH 255
+#define MAX_VALUE_NAME 16383
+
+    WDocument registryStorage;
+
+    try
+    {
+        HKEY hKey;
+        
+        DWORD dwKeyDataType = REG_SZ;
+        DWORD dwDataBufSize = 2056;
+        LONG regAccess;
+
+        TCHAR    achKey[MAX_KEY_LENGTH];        // buffer for subkey name
+        DWORD    cbName;                        // size of name string 
+        TCHAR    achClass[MAX_PATH] = TEXT(""); // buffer for class name 
+        DWORD    cchClassName = MAX_PATH;       // size of class string 
+        DWORD    cSubKeys = 0;                  // number of subkeys 
+        DWORD    cbMaxSubKey;                   // longest subkey size 
+        DWORD    cchMaxClass;                   // longest class string 
+        DWORD    cValues;                       // number of values for key 
+        DWORD    cchMaxValue;                   // longest value name 
+        DWORD    cbMaxValueData;                // longest value data 
+        DWORD    cbSecurityDescriptor;          // size of security descriptor 
+        FILETIME ftLastWriteTime;               // last write time 
+
+
+        TCHAR  achValue[MAX_VALUE_NAME];
+        DWORD cchValue = MAX_VALUE_NAME;
+        DWORD i, retCode;
+
+
+        regAccess = ::RegOpenKeyEx(HKEY_CURRENT_USER, keyPath, 0, KEY_QUERY_VALUE, &hKey);
+        if (regAccess != ERROR_SUCCESS)
+        {
+            regAccess = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, keyPath, 0, KEY_QUERY_VALUE, &hKey);
+        }
+
+        if (regAccess == ERROR_SUCCESS)
+        {
+            retCode = RegQueryInfoKey(
+                hKey,
+                achClass,
+                &cchClassName,
+                NULL,
+                &cSubKeys,
+                &cbMaxSubKey,
+                &cchMaxClass,
+                &cValues,
+                &cchMaxValue,
+                &cbMaxValueData,
+                &cbSecurityDescriptor,
+                &ftLastWriteTime);
+
+            // Enumerate the key values.
+
+            if (cValues)
+            {
+                for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
+                {
+                    cchValue = MAX_VALUE_NAME;
+                    achValue[0] = '\0';
+                    retCode = RegEnumValue(hKey, i,
+                        achValue,
+                        &cchValue,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL);
+
+                    if (retCode == ERROR_SUCCESS)
+                    {
+                        BSTR data;
+                        HRESULT res = GetItem(achValue, &data);
+                        if (SUCCEEDED(res))
+                        {
+                            CString key = CString(L"/");
+                            key.Append(achValue);
+                            CString value = CString(data);
+                            CJsonUtil::SetString(registryStorage, key, value);
+                        }
+                        else
+                        {
+                            LOGE << "Could not read value from registry " << achValue << " " << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
+                        }
+                    }
+                }
+            }
+
+            *data = CJsonUtil::Stringify(registryStorage).AllocSysString();
+
+            ::RegCloseKey(hKey);
+        }
+        else
+        {
+            LOGE << "Fail to open registry";
+        }
+    }
+    catch (...)
+    {
+        LOGE << "Exception thrown by registry" << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
     }
 
     return S_OK;
