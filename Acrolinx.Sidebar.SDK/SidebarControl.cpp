@@ -98,7 +98,7 @@ CString CSidebarControl::GetStartPageURL(void)
     CString startPageURL = CString(_T(""));
     CString extractPath = FileUtil::ExtractEmbeddedStartPage();
 
-    if (extractPath[0] == '\0')
+    if (extractPath.IsEmpty())
     {
         return startPageURL;
     }
@@ -840,7 +840,7 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
 
         CString startPageURL = GetStartPageURL();
 
-        if (startPageURL[0] == '\0')
+        if (startPageURL.IsEmpty())
         {
             m_label.SetWindowTextW(_T("Couldn't load start page. Check logs for errors."));
             LOGE << "Startpage URL empty.";
