@@ -1,4 +1,5 @@
 /* Copyright 2023-present Acrolinx GmbH */
+
 #pragma once
 
 #include "stdafx.h"

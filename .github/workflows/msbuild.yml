@@ -5,10 +5,14 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_run:
-    workflows: [Test]
-    types:
-      - completed
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Trigger Comment (Optional)"
+        required: false
+        default: "Manual Workflow Run"
 
 env:
   SOLUTION_FILE_PATH: .
@@ -17,7 +21,49 @@ env:
   BUILD_NUMBER: ${{ github.run_number }}
 
 jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+          fetch-depth: 0
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.3.1 
+      env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build x86 bit
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+    
+    - name: Register x86 SDK DLL
+      run:  regsvr32 "Release\Acrolinx.Sidebar.SDK.dll"
+
+    - name: Build Test Project
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        msbuild /m /p:Configuration=Test /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+        '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Test\DefaultTest.dll" /resultsfile:"Test\testResult.xml"'
+    
+    - name: Run Test Project
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Test\DefaultTest.dll" /resultsfile:"Test\testResult.xml"'
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: C++ Test Artifacts
+        path: .\Test\testResult.xml
+
   build:
+    name: Build
+    needs: Test
     runs-on: windows-latest
 
     steps:
@@ -29,7 +75,12 @@ jobs:
     - name: mkdir download
       run: |
         mkdir download
-        mkdir build_wrapper_output_directory 
+        mkdir build_wrapper_output_directory
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: C++ Test Artifacts
+        path: .\Test\testResult.xml
     
     - name: download sonar
       run: |
@@ -47,7 +98,7 @@ jobs:
         java-version: 1.11
     
     - name: Begin sonar
-      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory"
+      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory" /d:sonar.cs.vscoveragexml.reportsPaths="Test\testResult.xml"
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.3.1 

@@ -1,3 +1,5 @@
+/* Copyright 2023-present Acrolinx GmbH */
+
 #pragma once
 
 namespace Acrolinx_Sdk_Sidebar_Util
@@ -10,6 +12,7 @@ namespace Acrolinx_Sdk_Sidebar_Util
     public:
         static CString ExtractEmbeddedStartPage();
         static CString GetWebViewUserDataDirectory();
+    private:
         static bool UnzipToFolder(BSTR lpZipFile, BSTR lpFolder);
     };
 

@@ -95,7 +95,14 @@ void CSidebarControl::Start(CString serverAddress)
 
 CString CSidebarControl::GetStartPageURL(void)
 {
+    CString startPageURL = CString(_T(""));
     CString extractPath = FileUtil::ExtractEmbeddedStartPage();
+
+    if (extractPath.IsEmpty())
+    {
+        return startPageURL;
+    }
+
     CString hostName = CString(_T("extensions.acrolinx.cloud"));
 
     Microsoft::WRL::ComPtr<ICoreWebView2_3> webView;
@@ -110,7 +117,7 @@ CString CSidebarControl::GetStartPageURL(void)
     // Virtual Host Mapping
     webView->SetVirtualHostNameToFolderMapping(hostName, extractPath, COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
 
-    CString startPageURL = CString(_T("https://"));
+    startPageURL.Append(_T("https://"));
     startPageURL.Append(hostName);
     startPageURL.Append(_T("/dist-offline/index.html"));
 
@@ -691,9 +698,9 @@ BOOL CSidebarControl::InitializeWebView()
             LOGE << "Failed to create webview environment";
             intializeStatus = false;
         }
-
-        return intializeStatus;
     }
+
+    return intializeStatus;
 }
 
 HRESULT CSidebarControl::DCompositionCreateDevice2(IUnknown* renderingDevice, REFIID riid, void** ppv)
@@ -820,7 +827,7 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         webViewSettings->put_IsStatusBarEnabled(FALSE);
 
         ComPtr<ICoreWebView2Settings3> webViewSettings3;
-        webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings);
+        webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings3);
         if (webViewSettings3)
         {
             // WebView version 1.0.864.35
@@ -832,8 +839,15 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         }
 
         CString startPageURL = GetStartPageURL();
-        HRESULT hresult = m_webView->Navigate(startPageURL);
 
+        if (startPageURL.IsEmpty())
+        {
+            m_label.SetWindowTextW(_T("Couldn't load start page. Check logs for errors."));
+            LOGE << "Startpage URL empty.";
+            return S_FALSE;
+        }
+
+        HRESULT hresult = m_webView->Navigate(startPageURL);
         if (hresult == S_OK)
         {
             m_label.ShowWindow(SW_HIDE);

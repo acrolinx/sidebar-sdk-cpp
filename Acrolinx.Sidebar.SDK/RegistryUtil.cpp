@@ -1,3 +1,5 @@
+/* Copyright 2023-present Acrolinx GmbH */
+
 #include "stdafx.h"
 #include "RegistryUtil.h"
 
