@@ -138,7 +138,7 @@ bool Acrolinx_Sdk_Sidebar_Util::FileUtil::UnzipToFolder(BSTR lpZipFile, BSTR lpF
             pDestination->Release();
             pZippedFile->Release();
             pISD->Release();
-            return true;
+            return false;
         }
 
         pFilesInside->QueryInterface(IID_IDispatch, (void**)&pItem);
@@ -160,8 +160,10 @@ bool Acrolinx_Sdk_Sidebar_Util::FileUtil::UnzipToFolder(BSTR lpZipFile, BSTR lpF
         return retval;
 
     }
-    catch (std::exception&)
+    catch (std::exception& exception)
     {
-        CoUninitialize();
+        LOGE << "Failed to unzip startpage: " << exception.what();
     }
+
+    CoUninitialize();
 }
