@@ -1,10 +1,10 @@
 /* Copyright Acrolinx GmbH */
 
 #pragma once
-#include "rapidjson\writer.h"
-#include "rapidjson\stringbuffer.h"
-#include "rapidjson\document.h"
-#include "rapidjson\pointer.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/document.h"
+#include "rapidjson/pointer.h"
 
 typedef rapidjson::GenericDocument<rapidjson::UTF16<>> WDocument;
 typedef rapidjson::GenericValue<rapidjson::UTF16<>> WValue;

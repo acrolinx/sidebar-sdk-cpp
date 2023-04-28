@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "..\Acrolinx.Sidebar.SDK_i.h"
+#include "../Acrolinx.Sidebar.SDK_i.h"
 #include "JsonUtil.h"
 
 using namespace ATL;

@@ -6,7 +6,7 @@
 #undef DELETE
 #undef max
 #undef min
-#include "diff-match-patch\diff_match_patch.h"
+#include "diff-match-patch/diff_match_patch.h"
 #include <map>
 #include <set>
 #include "Range.h"
