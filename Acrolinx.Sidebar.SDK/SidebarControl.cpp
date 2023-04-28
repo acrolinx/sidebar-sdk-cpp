@@ -827,7 +827,7 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         webViewSettings->put_IsStatusBarEnabled(FALSE);
 
         ComPtr<ICoreWebView2Settings3> webViewSettings3;
-        webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings);
+        webViewSettings->QueryInterface(IID_ICoreWebView2Settings3, (VOID **)&webViewSettings3);
         if (webViewSettings3)
         {
             // WebView version 1.0.864.35
