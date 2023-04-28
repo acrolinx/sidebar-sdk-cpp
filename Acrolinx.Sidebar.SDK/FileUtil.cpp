@@ -93,33 +93,33 @@ bool Acrolinx_Sdk_Sidebar_Util::FileUtil::UnzipToFolder(BSTR lpZipFile, BSTR lpF
     Folder  *pZippedFile = 0L;
     Folder  *pDestination = 0L;
 
-    long FilesCount = 0;
+    long filesCount = 0;
     IDispatch* pItem = 0L;
     FolderItems *pFilesInside = 0L;
 
-    VARIANT Options, OutFolder, InZipFile, Item;
+    VARIANT options, outFolder, inZipFile, item;
     CoInitialize(NULL);
-    __try {
+    try {
         if (CoCreateInstance(CLSID_Shell, NULL, CLSCTX_INPROC_SERVER, IID_IShellDispatch, (void **)&pISD) != S_OK)
-            return 1;
+            return false;
 
-        InZipFile.vt = VT_BSTR;
-        InZipFile.bstrVal = lpZipFile;
-        pISD->NameSpace(InZipFile, &pZippedFile);
+        inZipFile.vt = VT_BSTR;
+        inZipFile.bstrVal = lpZipFile;
+        pISD->NameSpace(inZipFile, &pZippedFile);
         if (!pZippedFile)
         {
             pISD->Release();
-            return 1;
+            return false;
         }
 
-        OutFolder.vt = VT_BSTR;
-        OutFolder.bstrVal = lpFolder;
-        pISD->NameSpace(OutFolder, &pDestination);
+        outFolder.vt = VT_BSTR;
+        outFolder.bstrVal = lpFolder;
+        pISD->NameSpace(outFolder, &pDestination);
         if (!pDestination)
         {
             pZippedFile->Release();
             pISD->Release();
-            return 1;
+            return false;
         }
 
         pZippedFile->Items(&pFilesInside);
@@ -128,28 +128,28 @@ bool Acrolinx_Sdk_Sidebar_Util::FileUtil::UnzipToFolder(BSTR lpZipFile, BSTR lpF
             pDestination->Release();
             pZippedFile->Release();
             pISD->Release();
-            return 1;
+            return false;
         }
 
-        pFilesInside->get_Count(&FilesCount);
-        if (FilesCount < 1)
+        pFilesInside->get_Count(&filesCount);
+        if (filesCount < 1)
         {
             pFilesInside->Release();
             pDestination->Release();
             pZippedFile->Release();
             pISD->Release();
-            return 0;
+            return true;
         }
 
         pFilesInside->QueryInterface(IID_IDispatch, (void**)&pItem);
 
-        Item.vt = VT_DISPATCH;
-        Item.pdispVal = pItem;
+        item.vt = VT_DISPATCH;
+        item.pdispVal = pItem;
 
-        Options.vt = VT_I4;
-        Options.lVal = 1024 | 512 | 16 | 4;
+        options.vt = VT_I4;
+        options.lVal = 1024 | 512 | 16 | 4;
 
-        bool retval = pDestination->CopyHere(Item, Options) == S_OK;
+        bool retval = pDestination->CopyHere(item, options) == S_OK;
 
         pItem->Release(); pItem = 0L;
         pFilesInside->Release(); pFilesInside = 0L;
@@ -160,7 +160,7 @@ bool Acrolinx_Sdk_Sidebar_Util::FileUtil::UnzipToFolder(BSTR lpZipFile, BSTR lpF
         return retval;
 
     }
-    __finally
+    catch (std::exception&)
     {
         CoUninitialize();
     }

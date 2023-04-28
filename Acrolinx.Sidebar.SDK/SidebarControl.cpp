@@ -95,7 +95,14 @@ void CSidebarControl::Start(CString serverAddress)
 
 CString CSidebarControl::GetStartPageURL(void)
 {
+    CString startPageURL = CString(_T(""));
     CString extractPath = FileUtil::ExtractEmbeddedStartPage();
+
+    if (extractPath[0] == '\0')
+    {
+        return startPageURL;
+    }
+
     CString hostName = CString(_T("extensions.acrolinx.cloud"));
 
     Microsoft::WRL::ComPtr<ICoreWebView2_3> webView;
@@ -110,7 +117,7 @@ CString CSidebarControl::GetStartPageURL(void)
     // Virtual Host Mapping
     webView->SetVirtualHostNameToFolderMapping(hostName, extractPath, COREWEBVIEW2_HOST_RESOURCE_ACCESS_KIND_ALLOW);
 
-    CString startPageURL = CString(_T("https://"));
+    startPageURL.Append(_T("https://"));
     startPageURL.Append(hostName);
     startPageURL.Append(_T("/dist-offline/index.html"));
 
@@ -832,8 +839,15 @@ HRESULT CSidebarControl::OnCreateCoreWebView2ControllerCompleted(HRESULT result,
         }
 
         CString startPageURL = GetStartPageURL();
-        HRESULT hresult = m_webView->Navigate(startPageURL);
 
+        if (startPageURL[0] == '\0')
+        {
+            m_label.SetWindowTextW(_T("Couldn't load start page. Check logs for errors."));
+            LOGE << "Startpage URL empty.";
+            return S_FALSE;
+        }
+
+        HRESULT hresult = m_webView->Navigate(startPageURL);
         if (hresult == S_OK)
         {
             m_label.ShowWindow(SW_HIDE);
