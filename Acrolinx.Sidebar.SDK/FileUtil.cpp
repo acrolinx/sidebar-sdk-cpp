@@ -4,8 +4,6 @@
 #include "DllUtil.h"
 #include "Resource.h"
 
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-
 Acrolinx_Sdk_Sidebar_Util::FileUtil::FileUtil(void)
 {
 }

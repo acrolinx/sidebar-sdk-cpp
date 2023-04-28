@@ -6,8 +6,6 @@
 #include <Wbemcli.h>
 #include <Strsafe.h>
 
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-
 Acrolinx_Sdk_Sidebar_Util::DllUtil::DllUtil(void)
 {
 }
