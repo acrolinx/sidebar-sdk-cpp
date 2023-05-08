@@ -190,7 +190,10 @@ jobs:
       with:
         files: |
           *.nupkg
-          Acrolinx.Sidebar/bin/Release/
+          .\Acrolinx.Sidebar.SDK.Setup\bin\Release\*
+          .\Release\*
+          .\x64\Release\*
+          .\Acrolinx.Sidebar.SDK\Resource.h
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
