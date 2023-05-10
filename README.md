@@ -37,9 +37,7 @@ Download from [Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-s
 
 ## Using the SDK
 
-TODO:// update URL
-
-For simplified development experience get SDK from [Nuget](https://www.nuget.org/)
+For simplified development experience get SDK from [Nuget](https://www.nuget.org/packages/Acrolinx.Sidebar.SDK.CPP)
 
 Make sure to register the DLL before executing your application.
 
@@ -59,7 +57,6 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
    + **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
 5. **Acrolinx Adapter**: Provides reusable functionality for all integrations.
 
-  
 ## References
 
 * The [Sidebar DEMO C++](https://github.com/acrolinx/sidebar-demo-cpp) is built based on this SDK.
@@ -67,7 +64,7 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
 * RapidJSON for JSON utility. RapidJSON is licensed under the [MIT License](https://github.com/Tencent/rapidjson/blob/master/license.txt)
   and Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. You can get the source [here](https://github.com/Tencent/rapidjson).
 * Plog v1.1.4 for logging utility. Plog is licensed under the [MPL-2.0 License](https://github.com/SergiusTheBest/plog/blob/master/LICENSE)
-  and Copyright (c) 2016 Sergey Podobry (sergey.podobry@gmail.com). You can get the source [here]( https://github.com/SergiusTheBest/plog).
+  and Copyright (c) 2016 Sergey Podobry (<sergey.podobry@gmail.com>). You can get the source [here]( https://github.com/SergiusTheBest/plog).
 * Wix Toolset v3.11.2 for simple installer. Wix Toolset is licensed under the [MS-RL](https://wixtoolset.org/about/license/).
   The Wix Toolset website is at [wixtoolset.org](https://wixtoolset.org/).
 
