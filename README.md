@@ -1,5 +1,8 @@
 # Acrolinx Sidebar Windows C++ SDK
 
+![Nuget](https://img.shields.io/nuget/v/Acrolinx.Sidebar.SDK.CPP)
+![Nuget](https://img.shields.io/nuget/dt/Acrolinx.Sidebar.SDK.CPP)
+
 This is a library for integrating the [Acrolinx](https://www.acrolinx.com/) Sidebar into a Windows C++ application.
 
 See: [Getting Started with Custom Integrations](https://docs.acrolinx.com/customintegrations)
