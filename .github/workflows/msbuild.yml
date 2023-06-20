@@ -21,7 +21,7 @@ env:
   BUILD_CONFIGURATION: Release
   Solution_Name: Acrolinx.Sidebar.SDK.sln
   BUILD_NUMBER: ${{ github.run_number }}
-  SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+  BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
 
 jobs:
   test:
@@ -85,29 +85,14 @@ jobs:
         name: C++ Test Artifacts
         path: .\Test\testResult.xml
     
-    - name: download sonar
-      run: |
-        powershell Invoke-WebRequest -Uri "https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/5.13.0.66756/sonar-scanner-msbuild-5.13.0.66756-net46.zip" -OutFile ".\download\sonarmsbuild.zip"
-        powershell Invoke-WebRequest -Uri "https://sonarcloud.io/static/cpp/build-wrapper-win-x86.zip" -OutFile ".\download\sonar-build-wrapper.zip"
-
-    - name: extract sonar
-      run: |
-        powershell Expand-Archive .\download\sonarmsbuild.zip .\sonar-msbuild\
-        powershell Expand-Archive .\download\sonar-build-wrapper.zip .\sonar-msbuild\
-    
-    - name: Set up JDK 11 - required by sonar
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.11
-    
-    - name: Begin sonar
-      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.token=$env:SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory" /d:sonar.cs.vscoveragexml.reportsPaths="Test\testResult.xml"
-
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.3.1 
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     
+    - name: Install sonar-scanner and build-wrapper
+      uses: SonarSource/sonarcloud-github-c-cpp@v1
+
     - name: Replace version info
       run: |
         $version = git describe --abbrev=0 --tags
@@ -123,11 +108,14 @@ jobs:
 
     - name: Build x86 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: sonar-msbuild\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir build_wrapper_output_directory msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
+      run: build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=Win32 ${{env.SOLUTION_FILE_PATH}} /t:Rebuild
 
-     # SONAR is confused - End SONAR before building 64 bit.
-    - name: End sonar
-      run: sonar-msbuild\SonarScanner.MSBuild.exe end
+    - name: Run sonar-scanner
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+      run: |
+        sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
 
     - name: Build x64 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
