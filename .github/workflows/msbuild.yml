@@ -21,6 +21,7 @@ env:
   BUILD_CONFIGURATION: Release
   Solution_Name: Acrolinx.Sidebar.SDK.sln
   BUILD_NUMBER: ${{ github.run_number }}
+  SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
 jobs:
   test:
@@ -100,7 +101,7 @@ jobs:
         java-version: 1.11
     
     - name: Begin sonar
-      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory" /d:sonar.cs.vscoveragexml.reportsPaths="Test\testResult.xml"
+      run: sonar-msbuild\SonarScanner.MSBuild.exe begin /o:"acrolinx" /k:"acrolinx_sidebar-sdk-cpp" /d:sonar.token=$env:SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cfamily.build-wrapper-output="build_wrapper_output_directory" /d:sonar.cs.vscoveragexml.reportsPaths="Test\testResult.xml"
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.3.1 
@@ -126,12 +127,7 @@ jobs:
 
      # SONAR is confused - End SONAR before building 64 bit.
     - name: End sonar
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-      run: |
-        if($SONAR_TOKEN) { Write-Host "Secret available" } else {  Write-Host "Secret Unavailable"}
-        sonar-msbuild\SonarScanner.MSBuild.exe end
+      run: sonar-msbuild\SonarScanner.MSBuild.exe end
 
     - name: Build x64 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
