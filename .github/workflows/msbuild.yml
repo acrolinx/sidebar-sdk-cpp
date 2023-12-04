@@ -128,6 +128,7 @@ jobs:
         BINARY32: "distrib/x86/Acrolinx.Sidebar.SDK.dll"
         BINARY64: "distrib/x64/Acrolinx.Sidebar.SDK.dll"
         SIGNTOOL: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe"
+      if: ${{ (github.ref == 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/')) }}
       shell: powershell
       run : |
         $ErrorActionPreference = 'stop'
@@ -156,6 +157,7 @@ jobs:
     # Push package to Github registry.
     - name: Push nuget package to github
       shell: powershell
+      if: ${{ (github.ref == 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/')) }}
       run: |
         $NugetPackage  = Get-ChildItem .\*.nupkg -Exclude *.symbols.nupkg -name
         Write-Host "Pushing to Github registry.. NuGet package name is : " $NugetPackage
