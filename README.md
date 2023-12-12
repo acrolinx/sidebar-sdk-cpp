@@ -46,7 +46,7 @@ For simplified development experience get SDK from [Nuget](https://www.nuget.org
 
 Make sure to register the DLL before executing your application.
 
-For handy registration you can use this [utility](https://github.com/acrolinx/sidebar-demo-cpp)
+For handy registration you can use this [utility](https://github.com/acrolinx/sidebar-demo-cpp/blob/main/scripts/RegisterAcrolinx.bat)
 
 ## Getting Started
 
