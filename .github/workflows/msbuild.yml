@@ -59,7 +59,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Test\DefaultTest.dll" /resultsfile:"Test\testResult.xml"'
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: C++ Test Artifacts
         path: .\Test\testResult.xml
@@ -185,7 +185,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: C++ Build Artifacts
         path: |
