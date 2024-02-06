@@ -80,7 +80,7 @@ jobs:
         mkdir download
         mkdir build_wrapper_output_directory
     
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: C++ Test Artifacts
         path: .\Test\testResult.xml
