@@ -29,12 +29,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
           fetch-depth: 0
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.3.1 
+      uses: microsoft/setup-msbuild@v2.0.0 
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
@@ -71,7 +71,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
           fetch-depth: 0
 
@@ -86,7 +86,7 @@ jobs:
         path: .\Test\testResult.xml
     
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.3.1 
+      uses: microsoft/setup-msbuild@v2.0.0 
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     
