@@ -1,7 +1,5 @@
 # Acrolinx Sidebar Windows C++ SDK
 
-![Nuget](https://img.shields.io/nuget/v/Acrolinx.Sidebar.SDK.CPP)
-![Nuget](https://img.shields.io/nuget/dt/Acrolinx.Sidebar.SDK.CPP)
 ![GitHub Actions](https://github.com/acrolinx/sidebar-sdk-cpp/actions/workflows//msbuild.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=acrolinx_sidebar-sdk-cpp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=acrolinx_sidebar-sdk-cpp)
 
