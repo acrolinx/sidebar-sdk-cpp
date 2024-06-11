@@ -1,7 +1,5 @@
 # Acrolinx Sidebar Windows C++ SDK
 
-![Nuget](https://img.shields.io/nuget/v/Acrolinx.Sidebar.SDK.CPP)
-![Nuget](https://img.shields.io/nuget/dt/Acrolinx.Sidebar.SDK.CPP)
 ![GitHub Actions](https://github.com/acrolinx/sidebar-sdk-cpp/actions/workflows//msbuild.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=acrolinx_sidebar-sdk-cpp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=acrolinx_sidebar-sdk-cpp)
 
@@ -61,6 +59,18 @@ See: [Sidebar demo](https://github.com/acrolinx/sidebar-demo-cpp/blob/master/REA
    + **Registry path**: `HKCU\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
    + **Fallback path**: `HKLM\Software\Acrolinx\Plugins\Storage\AcrolinxStorage\[KEY]`
 5. **Acrolinx Adapter**: Provides reusable functionality for all integrations.
+
+### Deprecation
+
+> :warning: **Sidebar v14 is getting deprecated**
+
+The process to update your existing integration is straightforward and involves the following steps:
+
+1. Update to the Latest SDK Version: Please ensure that you’ve updated to the latest SDK version.
+The most recent version can be found on our Nuget package page [here](https://www.nuget.org/packages/Acrolinx.Sidebar.SDK.CPP).
+
+1. Remove the Initialization Config (Optional): If your current implementation includes the initialization config
+`MinimumSidebarVersion=14.x.x`, we recommend removing this configuration.
 
 ## References
 
