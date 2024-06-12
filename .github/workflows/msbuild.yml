@@ -38,6 +38,9 @@ jobs:
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
+    - name: Install components
+      run: .\.github\scripts\install-vs-components.ps1
+
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
@@ -89,7 +92,10 @@ jobs:
       uses: microsoft/setup-msbuild@v2.0.0 
       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-    
+
+    - name: Install components
+      run: .\.github\scripts\install-vs-components.ps1
+
     - name: Install sonar-scanner and build-wrapper
       uses: SonarSource/sonarcloud-github-c-cpp@v2
 
@@ -120,24 +126,6 @@ jobs:
     - name: Build x64 bit
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 ${{env.SOLUTION_FILE_PATH}}
-
-    - name: Code signing
-      env:
-        CERTIFICATE: ${{ secrets.CERTIFICATE }}
-        CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-        BINARY32: "distrib/x86/Acrolinx.Sidebar.SDK.dll"
-        BINARY64: "distrib/x64/Acrolinx.Sidebar.SDK.dll"
-        SIGNTOOL: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe"
-      if: ${{ (github.ref == 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/')) }}
-      shell: powershell
-      run : |
-        $ErrorActionPreference = 'stop'
-        $env:CERTIFICATE | Out-File -FilePath .\Certificate
-        certutil -decode Certificate AcrolinxCertificate.pfx
-        & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY32
-        & $env:SIGNTOOL sign /f AcrolinxCertificate.pfx /p $env:CERTIFICATE_PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 $env:BINARY64
-        del .\Certificate
-        del AcrolinxCertificate.pfx
 
     # Update .nuspec (Nuget Specification) with version number
     - name: Patch version in nuget spec
