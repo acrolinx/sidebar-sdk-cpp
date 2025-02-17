@@ -40,7 +40,7 @@ Download from [Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-s
 
 ## Requirements
 
-This SDK uses Microsoft WebView 2 based on Edge Chromoium to render the Sidebar.
+This SDK uses Microsoft WebView 2 based on Edge Chromium to render the Sidebar.
 
 The Evergreen WebView2 Runtime will be included as part of the Windows 11 operating system.
 
