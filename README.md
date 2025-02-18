@@ -35,6 +35,14 @@ Before you start developing your own integration, you might benefit from looking
 Also note that "Visual C++ 2017 redistributable x86" is a run time requirement.
 Download from [Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 
+## Requirements
+
+This SDK leverages Microsoft WebView2, built on Microsoft Edge Chromium, to render the Sidebar. Starting with Windows 11, Microsoft includes the Evergreen WebView2 Runtime by default.
+
+For earlier versions of Windows, please install the WebView2 Evergreen Runtime manually.
+
+You can download and install the Evergreen Standalone [Installer](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) from Microsoft's official site.
+
 ## Using the SDK
 
 For simplified development experience get SDK from [Nuget](https://www.nuget.org/packages/Acrolinx.Sidebar.SDK.CPP)
