@@ -4,18 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - abhijeetnarvekar
   - package-ecosystem: "nuget"
     directory: "/Acrolinx.Sidebar.SDK/"
     schedule:
       interval: "daily"
-    reviewers:
-      - abhijeetnarvekar
   - package-ecosystem: "npm"
     directory: "/Acrolinx.Sidebar.SDK/"
     schedule:
       interval: "daily"
-    reviewers:
-      - abhijeetnarvekar
     versioning-strategy: increase
