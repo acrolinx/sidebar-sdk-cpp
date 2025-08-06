@@ -26,7 +26,7 @@ jobs:
         mkdir build_wrapper_output_directory
 
     - name: Download artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: C++ Test Artifacts
         path: Test\testResult.xml
