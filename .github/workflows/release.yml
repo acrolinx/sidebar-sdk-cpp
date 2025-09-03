@@ -25,12 +25,6 @@ jobs:
         mkdir download
         mkdir build_wrapper_output_directory
 
-    - name: Download artifact
-      uses: actions/download-artifact@v5
-      with:
-        name: C++ Test Artifacts
-        path: Test\testResult.xml
-
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
       env:
