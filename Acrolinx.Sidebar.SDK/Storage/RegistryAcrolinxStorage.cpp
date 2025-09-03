@@ -57,7 +57,7 @@ STDMETHODIMP CRegistryAcrolinxStorage::SetItem(BSTR key, BSTR data)
         if (regAccess == ERROR_SUCCESS)
         {
             CString value(data);
-            if (::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), (value.GetLength()*(sizeof(WCHAR))) + 1) != ERROR_SUCCESS)
+            if (::RegSetValueEx(hKey, key, 0, REG_SZ, (LPBYTE)value.GetString(), ((value.GetLength() + 1) * sizeof(WCHAR))) != ERROR_SUCCESS)
             {
                 LOGE << "Fail to store values";
             }
@@ -82,6 +82,7 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
 #define MAX_VALUE_NAME 16383
 
     WDocument registryStorage;
+    registryStorage.SetObject();
 
     try
     {
@@ -166,9 +167,6 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
                     }
                 }
             }
-
-            *data = CJsonUtil::Stringify(registryStorage).AllocSysString();
-
             ::RegCloseKey(hKey);
         }
         else
@@ -180,6 +178,8 @@ STDMETHODIMP CRegistryAcrolinxStorage::GetAllItems(BSTR* data)
     {
         LOGE << "Exception thrown by registry" << Acrolinx_Sdk_Sidebar_Util::DllUtil::GetLastErrorAsString().GetString();
     }
+
+    *data = CJsonUtil::Stringify(registryStorage).AllocSysString();
 
     return S_OK;
 }
