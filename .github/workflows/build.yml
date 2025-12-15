@@ -51,7 +51,7 @@ jobs:
       run: '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"Test\DefaultTest.dll" /resultsfile:"Test\testResult.xml"'
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: C++ Test Artifacts
         path: Test\testResult.xml
